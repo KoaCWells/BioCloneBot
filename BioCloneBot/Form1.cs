@@ -215,5 +215,23 @@ namespace BioCloneBot
                 MessageBox.Show(ex.Message, "Message", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }
+
+        private void close_Serial_Click(object sender, EventArgs e)
+        {
+            if (serialPort1.IsOpen)
+            {
+                serialPort1.Close();
+                DialogResult msg = MessageBox.Show("Serial port closed.", "Serial port closed.", MessageBoxButtons.OK);
+            }
+        }
+
+        private void open_Serial_Click(object sender, EventArgs e)
+        {
+            if (!serialPort1.IsOpen)
+            {
+                serialPort1.Open();
+                DialogResult msg = MessageBox.Show("Serial port opened.", "Serial port opened.", MessageBoxButtons.OK);
+            }
+        }
     }
 }

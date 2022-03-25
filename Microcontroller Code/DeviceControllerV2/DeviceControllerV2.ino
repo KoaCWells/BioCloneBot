@@ -114,6 +114,14 @@ int axis_rev_steps;
 int pump_rev_steps;
 int homing = 0;
 double syringe_vol = 0;
+double x_location;
+double y_location;
+double z_location;
+double aspirate_vol;
+double dispense_vol;
+double x_dist;
+double y_dist;
+double z_dist;
 String host_message;
 String curr_command;
 String prev_command;
@@ -137,6 +145,9 @@ void setup() {
   pinMode(Z_LIMIT, INPUT_PULLUP);
   pinMode(P_LIMIT, INPUT_PULLUP);
 
+  //defines output pin for powering the LCD dadta lines
+  pinMode(VDD, OUTPUT);
+
   //sets default direction of stepper motors to point towards the limit switches
   digitalWrite(X_DIR, LOW);
   digitalWrite(Y_DIR, LOW);
@@ -148,16 +159,21 @@ void setup() {
   attachInterrupt(digitalPinToInterrupt(Y_LIMIT), yLimitPressed, FALLING);
   attachInterrupt(digitalPinToInterrupt(Z_LIMIT), zLimitPressed, FALLING);
   attachInterrupt(digitalPinToInterrupt(P_LIMIT), pLimitPressed, FALLING);
+
+  digitalWrite(VDD, HIGH);
   
   // set up the LCD's number of columns and rows:
   lcd.begin(16, 2);
   // Print a message to the LCD.
-  lcd.print("");
+  lcd.print("Waiting for host connection.");
     
    //waits for message from serial to establish connection with host computer
   while(true){
     host_message = Serial.readStringUntil('%');
     if(host_message == "ping"){
+      lcd.setCursor(0, 0);
+      lcd.clear();
+      lcd.print("Host connected.");
       digitalWrite(CONN_LED, HIGH);
       Serial.print("pong");
       break;
@@ -167,17 +183,29 @@ void setup() {
 
 void loop() {
   while(Serial.available() > 0){    
-    curr_command = Serial.readStringUntil('%');
-    lcd.setCursor(0, 0);
-    lcd.print(curr_command);
+    host_message = Serial.readStringUntil('%');
+    lcd.setCursor(0,1);
+    lcd.print(host_message);
 
-    //curr_command = host_message;
+    //decodes first 4-bits of host_message to determine command
+    for(int i = 0; i < 4; i++){
+      curr_command += host_message[i];
+    }
     
     if(curr_command == "0000"){ //home motors
       homeCarriage();
     }
     else if(curr_command == "0001"){ //move pump to x, y, z location
-      movePump(0,0,0);
+      for(int i = 4; i < 10; i++){
+        x_dist += curr_command[i];
+      }
+      for(int i = 10; i < 16; i++){
+        y_dist += curr_command[i];
+      }
+      for(int i = 16; i < 22; i++){
+        z_dist += curr_command[i];
+      }
+      movePump(x_dist,y_dist,z_dist);
     }
     else if(curr_command == "0010"){ //get tip
       getTip();
@@ -194,57 +222,9 @@ void loop() {
     else if(curr_command == "1111"){ //disable stepper motors
       disableMotors();
     }
-
-//    //aspirate
-//    else if(curr_command[0] == '0'){
-//      for(int i = 1; i < curr_command.length(); i++){
-//        volume += curr_command.charAt(i);
-//      }
-//      
-//      digitalWrite(31, HIGH);
-//      digitalWrite(STEP_ENABLE, HIGH);
-//      //volume = curr_command.charAt(1)*100 + curr_command.charAt(2)*10 + curr_command.charAt(3)*1;
-//      steps = volume.toInt()*24;
-//      lcd.setCursor(0, 1);
-//      lcd.print("Vol" + String(volume) + "Step" + String(steps));
-//      stepper.move(steps);
-//      digitalWrite(STEP_ENABLE, LOW);
-//      digitalWrite(31, LOW);
-//    }
-//    //dispense
-//    else if(curr_command[0] == '1'){
-//      for(int i = 1; i < curr_command.length(); i++){
-//        volume += curr_command.charAt(i);
-//      }
-//      //volume = curr_command.charAt(1)*100 + curr_command.charAt(2)*10 + curr_command.charAt(3)*1 + 50;
-//      steps = volume.toInt()*24 + 50;
-//      lcd.setCursor(0, 1);
-//      lcd.print("Vol" + String(volume) + "Step" + String(steps));
-//      digitalWrite(35, HIGH);
-//      digitalWrite(STEP_ENABLE, HIGH);
-//      stepper.move(-steps);
-//      digitalWrite(STEP_ENABLE, LOW);
-//      digitalWrite(35, LOW);
-//      while(steps > 0 ){
-//
-//        //if(digitalRead(SWITCH_INPUT) == LOW){
-//        if(digitalRead(LOW) == LOW){
-//          steps = 0;
-//          stepper.move(1000);
-//        }
-//        else if(steps > 50){
-//          stepper.move(-50);
-//          steps = steps - 50;
-//        }
-//        else{
-//          stepper.move(steps);
-//          steps = 0;
-//        }
-//      }
   }
   prev_command = curr_command;
   curr_command = "";
-  //digitalWrite(PUMP_LED, HIGH);
 }
 
 /*
@@ -353,13 +333,17 @@ void homeCarriage(){
 
   digitalWrite(P_DIR, LOW);
 
-  //sets homing to 0 re-enabling the normal functionality of the limit switches
-  //as emergency stops
+  //sets homing to 0 re-enabling the normal functionality of the limit switches as emergency stops
+  //and sets carriage location to (0.0, 0.0, 0.0) and syringe volume to 0
   homing = 0;
+  x_location = 0.0;
+  y_location = 0.0;
+  z_location = 0.0;
+  syringe_vol = 0.0;
 }
 
 void movePump(double x, double y, double z){
-  delay(10);
+  
 }
 
 void getTip(){
@@ -375,7 +359,6 @@ void ejectTip(){
 
 void aspirate(double volume){
   digitalWrite(P_DIR, HIGH);
-  
   delay(10);
 }
 
@@ -534,3 +517,50 @@ void pLimitPressed(){
     digitalWrite(P_SLEEP, LOW);
   }
 }
+
+//    //aspirate
+//    else if(curr_command[0] == '0'){
+//      for(int i = 1; i < curr_command.length(); i++){
+//        volume += curr_command.charAt(i);
+//      }
+//      
+//      digitalWrite(31, HIGH);
+//      digitalWrite(STEP_ENABLE, HIGH);
+//      //volume = curr_command.charAt(1)*100 + curr_command.charAt(2)*10 + curr_command.charAt(3)*1;
+//      steps = volume.toInt()*24;
+//      lcd.setCursor(0, 1);
+//      lcd.print("Vol" + String(volume) + "Step" + String(steps));
+//      stepper.move(steps);
+//      digitalWrite(STEP_ENABLE, LOW);
+//      digitalWrite(31, LOW);
+//    }
+//    //dispense
+//    else if(curr_command[0] == '1'){
+//      for(int i = 1; i < curr_command.length(); i++){
+//        volume += curr_command.charAt(i);
+//      }
+//      //volume = curr_command.charAt(1)*100 + curr_command.charAt(2)*10 + curr_command.charAt(3)*1 + 50;
+//      steps = volume.toInt()*24 + 50;
+//      lcd.setCursor(0, 1);
+//      lcd.print("Vol" + String(volume) + "Step" + String(steps));
+//      digitalWrite(35, HIGH);
+//      digitalWrite(STEP_ENABLE, HIGH);
+//      stepper.move(-steps);
+//      digitalWrite(STEP_ENABLE, LOW);
+//      digitalWrite(35, LOW);
+//      while(steps > 0 ){
+//
+//        //if(digitalRead(SWITCH_INPUT) == LOW){
+//        if(digitalRead(LOW) == LOW){
+//          steps = 0;
+//          stepper.move(1000);
+//        }
+//        else if(steps > 50){
+//          stepper.move(-50);
+//          steps = steps - 50;
+//        }
+//        else{
+//          stepper.move(steps);
+//          steps = 0;
+//        }
+//      }
