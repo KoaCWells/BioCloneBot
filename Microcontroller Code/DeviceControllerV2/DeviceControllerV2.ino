@@ -162,11 +162,11 @@ void setup() {
 
 void loop() {
   while(Serial.available() > 0){    
-    curr_command = Serial.readStringUntil('%');
+    host_message = Serial.readStringUntil('%');
     lcd.setCursor(0, 0);
     lcd.print(curr_command);
 
-    //curr_command = host_message;
+    curr_command = host_message;
     
     if(curr_command == "0000"){ //home motors
       homeCarriage();
