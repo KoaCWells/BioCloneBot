@@ -15,6 +15,7 @@
 * the BioCloneBot device.
 ******************************************************************************/
 #include <LiquidCrystal.h>
+#include <math.h>
 
 //Refer to Pololu website for documentation on DRV8825 stepper motor https://www.pololu.com/product/2133
 #define AXIS_STEPS 200 //Ender 3 Pro step angle 1.8 degrees/200 steps
@@ -35,12 +36,12 @@
 * -101/110/111 - 1/32 step
 ***************************************************************/
 //X motor driver pins
-#define X_MS0 23 //PA1
-#define X_MS1 25 //PA3
-#define X_MS2 27 //PA5
-#define X_SLEEP 29 //PA7
-#define X_STEP 31 //PA6
-#define X_DIR 33 //PA4
+#define X_MS0 23
+#define X_MS1 25
+#define X_MS2 27
+#define X_SLEEP 29
+#define X_STEP 31
+#define X_DIR 33
 
 //Y motor driver pins
 #define Y_MS0 22
@@ -72,7 +73,8 @@
 #define Z_LIMIT 20
 #define P_LIMIT 21
 
-#define MAX_VOL 200 //maximum volume for syringe aspiration
+//maximum volume for syringe aspiration
+#define MAX_VOL 200 
 
 //LCD screen for feedback and troubleshooting
 #define VDD 14
@@ -103,10 +105,13 @@ LiquidCrystal lcd(RS, EN, D4, D5, D6, D7);
  * microstepping - 
  * host_message - 
  * curr_command - 
- * 
+ * axis_rev_steps - steps per revolution of 3-axis motors
+ * pump_rev_steps - steps per revolution of pump motor
  */
 int axis_step_delay;
 int pump_step_delay;
+int axis_rev_steps;
+int pump_rev_steps;
 int homing = 0;
 double syringe_vol = 0;
 String host_message;
@@ -162,11 +167,11 @@ void setup() {
 
 void loop() {
   while(Serial.available() > 0){    
-    host_message = Serial.readStringUntil('%');
+    curr_command = Serial.readStringUntil('%');
     lcd.setCursor(0, 0);
     lcd.print(curr_command);
 
-    curr_command = host_message;
+    //curr_command = host_message;
     
     if(curr_command == "0000"){ //home motors
       homeCarriage();
@@ -378,24 +383,26 @@ void dispense(double volume){
   delay(10);
 }
 
-//adjusts microstepping and timing settings for all stepper motors
+//adjusts microstepping, timing, and steps/revolution for each motor
 void setMicrostepping(int step_size){
   switch(step_size){
     case 1: //000 - full step
-      digitalWrite(X_MS0, LOW);
-      digitalWrite(X_MS1, LOW);
-      digitalWrite(X_MS2, LOW);
-      digitalWrite(Y_MS0, LOW);
-      digitalWrite(Y_MS1, LOW);
-      digitalWrite(Y_MS2, LOW);
-      digitalWrite(Z_MS0, LOW);
-      digitalWrite(Z_MS1, LOW);
-      digitalWrite(Z_MS2, LOW);
-      digitalWrite(P_MS0, LOW);
-      digitalWrite(P_MS1, LOW);
-      digitalWrite(P_MS2, LOW);
+      digitalWrite(X_MS0, LOW); //23 - PA1
+      digitalWrite(X_MS1, LOW); //25 - PA3
+      digitalWrite(X_MS2, LOW); //27 - PA5
+      digitalWrite(Y_MS0, LOW); //22 - PA0
+      digitalWrite(Y_MS1, LOW); //24 - PA2
+      digitalWrite(Y_MS2, LOW); //26 - PA4
+      digitalWrite(Z_MS0, LOW); //35 - PC2
+      digitalWrite(Z_MS1, LOW); //37 - PC0
+      digitalWrite(Z_MS2, LOW); //39 - PG2
+      digitalWrite(P_MS0, LOW); //34 - PC3
+      digitalWrite(P_MS1, LOW); //36 - PC1
+      digitalWrite(P_MS2, LOW); //38 - PD7
       axis_step_delay = 2000;
       pump_step_delay = 1000;
+      axis_rev_steps = 200;
+      pump_rev_steps = 400;
       break;
     case 2: //001 - half step
       digitalWrite(X_MS0, LOW);
@@ -412,6 +419,8 @@ void setMicrostepping(int step_size){
       digitalWrite(P_MS2, HIGH);
       axis_step_delay = 1000;
       pump_step_delay = 500;
+      axis_rev_steps = 400;
+      pump_rev_steps = 800;
       break;
     case 4: //001 - half step
       digitalWrite(X_MS0, LOW);
@@ -427,7 +436,9 @@ void setMicrostepping(int step_size){
       digitalWrite(P_MS1, HIGH);
       digitalWrite(P_MS2, LOW);
       axis_step_delay = 500;
-      pump_step_delay = 250;      
+      pump_step_delay = 250;
+      axis_rev_steps = 800;
+      pump_rev_steps = 1600; 
       break;
     case 8:
       digitalWrite(X_MS0, LOW);
@@ -444,6 +455,8 @@ void setMicrostepping(int step_size){
       digitalWrite(P_MS2, HIGH);
       axis_step_delay = 250;
       pump_step_delay = 125;
+      axis_rev_steps = 1600;
+      pump_rev_steps = 3200; 
       break;
     case 16:
       digitalWrite(X_MS0, HIGH);
@@ -460,6 +473,8 @@ void setMicrostepping(int step_size){
       digitalWrite(P_MS2, LOW);
       axis_step_delay = 125;
       pump_step_delay = 63;
+      axis_rev_steps = 3200;
+      pump_rev_steps = 6400; 
       break;
     case 32:
       digitalWrite(X_MS0, HIGH);
@@ -476,6 +491,8 @@ void setMicrostepping(int step_size){
       digitalWrite(P_MS2, LOW);
       axis_step_delay = 63;
       pump_step_delay = 1000;
+      axis_rev_steps = 6400;
+      pump_rev_steps = 12800; 
       break;
   }
 }
