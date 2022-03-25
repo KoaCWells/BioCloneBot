@@ -74,6 +74,9 @@
 #define P_LIMIT 21
 
 //maximum volume for syringe aspiration
+#define X_MAX 400
+#define Y_MAX 400
+#define Z_MAX 100
 #define MAX_VOL 200 
 
 //LCD screen for feedback and troubleshooting
@@ -343,6 +346,25 @@ void homeCarriage(){
 }
 
 void movePump(double x, double y, double z){
+  if(x_dist > x){
+    digitalWrite(X_DIR, LOW);
+  }
+  else if(x_dist < x){
+    digitalWrite(X_DIR, HIGH);
+  }
+  if(y_dist > y){
+    digitalWrite(Y_DIR, LOW);
+  }
+  else if(y_dist < y){
+    digitalWrite(Y_DIR, HIGH);
+  }
+  if(z_dist > z){
+    digitalWrite(Z_DIR, LOW);
+  }
+  else if(z_dist < z){
+    digitalWrite(Z_DIR, HIGH);
+  }
+
   
 }
 
