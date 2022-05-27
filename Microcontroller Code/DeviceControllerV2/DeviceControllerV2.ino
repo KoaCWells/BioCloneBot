@@ -102,29 +102,41 @@
 LiquidCrystal lcd(RS, EN, D4, D5, D6, D7);
 
 /* Global variables for device control
- * axis_step_delay - 
- * pump_step_delay - 
- * homing - 
- * microstepping - 
- * host_message - 
- * curr_command - 
+ * axis_step_delay - time in microseconds in between HIGH/LOW pulses for the X,Y,Z motors
+ * pump_step_delay - time in microseconds in between HIGH/LOW pulses for the P motors
  * axis_rev_steps - steps per revolution of 3-axis motors
  * pump_rev_steps - steps per revolution of pump motor
+ * homing - 0 if device is not in homing mode; limit switches are for emergency stops/1 if device is in homing mode
+ * tip_attached - 0 if the pump does not have a tip/1 if the pump does have a tip
+ * x_step_dist - distance traveled per step in the X-axis
+ * y_step_dist - distance traveled per step in the Y-axis
+ * z_step_dist - distance traveled per step in the Z-axis
+ * p_step_dist - distance traveled per step in the P-axis
+ * aspiriate_vol - volume to be aspirated by pump
+ * dispense_vol - volume to be dispensed by pump + 50 ul of leading air gap
+ * x_dist - pump travel destination on x-axis
+ * y_dist - pump travel destination on y-axis
+ * z_dist - pump travel destination on z-axis
+ * host_message - raw message from the host including 4-bit command and command parameters
+ * curr_command - first 4 bits of host_message for determining what function the device should perform
+ * prev_command - previous command that was run
  */
 int axis_step_delay;
 int pump_step_delay;
 int axis_rev_steps;
 int pump_rev_steps;
 int homing = 0;
-double syringe_vol = 0;
-double x_location;
-double y_location;
-double z_location;
+double x_step_dist;
+double y_step_dist;
+double z_step_dist;
+double p_step_dist;
 double aspirate_vol;
 double dispense_vol;
 double x_dist;
 double y_dist;
 double z_dist;
+char distance[5];
+char *ptr_end;
 String host_message;
 String curr_command;
 String prev_command;
@@ -136,6 +148,13 @@ void setup() {
   for(int i = 22; i <= 45; i++){
     pinMode(i, OUTPUT);
   }
+
+  digitalWrite(P_MS0, LOW);
+  digitalWrite(P_MS1, LOW);
+  digitalWrite(P_MS2, LOW);
+  pump_step_delay = 1000; //time delay between HIGH/LOW digital control signal in microseconds
+  pump_rev_steps = 400; //steps per revolution
+  p_step_dist = 157E-6; //mm per step
   
   //defines indicator LEDs: MOVE for carriage movement, PUMP for pump movement, and CONN for a successful serial connection
   pinMode(MOVE_LED,OUTPUT);
@@ -197,33 +216,55 @@ void loop() {
     
     if(curr_command == "0000"){ //home motors
       homeCarriage();
+      Serial.print("homed");
     }
     else if(curr_command == "0001"){ //move pump to x, y, z location
-      for(int i = 4; i < 10; i++){
-        x_dist += curr_command[i];
+      for(int i = 6; i < 13; i++){
+        distance[i-6]= host_message[i];
       }
-      for(int i = 10; i < 16; i++){
-        y_dist += curr_command[i];
+      x_dist = strtod(distance, &ptr_end);
+
+      for(int i = 13; i < 19; i++){
+        distance[i-13]= host_message[i];
       }
-      for(int i = 16; i < 22; i++){
-        z_dist += curr_command[i];
+      y_dist = strtod(distance, &ptr_end);
+
+      for(int i = 19; i < 25; i++){
+        distance[i-19]= host_message[i];
       }
-      movePump(x_dist,y_dist,z_dist);
+      z_dist = strtod(distance, &ptr_end);
+      
+      //x_dist = host_message[7]*100 + host_message[8]*10 + host_message[9]*1 + host_message[11]*.1 + host_message[12]*.01;
+      //y_dist = host_message[13]*100 + host_message[14]*10 + host_message[15]*1 + host_message[17]*.1 + host_message[18]*.01;
+      //z_dist = host_message[19]*100 + host_message[20]*10 + host_message[21]*1 + host_message[23]*.1 + host_message[24]*.01;
+      lcd.clear();
+      lcd.setCursor(0,1);
+      lcd.print(host_message.charAt(4));
+      movePump(host_message.charAt(4),host_message.charAt(5),host_message.charAt(6),x_dist,y_dist,z_dist);
+      Serial.print("moved");
     }
     else if(curr_command == "0010"){ //get tip
       getTip();
+      Serial.print("loaded");
     }
     else if(curr_command == "0011"){ //remove tip
       ejectTip();
+      Serial.print("unloaded");
     }
     else if(curr_command == "0100"){ //aspirate volume
-      aspirate(0);
+      for(int i = 4; i < 10; i++){
+        aspirate_vol += curr_command[i]; //000.00
+      }
+      aspirate(aspirate_vol);
+      Serial.print("aspirated");
     }
     else if(curr_command == "0101"){ //dispense volume
       dispense(0);
+      Serial.print("dispensed");
     }
     else if(curr_command == "1111"){ //disable stepper motors
       disableMotors();
+      Serial.print("disabled");
     }
   }
   prev_command = curr_command;
@@ -234,15 +275,10 @@ void loop() {
  * List of possible device commands
  * -0000 home device: homes x, y, z, and p stepper motors
  * -0001 move pump: move carriage to x, y, z location (XXX.XX location in mm)
- * -0010 get tip: moves to tip box and gets curr tip
- * -0011 remove tip: moves to tip trash and removes tip
- * -0100 aspirate volume: aspirate volume in ul (XXX.XX ul)
- * -0101 dispense volume: dispense volume in ul + 50 ul (XXX.XX ul)
- * -0110 set microstepping: adjust microstepping and timing of all motors
+ * -0010 aspirate volume: aspirate volume in ul (XXX.XX ul)
+ * -0011 dispense volume: dispense volume in ul + 50 ul (XXX.XX ul)
  * -1110 enable stepper motors: sets sleep pin of all motor drivers to HIGH
  * -1111 disable stepper motors: sets sleep pin of all motor drivers to LOW
- * 
- * 
  */
 
  /*homeCarriage
@@ -257,7 +293,7 @@ void homeCarriage(){
   enableMotors(); //enables all stepper motor drivers
   setMicrostepping(32); //sets microstepping of all drivers to 1/32
   homing = 1; //disables limit switch overrupts for the purpose of homing
-
+  int count = 0;
   //sets initial direction of all motors towards their limit switches
   digitalWrite(X_DIR, LOW);
   digitalWrite(Y_DIR, LOW);
@@ -271,6 +307,10 @@ void homeCarriage(){
     digitalWrite(X_STEP,LOW);
     delayMicroseconds(axis_step_delay);
   }
+
+//  lcd.clear();
+//  lcd.setCursor(0,1);
+//  lcd.print(count);
   digitalWrite(X_DIR, HIGH);
   while(!digitalRead(X_LIMIT)){
     digitalWrite(X_STEP, HIGH);
@@ -339,33 +379,45 @@ void homeCarriage(){
   //sets homing to 0 re-enabling the normal functionality of the limit switches as emergency stops
   //and sets carriage location to (0.0, 0.0, 0.0) and syringe volume to 0
   homing = 0;
-  x_location = 0.0;
-  y_location = 0.0;
-  z_location = 0.0;
-  syringe_vol = 0.0;
 }
 
-void movePump(double x, double y, double z){
-  if(x_dist > x){
-    digitalWrite(X_DIR, LOW);
-  }
-  else if(x_dist < x){
-    digitalWrite(X_DIR, HIGH);
-  }
-  if(y_dist > y){
-    digitalWrite(Y_DIR, LOW);
-  }
-  else if(y_dist < y){
-    digitalWrite(Y_DIR, HIGH);
-  }
-  if(z_dist > z){
-    digitalWrite(Z_DIR, LOW);
-  }
-  else if(z_dist < z){
-    digitalWrite(Z_DIR, HIGH);
+void movePump(int x_direction, int y_direction, int z_direction, double x_dist, double y_dist, double z_dist){
+//  digitalWrite(Z_DIR, LOW);
+//  while(!digitalRead(Z_LIMIT)){
+//    digitalWrite(Z_STEP, HIGH);
+//    delayMicroseconds(axis_step_delay);
+//    digitalWrite(Z_STEP, LOW);
+//    delayMicroseconds(axid_step_delay);
+//  }
+  digitalWrite(X_DIR, x_direction - '0');
+  for(int i = 0; i < (x_dist/.1); i++){
+    for(int j = 0; j < 16; j++){
+      digitalWrite(X_STEP, HIGH);
+      delayMicroseconds(axis_step_delay);
+      digitalWrite(X_STEP, LOW);
+      delayMicroseconds(axis_step_delay);
+    }
   }
 
-  
+  digitalWrite(Y_DIR, y_direction - '0');
+  for(int i = 0; i < (y_dist/.1); i++){
+    for(int j = 0; j < 16; j++){
+      digitalWrite(Y_STEP, HIGH);
+      delayMicroseconds(axis_step_delay);
+      digitalWrite(Y_STEP, LOW);
+      delayMicroseconds(axis_step_delay);
+    }
+  }
+
+  digitalWrite(Z_DIR, z_direction - '0');
+  for(int i = 0; i < (z_dist/.1); i++){
+    for(int j = 0; j < 8; j++){
+      digitalWrite(Z_STEP, HIGH);
+      delayMicroseconds(axis_step_delay);
+      digitalWrite(Z_STEP, LOW);
+      delayMicroseconds(axis_step_delay);
+    }
+  }
 }
 
 void getTip(){
@@ -401,13 +453,11 @@ void setMicrostepping(int step_size){
       digitalWrite(Z_MS0, LOW); //35 - PC2
       digitalWrite(Z_MS1, LOW); //37 - PC0
       digitalWrite(Z_MS2, LOW); //39 - PG2
-      digitalWrite(P_MS0, LOW); //34 - PC3
-      digitalWrite(P_MS1, LOW); //36 - PC1
-      digitalWrite(P_MS2, LOW); //38 - PD7
       axis_step_delay = 2000;
-      pump_step_delay = 1000;
       axis_rev_steps = 200;
-      pump_rev_steps = 400;
+      x_step_dist = 2000E-7;
+      y_step_dist = 2000E-7;
+      z_step_dist = 4000E-5;
       break;
     case 2: //001 - half step
       digitalWrite(X_MS0, LOW);
@@ -419,15 +469,15 @@ void setMicrostepping(int step_size){
       digitalWrite(Z_MS0, LOW);
       digitalWrite(Z_MS1, LOW);
       digitalWrite(Z_MS2, HIGH);
-      digitalWrite(P_MS0, LOW);
-      digitalWrite(P_MS1, LOW);
-      digitalWrite(P_MS2, HIGH);
       axis_step_delay = 1000;
       pump_step_delay = 500;
       axis_rev_steps = 400;
       pump_rev_steps = 800;
+      x_step_dist = 1000E-7;
+      y_step_dist = 1000E-7;
+      z_step_dist = 2000E-5;
       break;
-    case 4: //001 - half step
+    case 4: //010 - quarter step
       digitalWrite(X_MS0, LOW);
       digitalWrite(X_MS1, HIGH);
       digitalWrite(X_MS2, LOW);
@@ -437,15 +487,15 @@ void setMicrostepping(int step_size){
       digitalWrite(Z_MS0, LOW);
       digitalWrite(Z_MS1, HIGH);
       digitalWrite(Z_MS2, LOW);
-      digitalWrite(P_MS0, LOW);
-      digitalWrite(P_MS1, HIGH);
-      digitalWrite(P_MS2, LOW);
       axis_step_delay = 500;
       pump_step_delay = 250;
       axis_rev_steps = 800;
-      pump_rev_steps = 1600; 
+      pump_rev_steps = 1600;
+      x_step_dist = 500E-7;
+      y_step_dist = 500E-7;
+      z_step_dist = 1000E-5;
       break;
-    case 8:
+    case 8: //010 - 1/8 step
       digitalWrite(X_MS0, LOW);
       digitalWrite(X_MS1, HIGH);
       digitalWrite(X_MS2, HIGH);
@@ -455,15 +505,15 @@ void setMicrostepping(int step_size){
       digitalWrite(Z_MS0, LOW);
       digitalWrite(Z_MS1, HIGH);
       digitalWrite(Z_MS2, HIGH);
-      digitalWrite(P_MS0, LOW);
-      digitalWrite(P_MS1, HIGH);
-      digitalWrite(P_MS2, HIGH);
       axis_step_delay = 250;
       pump_step_delay = 125;
       axis_rev_steps = 1600;
-      pump_rev_steps = 3200; 
+      pump_rev_steps = 3200;
+      x_step_dist = 250E-7;
+      y_step_dist = 250E-7;
+      z_step_dist = 500E-5;
       break;
-    case 16:
+    case 16: //011 - 1/16 step
       digitalWrite(X_MS0, HIGH);
       digitalWrite(X_MS1, LOW);
       digitalWrite(X_MS2, LOW);
@@ -473,15 +523,13 @@ void setMicrostepping(int step_size){
       digitalWrite(Z_MS0, HIGH);
       digitalWrite(Z_MS1, LOW);
       digitalWrite(Z_MS2, LOW);
-      digitalWrite(P_MS0, HIGH);
-      digitalWrite(P_MS1, LOW);
-      digitalWrite(P_MS2, LOW);
       axis_step_delay = 125;
-      pump_step_delay = 63;
       axis_rev_steps = 3200;
-      pump_rev_steps = 6400; 
+      x_step_dist = 125E-7;
+      y_step_dist = 125E-7;
+      z_step_dist = 250E-5;
       break;
-    case 32:
+    case 32: //100 - 1/32nd step
       digitalWrite(X_MS0, HIGH);
       digitalWrite(X_MS1, HIGH);
       digitalWrite(X_MS2, HIGH);
@@ -491,13 +539,11 @@ void setMicrostepping(int step_size){
       digitalWrite(Z_MS0, HIGH);
       digitalWrite(Z_MS1, HIGH);
       digitalWrite(Z_MS2, HIGH);
-      digitalWrite(P_MS0, LOW);
-      digitalWrite(P_MS1, LOW);
-      digitalWrite(P_MS2, LOW);
       axis_step_delay = 63;
-      pump_step_delay = 1000;
       axis_rev_steps = 6400;
-      pump_rev_steps = 12800; 
+      x_step_dist = 63E-7;
+      y_step_dist = 63E-7;
+      z_step_dist = 125E-5;
       break;
   }
 }
@@ -539,7 +585,7 @@ void pLimitPressed(){
     digitalWrite(P_SLEEP, LOW);
   }
 }
-
+/*
 //    //aspirate
 //    else if(curr_command[0] == '0'){
 //      for(int i = 1; i < curr_command.length(); i++){
@@ -586,3 +632,4 @@ void pLimitPressed(){
 //          steps = 0;
 //        }
 //      }
+*/

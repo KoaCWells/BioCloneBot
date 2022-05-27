@@ -19,7 +19,7 @@ namespace BioCloneBot.Properties {
     // class via a tool like ResGen or Visual Studio.
     // To add or remove a member, edit your .ResX file then rerun ResGen
     // with the /str option, or rebuild your VS project.
-    [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Resources.Tools.StronglyTypedResourceBuilder", "16.0.0.0")]
+    [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Resources.Tools.StronglyTypedResourceBuilder", "17.0.0.0")]
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
     [global::System.Runtime.CompilerServices.CompilerGeneratedAttribute()]
     internal class Resources {
@@ -63,9 +63,9 @@ namespace BioCloneBot.Properties {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
-        internal static System.Drawing.Bitmap _96wellplate {
+        internal static System.Drawing.Bitmap emptyTube {
             get {
-                object obj = ResourceManager.GetObject("96wellplate", resourceCulture);
+                object obj = ResourceManager.GetObject("emptyTube", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
             }
         }
@@ -73,9 +73,9 @@ namespace BioCloneBot.Properties {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
-        internal static System.Drawing.Bitmap slot1 {
+        internal static System.Drawing.Bitmap emptyWell {
             get {
-                object obj = ResourceManager.GetObject("slot1", resourceCulture);
+                object obj = ResourceManager.GetObject("emptyWell", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
             }
         }
@@ -83,9 +83,9 @@ namespace BioCloneBot.Properties {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
-        internal static System.Drawing.Bitmap slot2 {
+        internal static System.Drawing.Bitmap fullTube {
             get {
-                object obj = ResourceManager.GetObject("slot2", resourceCulture);
+                object obj = ResourceManager.GetObject("fullTube", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
             }
         }
@@ -93,9 +93,9 @@ namespace BioCloneBot.Properties {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
-        internal static System.Drawing.Bitmap slot3 {
+        internal static System.Drawing.Bitmap fullWell {
             get {
-                object obj = ResourceManager.GetObject("slot3", resourceCulture);
+                object obj = ResourceManager.GetObject("fullWell", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
             }
         }
@@ -103,9 +103,9 @@ namespace BioCloneBot.Properties {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
-        internal static System.Drawing.Bitmap slot4 {
+        internal static System.Drawing.Bitmap selectedTube {
             get {
-                object obj = ResourceManager.GetObject("slot4", resourceCulture);
+                object obj = ResourceManager.GetObject("selectedTube", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
             }
         }
@@ -113,9 +113,9 @@ namespace BioCloneBot.Properties {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
-        internal static System.Drawing.Bitmap slot5 {
+        internal static System.Drawing.Bitmap selectedWell {
             get {
-                object obj = ResourceManager.GetObject("slot5", resourceCulture);
+                object obj = ResourceManager.GetObject("selectedWell", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
             }
         }
@@ -123,9 +123,9 @@ namespace BioCloneBot.Properties {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
-        internal static System.Drawing.Bitmap slot6 {
+        internal static System.Drawing.Bitmap tipAvailable {
             get {
-                object obj = ResourceManager.GetObject("slot6", resourceCulture);
+                object obj = ResourceManager.GetObject("tipAvailable", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
             }
         }
@@ -133,9 +133,9 @@ namespace BioCloneBot.Properties {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
-        internal static System.Drawing.Bitmap slot7 {
+        internal static System.Drawing.Bitmap tipSelected {
             get {
-                object obj = ResourceManager.GetObject("slot7", resourceCulture);
+                object obj = ResourceManager.GetObject("tipSelected", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
             }
         }
@@ -143,19 +143,9 @@ namespace BioCloneBot.Properties {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
-        internal static System.Drawing.Bitmap slot8 {
+        internal static System.Drawing.Bitmap tipUnavailable {
             get {
-                object obj = ResourceManager.GetObject("slot8", resourceCulture);
-                return ((System.Drawing.Bitmap)(obj));
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized resource of type System.Drawing.Bitmap.
-        /// </summary>
-        internal static System.Drawing.Bitmap slot9 {
-            get {
-                object obj = ResourceManager.GetObject("slot9", resourceCulture);
+                object obj = ResourceManager.GetObject("tipUnavailable", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
             }
         }
