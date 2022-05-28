@@ -15,7 +15,7 @@ namespace BioCloneBot
         public Wellplate()
         {
             dimensions = new double[3] { 127.76, 85.48, 15.50 }; //length, width, height
-            start_location = new double[2] { 14.38, 11.24 }; //x and y distance from the top left corner of the plate
+            startLocation = new double[2] { 14.38, 11.24 }; //x and y distance from the top left corner of the plate
             row = 8;
             col = 12;
             maxVolume = 200.00; //200.00 uL

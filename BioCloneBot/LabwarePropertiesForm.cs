@@ -24,21 +24,21 @@ namespace BioCloneBot
         private string labwareType;
         private bool[,] wellsSelected;
         private double maxVolume;
+        private double[,] volumes;
         private int row;
         private int col;
         private int tableLayoutElementSize;
 
-        public double[,] volumes { get; set; }
-
-        public LabwarePropertiesForm(string labwareType, double maxVolume, double[,] volumes)
+        public LabwarePropertiesForm(Labware labware)
         {
             InitializeComponent();
             this.ClientSize = new Size(1000, 560);
             selectionBox = new Rectangle();
             startPoint = new Point(0, 0);
             endPoint = new Point(0, 0);
-            this.labwareType = labwareType;
-            this.maxVolume = maxVolume;
+            labwareType = labware.LabwareType;
+            maxVolume = labware.MaxVolume;
+            volumes = labware.Volumes;
 
             if (labwareType == "wellplate")
             {
@@ -47,7 +47,7 @@ namespace BioCloneBot
                 selectedButtonBackground = global::BioCloneBot.Properties.Resources.selectedWell;
                 row = 8;
                 col = 12;
-                this.volumes = new double[row, col];
+                volumes = new double[row, col];
                 wellsSelected = new bool[row, col];
                 tableLayoutElementSize = 60;
                 setVolumeButton.Text = "Set Volume";
@@ -60,7 +60,7 @@ namespace BioCloneBot
                 selectedButtonBackground = global::BioCloneBot.Properties.Resources.selectedTube;
                 row = 4;
                 col = 6;
-                this.volumes = new double[row, col];
+                volumes = new double[row, col];
                 wellsSelected = new bool[row, col];
                 tableLayoutElementSize = 120;
                 setVolumeButton.Text = "Add Volume";
@@ -73,7 +73,7 @@ namespace BioCloneBot
                 selectedButtonBackground = global::BioCloneBot.Properties.Resources.tipSelected;
                 row = 8;
                 col = 12;
-                this.volumes = new double[row, col];
+                volumes = new double[row, col];
                 wellsSelected = new bool[row, col];
                 tableLayoutElementSize = 60;
                 setVolumeButton.Text = "Add Tips";
@@ -108,24 +108,27 @@ namespace BioCloneBot
                     labwareReservoirsTableLayout.Controls.Add(reservoirButtons[i, j], j, i);
                     labwareReservoirsTableLayout.ColumnStyles.Add(new ColumnStyle(SizeType.Absolute, tableLayoutElementSize));
 
-                    this.volumes[i, j] = volumes[i, j];
-
-                    if (this.volumes[i, j] > 0)
+                    if (volumes[i, j] > 0)
                     {
                         reservoirButtons[i, j].BackgroundImage = fullButtonBackground;
                     }
-                    else if (this.volumes[i, j] == 0)
+                    else if (volumes[i, j] == 0)
                     {
                         reservoirButtons[i, j].BackgroundImage = emptyButtonBackground;
                     }
 
                     if(labwareType != "tipbox")
                     {
-                        reservoirButtons[i, j].Text = this.volumes[i, j].ToString();
+                        reservoirButtons[i, j].Text = volumes[i, j].ToString();
                     }
                 }
                 this.DoubleBuffered = true;
             }
+        }
+
+        public double[,] Volumes
+        {
+            get { return volumes; }
         }
         private void volumeLeftClickButton(object sender, EventArgs e)
         {

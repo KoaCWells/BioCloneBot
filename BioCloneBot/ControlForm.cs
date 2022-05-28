@@ -25,20 +25,18 @@ namespace BioCloneBot
         private double xDest;
         private double yDest;
         private double zDest;
-        private double syringeVol;
-        private bool[] labwareOccupied;
+        //private double syringeVol;
+        //private bool[] labwareOccupied;
         private bool[] labwareSelected;
         private bool[] aspirateOperation;
         private bool[] dispenseOperation;
         private bool[] getTipOperation;
+        //private bool tipAttached;
 
-        private bool tipAttached;
-
-        private Platform platform = new Platform();
+        //create new Platform object with 4 labware slots
+        private Platform platform;
         private List<string> deviceCommands;
-        private List<Labware> labwares;
-
-
+        //private List<Labware> labwares;
         private Button[] labwareButtons = new Button[4];
         private Color formBackgroundColor = Color.FromArgb(33,33,33);
         private Color buttonSelectedColor = Color.FromArgb(24, 225, 204);
@@ -56,8 +54,11 @@ namespace BioCloneBot
             WindowState = FormWindowState.Maximized;
 
             labwareCount = 4;
-            labwares = new List<Labware>(new Labware[labwareCount]);
-            labwareOccupied = new bool[labwareCount];
+            platform = new Platform(labwareCount);
+
+            //labwareCount = 4;
+            //labwares = new List<Labware>(new Labware[labwareCount]);
+            //labwareOccupied = new bool[labwareCount];
             labwareSelected = new bool[labwareCount];
             aspirateOperation = new bool[labwareCount];
             dispenseOperation = new bool[labwareCount];
@@ -65,8 +66,8 @@ namespace BioCloneBot
             
             for(int i = 0; i < labwareCount; i++)
             {
-                labwares[i] = null;
-                labwareOccupied[i] = false;
+                //labwares[i] = null;
+                //labwareOccupied[i] = false;
                 labwareSelected[i] = false;
                 aspirateOperation[i] = false;
                 dispenseOperation[i] = false;
@@ -75,15 +76,12 @@ namespace BioCloneBot
 
             labwareMenuStrip = new ContextMenuStrip();
             deviceCommands = new List<string>();
-
             labwareButtons[0] = labwareButton1;
             labwareButtons[1] = labwareButton2;
             labwareButtons[2] = labwareButton3;
             labwareButtons[3] = labwareButton4;
-
-            numberOfCommands = 0;
-            syringeVol = 0;
-            tipAttached = false;
+            //syringeVol = 0;
+            //tipAttached = false;
 
             initialize_Serial_Port();
         }
@@ -174,37 +172,31 @@ namespace BioCloneBot
             {
                 xDir = 0;
                 x_travel = x_dest - xLocation;
-                //digitalWrite(X_DIR, LOW);
             }
             else if (x_dest < xLocation)
             {
                 xDir = 1;
                 x_travel = xLocation - x_dest;
-                //digitalWrite(X_DIR, HIGH);
             }
             if (y_dest > yLocation)
             {
                 yDir = 0;
                 y_travel = y_dest - yLocation;
-                //digitalWrite(Y_DIR, LOW);
             }
             else if (y_dest < yLocation)
             {
                 yDir = 1;
                 y_travel = yLocation - y_dest;
-                //digitalWrite(Y_DIR, HIGH);
             }
             if (z_dest > zLocation)
             {
                 zDir = 0;
                 z_travel = z_dest - zLocation;
-                //digitalWrite(Z_DIR, LOW);
             }
             else if (z_dest < zLocation)
             {
                 zDir = 1;
                 z_travel = zLocation - z_dest;
-                //digitalWrite(Z_DIR, HIGH);
             }
             deviceCommands[numberOfCommands] = "0001" + xDir + yDir + zDir + x_travel + y_travel + z_travel + "%";
             numberOfCommands++;
@@ -213,11 +205,16 @@ namespace BioCloneBot
 
         private void open_labware_properties(int labwarePosition)
         {
-            using (LabwarePropertiesForm labwarePropertiesForm = new LabwarePropertiesForm(labwares[labwarePosition].labwareType, labwares[labwarePosition].maxVolume, labwares[labwarePosition].volumes))
+            /*
+            using (LabwarePropertiesForm labwarePropertiesForm = new LabwarePropertiesForm(platform.Labwares[labwarePosition].labwareType,
+                platform.Labwares[labwarePosition].maxVolume,
+                platform.Labwares[labwarePosition].volumes))
+            */
+            using (LabwarePropertiesForm labwarePropertiesForm = new LabwarePropertiesForm(platform.Labwares[labwarePosition]))
             {
                 if (labwarePropertiesForm.ShowDialog() == DialogResult.OK)
                 {
-                    labwares[labwarePosition].volumes = labwarePropertiesForm.volumes;
+                    platform.Labwares[labwarePosition].Volumes = labwarePropertiesForm.Volumes;
                 }
             }
         }
@@ -292,18 +289,140 @@ namespace BioCloneBot
 
         }
 
+        private void labware_MouseDown(object sender, MouseEventArgs e)
+        {
+            Button button = sender as Button;
+            int labwarePosition = -1;
+
+            for(int i = 0; i < labwareCount; i++)
+            {
+                if (button.Name == "labwareButton1")
+                {
+                    labwarePosition = 0;
+                }
+                else if (button.Name == "labwareButton2")
+                {
+                    labwarePosition = 1;
+                }
+                else if (button.Name == "labwareButton3")
+                {
+                    labwarePosition = 2;
+                }
+                else if (button.Name == "labwareButton4")
+                {
+                    labwarePosition = 3;
+                }
+            }
+
+            if (e.Button == MouseButtons.Left)
+            {
+                if (e.Clicks == 1 && platform.LabwareOccupied[labwarePosition] == false)
+                {
+                    wellplateButton.BackColor = buttonSelectedColor;
+                    tubeStandButton.BackColor = buttonSelectedColor;
+                    tipBoxButton.BackColor = buttonSelectedColor;
+                    labwareSelected[labwarePosition] = true;
+                }
+                else if (e.Clicks >= 2 && platform.LabwareOccupied[labwarePosition] == true)
+                {
+                    open_labware_properties(labwarePosition);
+                }
+
+                else if (aspirateOperation[labwarePosition] == true)
+                {
+                    for (int i = 0; i < labwareCount; i++)
+                    {
+                        aspirateOperation[i] = false;
+                        if (platform.LabwareOccupied[i] == true)
+                        {
+                            labwareButtons[i].BackColor = buttonSelectedColor;
+                            labwareButtons[i].ForeColor = buttonTextColor1;
+                        }
+                        else if (platform.LabwareOccupied[i] == false)
+                        {
+                            labwareButtons[i].BackColor = buttonBackgroundColor2;
+                            labwareButtons[i].ForeColor = buttonTextColor2;
+                        }
+                    }
+
+                    using (Operations operationsForm = new Operations(platform.Labwares[labwarePosition], "aspirate"))
+                    {
+                        if (operationsForm.ShowDialog() == DialogResult.OK)
+                        {
+                            platform.Labwares[labwarePosition].Volumes = operationsForm.volumes;
+                        }
+                    }
+                }
+                else if (dispenseOperation[labwarePosition] == true)
+                {
+                    for (int i = 0; i < labwareCount; i++)
+                    {
+                        dispenseOperation[i] = false;
+                        if (platform.LabwareOccupied[i] == true)
+                        {
+                            labwareButtons[i].BackColor = buttonSelectedColor;
+                            labwareButtons[i].ForeColor = buttonTextColor1;
+                        }
+                        else if (platform.LabwareOccupied[i] == false)
+                        {
+                            labwareButtons[i].BackColor = buttonBackgroundColor2;
+                            labwareButtons[i].ForeColor = buttonTextColor2;
+                        }
+                    }
+
+                    using (Operations operationsForm = new Operations(platform.Labwares[labwarePosition], "dispense"))
+                    {
+                        if (operationsForm.ShowDialog() == DialogResult.OK)
+                        {
+                            platform.Labwares[labwarePosition].Volumes = operationsForm.volumes;
+                        }
+                    }
+                }
+
+                else if (getTipOperation[labwarePosition] == true)
+                {
+                    for (int i = 0; i < labwareCount; i++)
+                    {
+                        getTipOperation[i] = false;
+                        if (platform.LabwareOccupied[i] == true)
+                        {
+                            labwareButtons[i].BackColor = buttonSelectedColor;
+                            labwareButtons[i].ForeColor = buttonTextColor1;
+                        }
+                        else if (platform.LabwareOccupied[i] == false)
+                        {
+                            labwareButtons[i].BackColor = buttonBackgroundColor2;
+                            labwareButtons[i].ForeColor = buttonTextColor2;
+                        }
+                    }
+
+                    using (Operations operationsForm = new Operations(platform.Labwares[labwarePosition], "getTip"))
+                    {
+                        if (operationsForm.ShowDialog() == DialogResult.OK)
+                        {
+                            platform.Labwares[labwarePosition].Volumes = operationsForm.volumes;
+                        }
+                    }
+                }
+            }
+            else if (e.Button == MouseButtons.Right && platform.LabwareOccupied[0] == true)
+            {
+                labwareMenuStrip.Show(this, new Point(Cursor.Position.X, Cursor.Position.Y));//places the menu at the pointer position
+            }
+        }
+        /*
         private void labware1_MouseDown(object sender, MouseEventArgs e)
         {
             if(e.Button == MouseButtons.Left)
             {
-                if (e.Clicks == 1 && labwareOccupied[0] == false)
+                if (e.Clicks == 1 && platform.LabwareOccupied[0] == false)
                 {
                     wellplateButton.BackColor = buttonSelectedColor;
                     tubeStandButton.BackColor = buttonSelectedColor;
                     tipBoxButton.BackColor = buttonSelectedColor;
                     labwareSelected[0] = true;
                 }
-                else if (e.Clicks >= 2 && labwareOccupied[0] == true)
+                else if (e.Clicks >= 2 && platform.LabwareOccupied[0] == true)
                 {
                     open_labware_properties(0);
                 }
@@ -313,23 +432,23 @@ namespace BioCloneBot
                     for (int i = 0; i < labwareCount; i++)
                     {
                         aspirateOperation[i] = false;
-                        if(labwareOccupied[i] == true)
+                        if(platform.LabwareOccupied[i] == true)
                         {
                             labwareButtons[i].BackColor = buttonSelectedColor;
                             labwareButtons[i].ForeColor = buttonTextColor1;
                         }
-                        else if(labwareOccupied[i] == false)
+                        else if(platform.LabwareOccupied[i] == false)
                         {
                             labwareButtons[i].BackColor = buttonBackgroundColor2;
                             labwareButtons[i].ForeColor = buttonTextColor2;
                         }
                     }
 
-                    using (Operations operationsForm = new Operations(labwares[0], "aspirate"))
+                    using (Operations operationsForm = new Operations(platform.Labwares[0], "aspirate"))
                     {
                         if (operationsForm.ShowDialog() == DialogResult.OK)
                         {
-                            labwares[0].volumes = operationsForm.volumes;
+                            platform.Labwares[0].volumes = operationsForm.volumes;
                         }
                     }
                 }
@@ -338,23 +457,23 @@ namespace BioCloneBot
                     for (int i = 0; i < labwareCount; i++)
                     {
                         dispenseOperation[i] = false;
-                        if (labwareOccupied[i] == true)
+                        if (platform.LabwareOccupied[i] == true)
                         {
                             labwareButtons[i].BackColor = buttonSelectedColor;
                             labwareButtons[i].ForeColor = buttonTextColor1;
                         }
-                        else if (labwareOccupied[i] == false)
+                        else if (platform.LabwareOccupied[i] == false)
                         {
                             labwareButtons[i].BackColor = buttonBackgroundColor2;
                             labwareButtons[i].ForeColor = buttonTextColor2;
                         }
                     }
 
-                    using (Operations operationsForm = new Operations(labwares[0], "dispense"))
+                    using (Operations operationsForm = new Operations(platform.Labwares[0], "dispense"))
                     {
                         if (operationsForm.ShowDialog() == DialogResult.OK)
                         {
-                            labwares[0].volumes = operationsForm.volumes;
+                            platform.Labwares[0].volumes = operationsForm.volumes;
                         }
                     }
                 }
@@ -364,28 +483,28 @@ namespace BioCloneBot
                     for (int i = 0; i < labwareCount; i++)
                     {
                         getTipOperation[i] = false;
-                        if (labwareOccupied[i] == true)
+                        if (platform.LabwareOccupied[i] == true)
                         {
                             labwareButtons[i].BackColor = buttonSelectedColor;
                             labwareButtons[i].ForeColor = buttonTextColor1;
                         }
-                        else if (labwareOccupied[i] == false)
+                        else if (platform.LabwareOccupied[i] == false)
                         {
                             labwareButtons[i].BackColor = buttonBackgroundColor2;
                             labwareButtons[i].ForeColor = buttonTextColor2;
                         }
                     }
 
-                    using (Operations operationsForm = new Operations(labwares[0], "getTip"))
+                    using (Operations operationsForm = new Operations(platform.Labwares[0], "getTip"))
                     {
                         if (operationsForm.ShowDialog() == DialogResult.OK)
                         {
-                            labwares[0].volumes = operationsForm.volumes;
+                            platform.Labwares[0].volumes = operationsForm.volumes;
                         }
                     }
                 }
             }
-            else if (e.Button == MouseButtons.Right && labwareOccupied[0] == true)
+            else if (e.Button == MouseButtons.Right && platform.LabwareOccupied[0] == true)
             {
                 labwareMenuStrip.Show(this, new Point(Cursor.Position.X, Cursor.Position.Y));//places the menu at the pointer position
             }
@@ -395,14 +514,14 @@ namespace BioCloneBot
         {
             if (e.Button == MouseButtons.Left)
             {
-                if (e.Clicks == 1 && labwareOccupied[1] == false)
+                if (e.Clicks == 1 && platform.LabwareOccupied[1] == false)
                 {
                     wellplateButton.BackColor = buttonSelectedColor;
                     tubeStandButton.BackColor = buttonSelectedColor;
                     tipBoxButton.BackColor = buttonSelectedColor;
                     labwareSelected[1] = true;
                 }
-                else if (e.Clicks >= 2 && labwareOccupied[1] == true)
+                else if (e.Clicks >= 2 && platform.LabwareOccupied[1] == true)
                 {
                     open_labware_properties(1);
                 }
@@ -411,23 +530,23 @@ namespace BioCloneBot
                     for (int i = 0; i < labwareCount; i++)
                     {
                         aspirateOperation[i] = false;
-                        if (labwareOccupied[i] == true)
+                        if (platform.LabwareOccupied[i] == true)
                         {
                             labwareButtons[i].BackColor = buttonSelectedColor;
                             labwareButtons[i].ForeColor = buttonTextColor1;
                         }
-                        else if (labwareOccupied[i] == false)
+                        else if (platform.LabwareOccupied[i] == false)
                         {
                             labwareButtons[i].BackColor = buttonBackgroundColor2;
                             labwareButtons[i].ForeColor = buttonTextColor2;
                         }
                     }
 
-                    using (Operations operationsForm = new Operations(labwares[1], "aspirate"))
+                    using (Operations operationsForm = new Operations(platform.Labwares[1], "aspirate"))
                     {
                         if (operationsForm.ShowDialog() == DialogResult.OK)
                         {
-                            labwares[1].volumes = operationsForm.volumes;
+                            platform.Labwares[1].volumes = operationsForm.volumes;
                         }
                     }
                 }
@@ -436,23 +555,23 @@ namespace BioCloneBot
                     for (int i = 0; i < labwareCount; i++)
                     {
                         dispenseOperation[i] = false;
-                        if (labwareOccupied[i] == true)
+                        if (platform.LabwareOccupied[i] == true)
                         {
                             labwareButtons[i].BackColor = buttonSelectedColor;
                             labwareButtons[i].ForeColor = buttonTextColor1;
                         }
-                        else if (labwareOccupied[i] == false)
+                        else if (platform.LabwareOccupied[i] == false)
                         {
                             labwareButtons[i].BackColor = buttonBackgroundColor2;
                             labwareButtons[i].ForeColor = buttonTextColor2;
                         }
                     }
 
-                    using (Operations operationsForm = new Operations(labwares[1], "dispense"))
+                    using (Operations operationsForm = new Operations(platform.Labwares[1], "dispense"))
                     {
                         if (operationsForm.ShowDialog() == DialogResult.OK)
                         {
-                            labwares[1].volumes = operationsForm.volumes;
+                            platform.Labwares[1].volumes = operationsForm.volumes;
                         }
                     }
                 }
@@ -462,27 +581,27 @@ namespace BioCloneBot
                 for (int i = 0; i < labwareCount; i++)
                 {
                     getTipOperation[i] = false;
-                    if (labwareOccupied[i] == true)
+                    if (platform.LabwareOccupied[i] == true)
                     {
                         labwareButtons[i].BackColor = buttonSelectedColor;
                         labwareButtons[i].ForeColor = buttonTextColor1;
                     }
-                    else if (labwareOccupied[i] == false)
+                    else if (platform.LabwareOccupied[i] == false)
                     {
                         labwareButtons[i].BackColor = buttonBackgroundColor2;
                         labwareButtons[i].ForeColor = buttonTextColor2;
                     }
                 }
 
-                using (Operations operationsForm = new Operations(labwares[1], "getTip"))
+                using (Operations operationsForm = new Operations(platform.Labwares[1], "getTip"))
                 {
                     if (operationsForm.ShowDialog() == DialogResult.OK)
                     {
-                        labwares[1].volumes = operationsForm.volumes;
+                        platform.Labwares[1].volumes = operationsForm.volumes;
                     }
                 }
             }
-            else if (e.Button == MouseButtons.Right && labwareOccupied[1] == true)
+            else if (e.Button == MouseButtons.Right && platform.LabwareOccupied[1] == true)
             {
                 labwareMenuStrip.Show(this, new Point(Cursor.Position.X, Cursor.Position.Y));//places the menu at the pointer position
             }
@@ -491,14 +610,14 @@ namespace BioCloneBot
         {
             if (e.Button == MouseButtons.Left)
             {
-                if (e.Clicks == 1 && labwareOccupied[2] == false)
+                if (e.Clicks == 1 && platform.LabwareOccupied[2] == false)
                 {
                     wellplateButton.BackColor = buttonSelectedColor;
                     tubeStandButton.BackColor = buttonSelectedColor;
                     tipBoxButton.BackColor = buttonSelectedColor;
                     labwareSelected[2] = true;
                 }
-                else if (e.Clicks >= 2 && labwareOccupied[2] == true)
+                else if (e.Clicks >= 2 && platform.LabwareOccupied[2] == true)
                 {
                     open_labware_properties(2);
                 }
@@ -507,23 +626,23 @@ namespace BioCloneBot
                     for (int i = 0; i < labwareCount; i++)
                     {
                         getTipOperation[i] = false;
-                        if (labwareOccupied[i] == true)
+                        if (platform.LabwareOccupied[i] == true)
                         {
                             labwareButtons[i].BackColor = buttonSelectedColor;
                             labwareButtons[i].ForeColor = buttonTextColor1;
                         }
-                        else if (labwareOccupied[i] == false)
+                        else if (platform.LabwareOccupied[i] == false)
                         {
                             labwareButtons[i].BackColor = buttonBackgroundColor2;
                             labwareButtons[i].ForeColor = buttonTextColor2;
                         }
                     }
 
-                    using (Operations operationsForm = new Operations(labwares[2], "aspirate"))
+                    using (Operations operationsForm = new Operations(platform.Labwares[2], "aspirate"))
                     {
                         if (operationsForm.ShowDialog() == DialogResult.OK)
                         {
-                            labwares[2].volumes = operationsForm.volumes;
+                            platform.Labwares[2].volumes = operationsForm.volumes;
                         }
                     }
                 }
@@ -679,6 +798,7 @@ namespace BioCloneBot
                 labwareMenuStrip.Show(this, new Point(Cursor.Position.X, Cursor.Position.Y));//places the menu at the pointer position
             }
         }
+        */
 
         //labware buttons
         private void wellplate_Click(object sender, EventArgs e)
@@ -687,17 +807,16 @@ namespace BioCloneBot
             tubeStandButton.BackColor = buttonBackgroundColor1;
             tipBoxButton.BackColor = buttonBackgroundColor1;
 
-            for(int i = 0; i < labwares.Count(); i++)
+            for(int i = 0; i < labwareCount; i++)
             {
-                if (labwareSelected[i] == true && labwareOccupied[i] == false)
+                if (labwareSelected[i] == true && platform.LabwareOccupied[i] == false)
                 {
                     labwareButtons[i].Text = "96 Wellplate";
                     labwareButtons[i].BackColor = buttonSelectedColor;
                     labwareButtons[i].ForeColor = buttonTextColor1;
 
                     labwareSelected[i] = false;
-                    labwareOccupied[i] = true;
-                    labwares[i] = new Wellplate();
+                    platform.AddLabware(i, "wellplate");
                 }
             }
         }
@@ -707,16 +826,15 @@ namespace BioCloneBot
             tubeStandButton.BackColor = buttonBackgroundColor1;
             tipBoxButton.BackColor = buttonBackgroundColor1;
 
-            for (int i = 0; i < labwares.Count(); i++)
+            for (int i = 0; i < labwareCount; i++)
             {
-                if (labwareSelected[i] == true && labwareOccupied[i] == false)
+                if (labwareSelected[i] == true && platform.LabwareOccupied[i] == false)
                 {
                     labwareButtons[i].Text = "5mL Eppendorf Tubes";
                     labwareButtons[i].BackColor = buttonSelectedColor;
                     labwareButtons[i].ForeColor = buttonTextColor1;
                     labwareSelected[i] = false;
-                    labwareOccupied[i] = true;
-                    labwares[i] = new Tubestand();
+                    platform.AddLabware(i, "tubestand");
                 }
             }
         }
@@ -726,16 +844,15 @@ namespace BioCloneBot
             tubeStandButton.BackColor = buttonBackgroundColor1;
             tipBoxButton.BackColor = buttonBackgroundColor1;
 
-            for (int i = 0; i < labwares.Count(); i++)
+            for (int i = 0; i < labwareCount; i++)
             {
-                if (labwareSelected[i] == true && labwareOccupied[i] == false)
+                if (labwareSelected[i] == true && platform.LabwareOccupied[i] == false)
                 {
                     labwareButtons[i].Text = "200uL Tip Box";
                     labwareButtons[i].BackColor = buttonSelectedColor;
                     labwareButtons[i].ForeColor = buttonTextColor1;
                     labwareSelected[i] = false;
-                    labwareOccupied[i] = true;
-                    labwares[i] = new Tipbox();
+                    platform.AddLabware(i, "tipbox");
                 }
             }
         }
@@ -771,92 +888,88 @@ namespace BioCloneBot
 
         private void labware1PropertiesToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            using (LabwarePropertiesForm labwarePropertiesForm = new LabwarePropertiesForm(labwares[0].labwareType, labwares[0].maxVolume, labwares[0].volumes))
+            using (LabwarePropertiesForm labwarePropertiesForm = new LabwarePropertiesForm(platform.Labwares[0]))
             {
-                if(labwarePropertiesForm.ShowDialog() == DialogResult.OK)
+                if (labwarePropertiesForm.ShowDialog() == DialogResult.OK)
                 {
-                    labwares[0].volumes = labwarePropertiesForm.volumes;
+                    platform.Labwares[0].Volumes = labwarePropertiesForm.Volumes;
                 }
             }    
         }
         private void removeLabware1ToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            if (labwareOccupied[0] == true)
+            if (platform.LabwareOccupied[0] == true)
             {
                 labwareButton1.Text = "Labware 1";
                 labwareButton1.BackColor = buttonBackgroundColor2;
                 labwareButton1.ForeColor = buttonTextColor2;
-                labwareOccupied[0] = false;
-                labwares[0] = null;
+                platform.RemoveLabware(0);
             }
         }
         private void labware2PropertiesToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            using (LabwarePropertiesForm labwarePropertiesForm = new LabwarePropertiesForm(labwares[1].labwareType, labwares[1].maxVolume, labwares[1].volumes))
+            using (LabwarePropertiesForm labwarePropertiesForm = new LabwarePropertiesForm(platform.Labwares[1]))
             {
                 if (labwarePropertiesForm.ShowDialog() == DialogResult.OK)
                 {
-                    labwares[1].volumes = labwarePropertiesForm.volumes;
+                    platform.Labwares[1].Volumes = labwarePropertiesForm.Volumes;
                 }
             }
         }
         private void removeLabware2ToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            if (labwareOccupied[1] == true)
+            if (platform.LabwareOccupied[1] == true)
             {
                 labwareButton2.Text = "Labware 2";
                 labwareButton2.BackColor = buttonBackgroundColor2;
                 labwareButton2.ForeColor = buttonTextColor2;
-                labwareOccupied[1] = false;
-                labwares[1] = null;
+                platform.RemoveLabware(1);
             }
         }
         private void labware3ProperiesToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            using (LabwarePropertiesForm labwarePropertiesForm = new LabwarePropertiesForm(labwares[2].labwareType, labwares[2].maxVolume, labwares[2].volumes))
+            using (LabwarePropertiesForm labwarePropertiesForm = new LabwarePropertiesForm(platform.Labwares[2]))
             {
                 if (labwarePropertiesForm.ShowDialog() == DialogResult.OK)
                 {
-                    labwares[2].volumes = labwarePropertiesForm.volumes;
+                    platform.Labwares[2].Volumes = labwarePropertiesForm.Volumes;
                 }
             }
         }
         private void removeLabware3ToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            if (labwareOccupied[2] == true)
+            if (platform.LabwareOccupied[2] == true)
             {
                 labwareButton3.Text = "Labware 3";
                 labwareButton3.BackColor = buttonBackgroundColor2;
                 labwareButton3.ForeColor = buttonTextColor2;
-                labwareOccupied[2] = false;
-                labwares[2] = null;
+                platform.RemoveLabware(2);
             }
         }
         private void labware4PropertiesToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            using (LabwarePropertiesForm labwarePropertiesForm = new LabwarePropertiesForm(labwares[3].labwareType, labwares[3].maxVolume, labwares[3].volumes))
+            using (LabwarePropertiesForm labwarePropertiesForm = new LabwarePropertiesForm(platform.Labwares[3]))
             {
                 if (labwarePropertiesForm.ShowDialog() == DialogResult.OK)
                 {
-                    labwares[3].volumes = labwarePropertiesForm.volumes;
+                    platform.Labwares[3].Volumes = labwarePropertiesForm.Volumes;
                 }
             }
         }
         private void removeLabware4ToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            if (labwareOccupied[3] == true)
+            if (platform.LabwareOccupied[3] == true)
             {
                 labwareButton4.Text = "Labware 4";
                 labwareButton4.BackColor = buttonBackgroundColor2;
                 labwareButton4.ForeColor = buttonTextColor2;
-                labwareOccupied[3] = false;
-                labwares[3] = null;
+                platform.RemoveLabware(3);
             }
         }
 
         private void labware1MenuStrip_Opening(object sender, CancelEventArgs e)
         {
-            if(labwareOccupied[0] == false)
+            if(platform.LabwareOccupied[0] == false)
             {
                 labware1PropertiesToolStripMenuItem.Enabled = false;
                 removeLabware1ToolStripMenuItem.Enabled = false;
@@ -870,7 +983,7 @@ namespace BioCloneBot
 
         private void labware2MenuStrip_Opening(object sender, CancelEventArgs e)
         {
-            if (labwareOccupied[1] == false)
+            if (platform.LabwareOccupied[1] == false)
             {
                 labware2PropertiesToolStripMenuItem.Enabled = false;
                 removeLabware2ToolStripMenuItem.Enabled = false;
@@ -884,7 +997,7 @@ namespace BioCloneBot
 
         private void labware3MenuStrip_Opening(object sender, CancelEventArgs e)
         {
-            if (labwareOccupied[2] == false)
+            if (platform.LabwareOccupied[2] == false)
             {
                 labware3PropertiesToolStripMenuItem.Enabled = false;
                 removeLabware3ToolStripMenuItem.Enabled = false;
@@ -898,7 +1011,7 @@ namespace BioCloneBot
 
         private void labware4MenuStrip_Opening(object sender, CancelEventArgs e)
         {
-            if (labwareOccupied[3] == false)
+            if (platform.LabwareOccupied[3] == false)
             {
                 labware4PropertiesToolStripMenuItem.Enabled = false;
                 removeLabware4ToolStripMenuItem.Enabled = false;
@@ -920,9 +1033,9 @@ namespace BioCloneBot
         {
             bool labwareAvailable = false;
 
-            for (int i = 0; i < labwares.Count; i++)
+            for (int i = 0; i < labwareCount; i++)
             {
-                if (labwares[i] != null && (labwares[i].labwareType == "tipbox"))
+                if (platform.Labwares[i] != null && (platform.Labwares[i].LabwareType == "tipbox"))
                 {
                     labwareButtons[i].BackColor = buttonOperationsColor;
                     getTipOperation[i] = true;
@@ -945,9 +1058,9 @@ namespace BioCloneBot
         {
             bool labwareAvailable = false;
 
-            for (int i = 0; i < labwares.Count; i++)
+            for (int i = 0; i < labwareCount; i++)
             {
-                if (labwares[i] != null && (labwares[i].labwareType == "wellplate" || labwares[i].labwareType == "tubestand"))
+                if (platform.Labwares[i] != null && (platform.Labwares[i].LabwareType == "wellplate" || platform.Labwares[i].LabwareType == "tubestand"))
                 {
                     labwareButtons[i].BackColor = buttonOperationsColor;
                     aspirateOperation[i] = true;
@@ -965,9 +1078,9 @@ namespace BioCloneBot
         {
             bool labwareAvailable = false;
 
-            for (int i = 0; i < labwares.Count; i++)
+            for (int i = 0; i < labwareCount; i++)
             {
-                if (labwares[i] != null && (labwares[i].labwareType == "wellplate" || labwares[i].labwareType == "tubestand"))
+                if (platform.Labwares[i] != null && (platform.Labwares[i].LabwareType == "wellplate" || platform.Labwares[i].LabwareType == "tubestand"))
                 {
                     labwareButtons[i].BackColor = buttonOperationsColor;
                     dispenseOperation[i] = true;

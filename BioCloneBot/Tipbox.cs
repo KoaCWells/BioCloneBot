@@ -23,7 +23,7 @@ namespace BioCloneBot
              * tip_diameter
              */
             dimensions = new double[3] { 127.76, 85.48, 15.50 };
-            start_location = new double[2] { 14.38, 11.24 };
+            startLocation = new double[2] { 14.38, 11.24 };
             row = 8;
             col = 12;
             maxVolume = 200.00;
@@ -45,5 +45,6 @@ namespace BioCloneBot
             }
             volumes = tips;
         }
+
     }
 }

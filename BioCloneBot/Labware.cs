@@ -9,12 +9,27 @@ namespace BioCloneBot
     public class Labware
     {
         protected double[] dimensions;
-        protected double[] start_location;
-        public int row { get; set; }
-        public int col { get; set; }
-        public double maxVolume { get; set; }
-        public double[,] volumes { get; set; }
-        public string labwareType { get; set; }
+        protected double[] startLocation;
+        protected int row;
+        protected int col;
+        protected double maxVolume;
+        protected double[,] volumes;
+        protected string labwareType;
+
+        public double MaxVolume 
+        {
+            get { return maxVolume; }
+        }
+
+        public double[,] Volumes 
+        { 
+            get { return volumes; }
+            set { volumes = value; }
+        }
+        public string LabwareType 
+        {
+            get { return labwareType; }
+        }
 
         public Labware()
         {

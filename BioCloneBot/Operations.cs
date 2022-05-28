@@ -36,10 +36,10 @@ namespace BioCloneBot
             this.DoubleBuffered = true;
             labwareReservoirsTableLayout = new TableLayoutPanel();
             labwareSelected = new Labware();
-            labwareType = labware.labwareType;
+            labwareType = labware.LabwareType;
             this.mode = mode;
-            maxVolume = labware.maxVolume;
-            volumes = labware.volumes;
+            maxVolume = labware.MaxVolume;
+            volumes = labware.Volumes;
             selectedPosition = new int[2];
 
             if (labwareType == "wellplate")

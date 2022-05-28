@@ -954,7 +954,7 @@ namespace BioCloneBot
             this.labwareButton1.TabIndex = 2;
             this.labwareButton1.Text = "Labware 1";
             this.labwareButton1.UseVisualStyleBackColor = false;
-            this.labwareButton1.MouseDown += new System.Windows.Forms.MouseEventHandler(this.labware1_MouseDown);
+            this.labwareButton1.MouseDown += new System.Windows.Forms.MouseEventHandler(this.labware_MouseDown);
             // 
             // labwareMenuStrip
             // 
@@ -997,7 +997,7 @@ namespace BioCloneBot
             this.labwareButton2.TabIndex = 3;
             this.labwareButton2.Text = "Labware 2";
             this.labwareButton2.UseVisualStyleBackColor = false;
-            this.labwareButton2.MouseDown += new System.Windows.Forms.MouseEventHandler(this.labware2_MouseDown);
+            this.labwareButton2.MouseDown += new System.Windows.Forms.MouseEventHandler(this.labware_MouseDown);
             // 
             // labware2MenuStrip
             // 
@@ -1040,7 +1040,7 @@ namespace BioCloneBot
             this.labwareButton3.TabIndex = 4;
             this.labwareButton3.Text = "Labware 3";
             this.labwareButton3.UseVisualStyleBackColor = false;
-            this.labwareButton3.MouseDown += new System.Windows.Forms.MouseEventHandler(this.labware3_MouseDown);
+            this.labwareButton3.MouseDown += new System.Windows.Forms.MouseEventHandler(this.labware_MouseDown);
             // 
             // labware3MenuStrip
             // 
@@ -1083,7 +1083,7 @@ namespace BioCloneBot
             this.labwareButton4.TabIndex = 5;
             this.labwareButton4.Text = "Labware 4";
             this.labwareButton4.UseVisualStyleBackColor = false;
-            this.labwareButton4.MouseDown += new System.Windows.Forms.MouseEventHandler(this.labware4_MouseDown);
+            this.labwareButton4.MouseDown += new System.Windows.Forms.MouseEventHandler(this.labware_MouseDown);
             // 
             // labware4MenuStrip
             // 

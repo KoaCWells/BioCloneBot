@@ -19,15 +19,17 @@ namespace BioCloneBot
         //to be added at a later time
         //private Thermocycler thermocycler;
 
-        public Platform()
+        public Platform(int labwareCount)
         {
-            labwareCount = 4;
+            this.labwareCount = labwareCount;
             volumeInTip = 0.0;
             trashLocation = new double[2] { 292.5, 78.5 };
             pumpPosition = new double[2] { 0.0, 0.0 };
             tipAttached = false;
+            labwareOccupied = new bool[this.labwareCount];
+            labwares = new Labware[this.labwareCount];
 
-            for( int i = 0; i < labwareCount; i++)
+            for( int i = 0; i < this.labwareCount; i++)
             {
                 labwareOccupied[i] = false;
                 labwares[i] = null;
@@ -56,7 +58,17 @@ namespace BioCloneBot
             set { tipAttached = value; }
         }
 
-        public void AddLabware(int position, string labwareType, bool value)
+        public bool[] LabwareOccupied
+        {
+            get { return labwareOccupied; }
+        }
+
+        public Labware[] Labwares
+        {
+            get { return labwares; }
+        }
+
+        public void AddLabware(int position, string labwareType)
         {
             if(labwareType == "wellplate")
             {
@@ -70,10 +82,10 @@ namespace BioCloneBot
             {
                 labwares[position] = new Tipbox();
             }
-            labwareOccupied[position] = value;
+            labwareOccupied[position] = true;
         }
 
-        public void RemoveLabware(int position, bool value)
+        public void RemoveLabware(int position)
         {
             labwares[position] = null;
             labwareOccupied[position] = false;

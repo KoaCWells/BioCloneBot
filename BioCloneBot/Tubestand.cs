@@ -15,7 +15,7 @@ namespace BioCloneBot
         public Tubestand()
         {
             dimensions = new double[3] {125.5144, 83.2644, 56.5986};
-            start_location = new double[2] { 14.525, 6.725 };
+            startLocation = new double[2] { 14.525, 6.725 };
             row = 4;
             col = 6;
             maxVolume = 1500.00; //1.5 mL or 1500 uL
