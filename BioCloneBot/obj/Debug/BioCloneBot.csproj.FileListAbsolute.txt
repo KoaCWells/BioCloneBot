@@ -49,7 +49,6 @@ D:\OneDrive - Concordia University - Canada\Thesis\Cloning Project\Software\BioC
 D:\OneDrive - Concordia University - Canada\Thesis\Cloning Project\Software\BioCloneBot\BioCloneBot\BioCloneBot\bin\Debug\BioCloneBot.pdb
 D:\OneDrive - Concordia University - Canada\Thesis\Cloning Project\Software\BioCloneBot\BioCloneBot\BioCloneBot\obj\Debug\BioCloneBot.csproj.AssemblyReference.cache
 D:\OneDrive - Concordia University - Canada\Thesis\Cloning Project\Software\BioCloneBot\BioCloneBot\BioCloneBot\obj\Debug\BioCloneBot.csproj.SuggestedBindingRedirects.cache
-D:\OneDrive - Concordia University - Canada\Thesis\Cloning Project\Software\BioCloneBot\BioCloneBot\BioCloneBot\obj\Debug\BioCloneBot.Operations.resources
 D:\OneDrive - Concordia University - Canada\Thesis\Cloning Project\Software\BioCloneBot\BioCloneBot\BioCloneBot\obj\Debug\BioCloneBot.ControlForm.resources
 D:\OneDrive - Concordia University - Canada\Thesis\Cloning Project\Software\BioCloneBot\BioCloneBot\BioCloneBot\obj\Debug\BioCloneBot.LabwarePropertiesForm.resources
 D:\OneDrive - Concordia University - Canada\Thesis\Cloning Project\Software\BioCloneBot\BioCloneBot\BioCloneBot\obj\Debug\BioCloneBot.Properties.Resources.resources
@@ -61,7 +60,6 @@ C:\Users\Koa\OneDrive - Concordia University - Canada\Thesis\Cloning Project\Sof
 C:\Users\Koa\OneDrive - Concordia University - Canada\Thesis\Cloning Project\Software\BioCloneBot\BioCloneBot\BioCloneBot\bin\Debug\BioCloneBot.exe
 C:\Users\Koa\OneDrive - Concordia University - Canada\Thesis\Cloning Project\Software\BioCloneBot\BioCloneBot\BioCloneBot\bin\Debug\BioCloneBot.pdb
 C:\Users\Koa\OneDrive - Concordia University - Canada\Thesis\Cloning Project\Software\BioCloneBot\BioCloneBot\BioCloneBot\obj\Debug\BioCloneBot.csprojAssemblyReference.cache
-C:\Users\Koa\OneDrive - Concordia University - Canada\Thesis\Cloning Project\Software\BioCloneBot\BioCloneBot\BioCloneBot\obj\Debug\BioCloneBot.Operations.resources
 C:\Users\Koa\OneDrive - Concordia University - Canada\Thesis\Cloning Project\Software\BioCloneBot\BioCloneBot\BioCloneBot\obj\Debug\BioCloneBot.ControlForm.resources
 C:\Users\Koa\OneDrive - Concordia University - Canada\Thesis\Cloning Project\Software\BioCloneBot\BioCloneBot\BioCloneBot\obj\Debug\BioCloneBot.LabwarePropertiesForm.resources
 C:\Users\Koa\OneDrive - Concordia University - Canada\Thesis\Cloning Project\Software\BioCloneBot\BioCloneBot\BioCloneBot\obj\Debug\BioCloneBot.Properties.Resources.resources
@@ -69,3 +67,5 @@ C:\Users\Koa\OneDrive - Concordia University - Canada\Thesis\Cloning Project\Sof
 C:\Users\Koa\OneDrive - Concordia University - Canada\Thesis\Cloning Project\Software\BioCloneBot\BioCloneBot\BioCloneBot\obj\Debug\BioCloneBot.csproj.CoreCompileInputs.cache
 C:\Users\Koa\OneDrive - Concordia University - Canada\Thesis\Cloning Project\Software\BioCloneBot\BioCloneBot\BioCloneBot\obj\Debug\BioCloneBot.exe
 C:\Users\Koa\OneDrive - Concordia University - Canada\Thesis\Cloning Project\Software\BioCloneBot\BioCloneBot\BioCloneBot\obj\Debug\BioCloneBot.pdb
+C:\Users\Koa\OneDrive - Concordia University - Canada\Thesis\Cloning Project\Software\BioCloneBot\BioCloneBot\BioCloneBot\obj\Debug\BioCloneBot.OperationsForm.resources
+D:\OneDrive - Concordia University - Canada\Thesis\Cloning Project\Software\BioCloneBot\BioCloneBot\BioCloneBot\obj\Debug\BioCloneBot.OperationsForm.resources

@@ -13,6 +13,7 @@ namespace BioCloneBot
 {
     public partial class ControlForm : Form
     {
+        
         //the global variables
         private int xDir;
         private int yDir;
@@ -22,21 +23,19 @@ namespace BioCloneBot
         private double xLocation;
         private double yLocation;
         private double zLocation;
-        private double xDest;
-        private double yDest;
-        private double zDest;
-        //private double syringeVol;
-        //private bool[] labwareOccupied;
+        //private double xDest;
+        //private double yDest;
+        //private double zDest;
+        //private double volumeMoved;
         private bool[] labwareSelected;
         private bool[] aspirateOperation;
         private bool[] dispenseOperation;
         private bool[] getTipOperation;
-        //private bool tipAttached;
 
         //create new Platform object with 4 labware slots
         private Platform platform;
         private List<string> deviceCommands;
-        //private List<Labware> labwares;
+        private List<string> protocolList;
         private Button[] labwareButtons = new Button[4];
         private Color formBackgroundColor = Color.FromArgb(33,33,33);
         private Color buttonSelectedColor = Color.FromArgb(24, 225, 204);
@@ -56,18 +55,20 @@ namespace BioCloneBot
             labwareCount = 4;
             platform = new Platform(labwareCount);
 
-            //labwareCount = 4;
-            //labwares = new List<Labware>(new Labware[labwareCount]);
-            //labwareOccupied = new bool[labwareCount];
             labwareSelected = new bool[labwareCount];
             aspirateOperation = new bool[labwareCount];
             dispenseOperation = new bool[labwareCount];
             getTipOperation = new bool[labwareCount];
+            xLocation = -1.0;
+            yLocation = -1.0;
+            zLocation = -1.0;
+            //xDest = -1.0;
+            //yDest = -1.0;
+            //zDest = -1.0;
+            //volumeMoved = -1.0;
             
             for(int i = 0; i < labwareCount; i++)
             {
-                //labwares[i] = null;
-                //labwareOccupied[i] = false;
                 labwareSelected[i] = false;
                 aspirateOperation[i] = false;
                 dispenseOperation[i] = false;
@@ -76,21 +77,26 @@ namespace BioCloneBot
 
             labwareMenuStrip = new ContextMenuStrip();
             deviceCommands = new List<string>();
+            protocolList = new List<string>();
             labwareButtons[0] = labwareButton1;
             labwareButtons[1] = labwareButton2;
             labwareButtons[2] = labwareButton3;
             labwareButtons[3] = labwareButton4;
-            //syringeVol = 0;
-            //tipAttached = false;
 
             initialize_Serial_Port();
         }
-
+        /* Helper Functions
+         * -initialize_Serial_Port
+         * -updateCommand_List
+         * 
+         * 
+         * 
+         */
         private void initialize_Serial_Port()
         {
             string[] ports = System.IO.Ports.SerialPort.GetPortNames();
             string response = "";
-            bool handshake = true;
+            bool handshake = false;
             int i = 0;
 
             while (!handshake)
@@ -114,7 +120,6 @@ namespace BioCloneBot
                 }
                 catch (Exception ex)
                 {
-                    //MessageBox.Show(ex.Message, "Message", MessageBoxButtons.OK, MessageBoxIcon.Error);
                     Console.WriteLine(ex.Message);
                 }
 
@@ -128,7 +133,6 @@ namespace BioCloneBot
 
                     if (response == "pong")
                     {
-                        //MessageBox.Show("Arduino connection established.");
                         handshake = true;
                     }
                     else
@@ -139,86 +143,291 @@ namespace BioCloneBot
                 i++;
             }
         }
-        private void update_Command_List()
+        private void updateCommand_List()
         {
-            if(this.deviceCommands.Count > 0)
+            if(protocolList.Count > 0)
             {
-                this.commandList.Clear();
-                foreach (String command in this.deviceCommands)
+                commandList.Clear();
+                for(int i = 0; i < protocolList.Count(); i++)
                 {
-                    //Adds a new line then the item from the array to the textbox
-                    commandList.Text = String.Join("\n", this.deviceCommands);
+                    commandList.Text += (i+1) + ". " + protocolList[i] + ".\r\n";
                 }
             }
         }
-        //device commands
-        private void home_Device()
+        private void movePump(double xDest, double yDest, double zDest)
         {
-            deviceCommands[numberOfCommands] = "0000%";
-            numberOfCommands++;
-            xLocation = 0.0;
-            yLocation = 0.0;
-            zLocation = 0.0;
+            double xTravel = 0;
+            double yTravel = 0;
+            double zTravel = 0;
 
-            update_Command_List();
-        }
-        private void move_Pump(double x_dest, double y_dest, double z_dest)
-        {
-            double x_travel = 0;
-            double y_travel = 0;
-            double z_travel = 0;
-
-            if (x_dest > xLocation)
+            if (xDest > xLocation)
             {
                 xDir = 0;
-                x_travel = x_dest - xLocation;
+                xTravel = xDest - xLocation;
             }
-            else if (x_dest < xLocation)
+            else if (xDest < xLocation)
             {
                 xDir = 1;
-                x_travel = xLocation - x_dest;
+                xTravel = xLocation - xDest;
             }
-            if (y_dest > yLocation)
+            if (yDest > yLocation)
             {
                 yDir = 0;
-                y_travel = y_dest - yLocation;
+                yTravel = yDest - yLocation;
             }
-            else if (y_dest < yLocation)
+            else if (yDest < yLocation)
             {
                 yDir = 1;
-                y_travel = yLocation - y_dest;
+                yTravel = yLocation - yDest;
             }
-            if (z_dest > zLocation)
+            if (zDest > zLocation)
             {
                 zDir = 0;
-                z_travel = z_dest - zLocation;
+                zTravel = zDest - zLocation;
             }
-            else if (z_dest < zLocation)
+            else if (zDest < zLocation)
             {
                 zDir = 1;
-                z_travel = zLocation - z_dest;
+                zTravel = zLocation - zDest;
             }
-            deviceCommands[numberOfCommands] = "0001" + xDir + yDir + zDir + x_travel + y_travel + z_travel + "%";
-            numberOfCommands++;
-            update_Command_List();
+            if (!(xLocation == xDest && yLocation == yDest && zLocation == zDest))
+            {
+                xLocation = xDest;
+                yLocation = yDest;
+                zLocation = zDest;
+                deviceCommands.Add("0001" + xDir + yDir + zDir + xTravel + yTravel + zTravel + "%");
+                numberOfCommands++;
+            }
         }
+        private double[] calculateTravelDistance(int position, int[] wellLocation)
+        {
+            double[] destination = new double[3];
+            double elementSeparation = platform.Labwares[position].ReservoirSeparation;
+            double[] topLeftCorner = platform.Labwares[position].TopLeftCorner;
+            double[] startLocation = platform.Labwares[position].StartLocation;
 
-        private void open_labware_properties(int labwarePosition)
+            destination[0] = topLeftCorner[0] + startLocation[0] + elementSeparation * wellLocation[0];
+            destination[1] = topLeftCorner[1] + startLocation[1] + elementSeparation * wellLocation[1];
+            destination[2] = platform.ZMax - platform.Labwares[position].Dimensions[2] - 5.0;
+
+            return destination;
+        }
+        private void getTip(int labwarePosition)
+        {
+            //movePump(xLocation, yLocation, 0.0);
+            //deviceCommands.Add(move over)
+            //deviceCommands.Add(move down)
+            //deviceCommands.Add(move down)
+            //deviceCommands.Add(move up all the way)
+            double[] destination = calculateTravelDistance(labwarePosition, platform.SelectedPosition);
+            platform.Operations.Add(new Operation("gettip", xLocation, yLocation, zLocation, destination[0], destination[1], destination[2], 
+                labwarePosition, platform.SelectedPosition, platform.Labwares[labwarePosition]));
+            numberOfCommands = numberOfCommands + 5;
+            xLocation = destination[0];
+            yLocation = destination[1];
+            zLocation = 0.0;
+            protocolList.Add("Get Tip from " + platform.Labwares[labwarePosition].LabwareType + " in position " + (labwarePosition + 1));
+            updateCommand_List();
+        }
+        private void removeTip()
+        {
+            //deviceCommands.Add(move up);
+            //deviceCommands.Add(move over);
+            //deviceCommands.Add(eject tip);
+            platform.Operations.Add(new Operation("removetip", xLocation, yLocation, zLocation, platform.TrashLocation[0], platform.TrashLocation[1]));
+            numberOfCommands = numberOfCommands + 5;
+            xLocation = platform.TrashLocation[0];
+            yLocation = platform.TrashLocation[1];
+            zLocation = 0.0;
+            protocolList.Add("Remove tip");
+            updateCommand_List();
+        }
+        private void aspirateVolume(int labwarePosition, double volumeAspirated)
         {
             /*
-            using (LabwarePropertiesForm labwarePropertiesForm = new LabwarePropertiesForm(platform.Labwares[labwarePosition].labwareType,
-                platform.Labwares[labwarePosition].maxVolume,
-                platform.Labwares[labwarePosition].volumes))
+            movePump(xLocation, yLocation, 0.0); //move up
+            calculateTravelDistance(labwarePosition, platform.SelectedPosition); //move over and down
+            movePump(xLocation, yLocation, zLocation - 5.0);
+            //deviceCommands.Add(move over);
+            //deviceCommands.Add(move down);
+            //deviceCommands.Add(suck volume);
+            //deviceCommands.Add(move above labware)
+            numberOfCommands = numberOfCommands + 5;
+            
+            updateCommand_List();
+            deviceCommands.Add("0010" + volume + "%");
+            numberOfCommands++;
             */
-            using (LabwarePropertiesForm labwarePropertiesForm = new LabwarePropertiesForm(platform.Labwares[labwarePosition]))
+
+            double[] destination = calculateTravelDistance(labwarePosition, platform.SelectedPosition);
+            platform.Operations.Add(new Operation("aspirate", volumeAspirated, xLocation, yLocation, zLocation, destination[0], destination[1], destination[2],
+                labwarePosition, platform.SelectedPosition, platform.Labwares[labwarePosition]));
+            numberOfCommands = numberOfCommands + 5;
+            protocolList.Add("Aspirated " + volumeAspirated + "uL from " + platform.Labwares[labwarePosition].LabwareType + " in position " + (labwarePosition + 1));
+            updateCommand_List();
+        }
+        private void dispenseVolume(int labwarePosition, double volumeDispensed)
+        {
+            //movePump(xLocation, yLocation, 0.0);
+            //deviceCommands.Add(move up)
+            //deviceCommands.Add(move over);
+            //deviceCommands.Add(move down);
+            //deviceCommands.Add(dispense volume);
+            //deviceCommands.Add(move above labware);
+            //updateCommand_List();
+            //deviceCommands.Add("0011" + volumeDispensed + "%");
+            //numberOfCommands++;
+
+            double[] destination = calculateTravelDistance(labwarePosition, platform.SelectedPosition);
+            platform.Operations.Add(new Operation("aspirate", volumeDispensed, xLocation, yLocation, zLocation, destination[0], destination[1], destination[2],
+                labwarePosition, platform.SelectedPosition, platform.Labwares[labwarePosition]));
+            numberOfCommands = numberOfCommands + 5;
+            protocolList.Add("Dispensed " + volumeDispensed + "uL to " + platform.Labwares[labwarePosition].LabwareType + " in position " + (labwarePosition + 1));
+            updateCommand_List();
+        }
+        /* BioCloneBot Control Buttons
+         * 
+         * 
+         */
+        private void startExperimentButton_Click(object sender, EventArgs e)
+        {
+            int count = 0;
+            MessageBox.Show("Click OK to confirm and start the experiment", "Starting Experiment", MessageBoxButtons.OK, MessageBoxIcon.Information);
+            //DialogResult msg = MessageBox.Show("The device will now begin homing. Please make sure the platform is empty before continuing.", "Homing Device" +
+            //   "", MessageBoxButtons.OKCancel, MessageBoxIcon.Exclamation);
+            bool commandCompleted = false;
+            for(int i = 0; i < platform.Operations.Count; i++)
             {
-                if (labwarePropertiesForm.ShowDialog() == DialogResult.OK)
+                for(int j = 0; j < platform.Operations[i].Steps.Count; j++)
                 {
-                    platform.Labwares[labwarePosition].Volumes = labwarePropertiesForm.Volumes;
+                    try
+                    {
+                        if (serialPort1.IsOpen)
+                        {
+                            commandCompleted = false;
+                            serialPort1.Write(platform.Operations[i].Steps[j]);
+                            serialMessage.Clear();
+                            while(commandCompleted == false)
+                            {
+                                //System.Threading.Thread.Sleep(10000);
+                                //serialPort1.Write(platform.Operations[i].Steps[j]);
+                                if (serialPort1.ReadExisting() == "complete")
+                                {
+                                    commandCompleted = true;
+                                }
+                            }
+                        }
+                    }
+                    catch (Exception ex)
+                    {
+                        MessageBox.Show(ex.Message, "Message", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    }
                 }
             }
+            MessageBox.Show("BioCloneBot has finished running your experiment.", "Experiment Complete", MessageBoxButtons.OK, MessageBoxIcon.Information);
         }
-        //device control buttons
+        private void homeButton_Click(object sender, EventArgs e)
+        {
+            try
+            {
+                if (serialPort1.IsOpen)
+                {
+                    MessageBox.Show("BioCloneBot will now start homing. Please make sure the platform is empty before continuining.", "Homing Device", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                    serialPort1.Write("0000%");
+                    xLocation = 0.0;
+                    yLocation = 0.0;
+                    zLocation = 0.0;
+                }
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(ex.Message, "Message", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+        }
+        private void saveProtocolButton_Click(object sender, EventArgs e)
+        {
+
+        }
+        private void loadSample_Click(object sender, EventArgs e)
+        {
+            double[,] wellplateVolume1 = new double[8, 12];
+            double[,] wellplateVolume2 = new double[8, 12];
+            double[,] tubestandVolume = new double[4, 6];
+            double[,] tipboxTips = new double[8, 12];
+
+            for (int i = 0; i < 8; i++)
+            {
+                for (int j = 0; j < 12; j++)
+                {
+                    if (i < 4 && j < 6)
+                    {
+                        tubestandVolume[i, j] = 500.0;
+                    }
+                    wellplateVolume1[i, j] = 100.00;
+                    wellplateVolume2[i, j] = 0.0;
+                    tipboxTips[i, j] = 1.0;
+                }
+            }
+
+            if (this.deviceCommands.Count == 0)
+            {
+
+                /*
+                this.deviceCommands.Add("0000%");
+                this.deviceCommands.Add("0001" + "110 " + "200.00" + "200.00" + "000.00" + "%");
+                this.deviceCommands.Add("0001" + "001" + "000.00" + "000.00" + "100.00" + "%");
+                updateCommand_List();
+                */
+                platform.AddLabware(0, "wellplate");
+                platform.LabwareOccupied[0] = true;
+                platform.Labwares[0].Volumes = wellplateVolume1;
+                labwareButtons[0].Text = "96 Wellplate";
+                labwareButtons[0].BackColor = buttonSelectedColor;
+                labwareButtons[0].ForeColor = buttonTextColor1;
+
+                platform.AddLabware(1, "tipbox");
+                platform.LabwareOccupied[1] = true;
+                platform.Labwares[1].Volumes = tipboxTips;
+                labwareButtons[1].Text = "200uL Tip Box";
+                labwareButtons[1].BackColor = buttonSelectedColor;
+                labwareButtons[1].ForeColor = buttonTextColor1;
+
+                platform.AddLabware(2, "tubestand");
+                platform.LabwareOccupied[2] = true;
+                platform.Labwares[2].Volumes = tubestandVolume;
+                labwareButtons[2].Text = "5mL Eppendorf Tubes";
+                labwareButtons[2].BackColor = buttonSelectedColor;
+                labwareButtons[2].ForeColor = buttonTextColor1;
+
+                platform.AddLabware(3, "wellplate");
+                platform.LabwareOccupied[3] = true;
+                platform.Labwares[3].Volumes = wellplateVolume2;
+                labwareButtons[3].Text = "96 Wellplate";
+                labwareButtons[3].BackColor = buttonSelectedColor;
+                labwareButtons[3].ForeColor = buttonTextColor1;
+            }
+
+            else
+            {
+                MessageBox.Show("Sample experiments can only be loaded if there are no operations in the Protocol Queue.", "Error: Cannot Load Sample Experiment", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+        }
+        private void open_Serial_Click(object sender, EventArgs e)
+        {
+            if (!serialPort1.IsOpen)
+            {
+                initialize_Serial_Port();
+                DialogResult msg = MessageBox.Show("Serial port opened.", "Serial port opened.", MessageBoxButtons.OK);
+            }
+        }
+        private void close_Serial_Click(object sender, EventArgs e)
+        {
+            if (serialPort1.IsOpen)
+            {
+                serialPort1.Close();
+                DialogResult msg = MessageBox.Show("Serial port closed.", "Serial port closed.", MessageBoxButtons.OK);
+            }
+        }
         private void sendBtn_Click(object sender, EventArgs e)
         {
             try
@@ -234,580 +443,148 @@ namespace BioCloneBot
                 MessageBox.Show(ex.Message, "Message", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }
-
-        private void home_Button(object sender, EventArgs e)
+        /* Operations Buttons
+         * -homeDeviceButton_Click
+         * -getTipButton_Click
+         * -removeTipButton_Click
+         * -aspirateButton_Click
+         * -dispenseButton_Click
+         * -0110 set microstepping: adjust microstepping and timing of all motors
+         * -1110 enable stepper motors: sets sleep pin of all motor drivers to HIGH
+         * -1111 disable stepper motors: sets sleep pin of all motor drivers to LOW
+         */
+        private void homeDeviceButton_Click(object sender, EventArgs e)
         {
-            try
+            platform.Operations.Add(new Operation("home"));
+            //platform.addOperation(z)
+            //deviceCommands.Add("0000%");
+            protocolList.Add("Home Device");
+            numberOfCommands++;
+            xLocation = 0.0;
+            yLocation = 0.0;
+            zLocation = 0.0;
+
+            updateCommand_List();
+        }
+        private void getTipButton_Click(object sender, EventArgs e)
+        {
+            if (platform.TipAttached == false)
             {
-                if (serialPort1.IsOpen)
+                bool labwareAvailable = false;
+
+                for (int i = 0; i < labwareCount; i++)
                 {
-                    serialPort1.Write("0000%");
+                    if (platform.Labwares[i] != null && (platform.Labwares[i].LabwareType == "tipbox"))
+                    {
+                        labwareButtons[i].BackColor = buttonOperationsColor;
+                        getTipOperation[i] = true;
+                        labwareAvailable = true;
+                    }
+                }
+
+                if (labwareAvailable == false)
+                {
+                    MessageBox.Show("Before you can attach a fresh tip, add a tipbox to the platform.", "Error: No Available Tipbox", MessageBoxButtons.OK, MessageBoxIcon.Error);
                 }
             }
-            catch (Exception ex)
+
+            else
             {
-                MessageBox.Show(ex.Message, "Message", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                MessageBox.Show("Pipette tip already attached to the pump. Please add a 'Remove Tip' operation before adding a new tip.", "Error: Tip Already Attached", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }
-        private void close_Serial_Click(object sender, EventArgs e)
+        private void removeTipButton_Click(object sender, EventArgs e)
         {
-            if (serialPort1.IsOpen)
+
+            if (platform.TipAttached == true)
             {
-                serialPort1.Close();
-                DialogResult msg = MessageBox.Show("Serial port closed.", "Serial port closed.", MessageBoxButtons.OK);
+                removeTip();
+            }
+            else if (platform.TipAttached == false)
+            {
+                MessageBox.Show("Pump does not have an attached tip.", "Error: No Tip Attached.", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }
-        private void open_Serial_Click(object sender, EventArgs e)
+        private void aspirateButton_Click(object sender, EventArgs e)
         {
-            if (!serialPort1.IsOpen)
-            {
-                serialPort1.Open();
-                DialogResult msg = MessageBox.Show("Serial port opened.", "Serial port opened.", MessageBoxButtons.OK);
-            }
-        }
+            bool labwareAvailable = false;
 
-        /*
-        * List of possible device commands
-        * -0000 homeDevice: homes x, y, z, and p stepper motors
-        * -0001 movePump: calculates and sends x_dir, y_dir, z_dir, x_location, y_location, z_location (XXX.XX location in mm)
-        * -0010 getTip: moves to tip box and gets curr tip
-        * -0011 remove tip: moves to tip trash and removes tip
-        * -0100 aspirate volume: aspirate volume in ul (XXX.XX ul)
-        * -0101 dispense volume: dispense volume in ul + 50 ul (XXX.XX ul)
-        * -0110 set microstepping: adjust microstepping and timing of all motors
-        * -1110 enable stepper motors: sets sleep pin of all motor drivers to HIGH
-        * -1111 disable stepper motors: sets sleep pin of all motor drivers to LOW
-        */
-        
-        //platform buttons
-        private void thermocycler_Click(object sender, EventArgs e)
-        {
-            
-        }
-        private void trash_Click(object sender, EventArgs e)
-        {
-
-        }
-
-        private void labware_MouseDown(object sender, MouseEventArgs e)
-        {
-            Button button = sender as Button;
-            int labwarePosition = -1;
-
-            for(int i = 0; i < labwareCount; i++)
-            {
-                if (button.Name == "labwareButton1")
-                {
-                    labwarePosition = 0;
-                }
-                else if (button.Name == "labwareButton2")
-                {
-                    labwarePosition = 1;
-                }
-                else if (button.Name == "labwareButton3")
-                {
-                    labwarePosition = 2;
-                }
-                else if (button.Name == "labwareButton4")
-                {
-                    labwarePosition = 3;
-                }
-            }
-
-            if (e.Button == MouseButtons.Left)
-            {
-                if (e.Clicks == 1 && platform.LabwareOccupied[labwarePosition] == false)
-                {
-                    wellplateButton.BackColor = buttonSelectedColor;
-                    tubeStandButton.BackColor = buttonSelectedColor;
-                    tipBoxButton.BackColor = buttonSelectedColor;
-                    labwareSelected[labwarePosition] = true;
-                }
-                else if (e.Clicks >= 2 && platform.LabwareOccupied[labwarePosition] == true)
-                {
-                    open_labware_properties(labwarePosition);
-                }
-
-                else if (aspirateOperation[labwarePosition] == true)
-                {
-                    for (int i = 0; i < labwareCount; i++)
-                    {
-                        aspirateOperation[i] = false;
-                        if (platform.LabwareOccupied[i] == true)
-                        {
-                            labwareButtons[i].BackColor = buttonSelectedColor;
-                            labwareButtons[i].ForeColor = buttonTextColor1;
-                        }
-                        else if (platform.LabwareOccupied[i] == false)
-                        {
-                            labwareButtons[i].BackColor = buttonBackgroundColor2;
-                            labwareButtons[i].ForeColor = buttonTextColor2;
-                        }
-                    }
-
-                    using (Operations operationsForm = new Operations(platform.Labwares[labwarePosition], "aspirate"))
-                    {
-                        if (operationsForm.ShowDialog() == DialogResult.OK)
-                        {
-                            platform.Labwares[labwarePosition].Volumes = operationsForm.volumes;
-                        }
-                    }
-                }
-                else if (dispenseOperation[labwarePosition] == true)
-                {
-                    for (int i = 0; i < labwareCount; i++)
-                    {
-                        dispenseOperation[i] = false;
-                        if (platform.LabwareOccupied[i] == true)
-                        {
-                            labwareButtons[i].BackColor = buttonSelectedColor;
-                            labwareButtons[i].ForeColor = buttonTextColor1;
-                        }
-                        else if (platform.LabwareOccupied[i] == false)
-                        {
-                            labwareButtons[i].BackColor = buttonBackgroundColor2;
-                            labwareButtons[i].ForeColor = buttonTextColor2;
-                        }
-                    }
-
-                    using (Operations operationsForm = new Operations(platform.Labwares[labwarePosition], "dispense"))
-                    {
-                        if (operationsForm.ShowDialog() == DialogResult.OK)
-                        {
-                            platform.Labwares[labwarePosition].Volumes = operationsForm.volumes;
-                        }
-                    }
-                }
-
-                else if (getTipOperation[labwarePosition] == true)
-                {
-                    for (int i = 0; i < labwareCount; i++)
-                    {
-                        getTipOperation[i] = false;
-                        if (platform.LabwareOccupied[i] == true)
-                        {
-                            labwareButtons[i].BackColor = buttonSelectedColor;
-                            labwareButtons[i].ForeColor = buttonTextColor1;
-                        }
-                        else if (platform.LabwareOccupied[i] == false)
-                        {
-                            labwareButtons[i].BackColor = buttonBackgroundColor2;
-                            labwareButtons[i].ForeColor = buttonTextColor2;
-                        }
-                    }
-
-                    using (Operations operationsForm = new Operations(platform.Labwares[labwarePosition], "getTip"))
-                    {
-                        if (operationsForm.ShowDialog() == DialogResult.OK)
-                        {
-                            platform.Labwares[labwarePosition].Volumes = operationsForm.volumes;
-                        }
-                    }
-                }
-            }
-            else if (e.Button == MouseButtons.Right && platform.LabwareOccupied[0] == true)
-            {
-                labwareMenuStrip.Show(this, new Point(Cursor.Position.X, Cursor.Position.Y));//places the menu at the pointer position
-            }
-        }
-        /*
-        private void labware1_MouseDown(object sender, MouseEventArgs e)
-        {
-            if(e.Button == MouseButtons.Left)
-            {
-                if (e.Clicks == 1 && platform.LabwareOccupied[0] == false)
-                {
-                    wellplateButton.BackColor = buttonSelectedColor;
-                    tubeStandButton.BackColor = buttonSelectedColor;
-                    tipBoxButton.BackColor = buttonSelectedColor;
-                    labwareSelected[0] = true;
-                }
-                else if (e.Clicks >= 2 && platform.LabwareOccupied[0] == true)
-                {
-                    open_labware_properties(0);
-                }
-
-                else if (aspirateOperation[0] == true)
-                {
-                    for (int i = 0; i < labwareCount; i++)
-                    {
-                        aspirateOperation[i] = false;
-                        if(platform.LabwareOccupied[i] == true)
-                        {
-                            labwareButtons[i].BackColor = buttonSelectedColor;
-                            labwareButtons[i].ForeColor = buttonTextColor1;
-                        }
-                        else if(platform.LabwareOccupied[i] == false)
-                        {
-                            labwareButtons[i].BackColor = buttonBackgroundColor2;
-                            labwareButtons[i].ForeColor = buttonTextColor2;
-                        }
-                    }
-
-                    using (Operations operationsForm = new Operations(platform.Labwares[0], "aspirate"))
-                    {
-                        if (operationsForm.ShowDialog() == DialogResult.OK)
-                        {
-                            platform.Labwares[0].volumes = operationsForm.volumes;
-                        }
-                    }
-                }
-                else if (dispenseOperation[0] == true)
-                {
-                    for (int i = 0; i < labwareCount; i++)
-                    {
-                        dispenseOperation[i] = false;
-                        if (platform.LabwareOccupied[i] == true)
-                        {
-                            labwareButtons[i].BackColor = buttonSelectedColor;
-                            labwareButtons[i].ForeColor = buttonTextColor1;
-                        }
-                        else if (platform.LabwareOccupied[i] == false)
-                        {
-                            labwareButtons[i].BackColor = buttonBackgroundColor2;
-                            labwareButtons[i].ForeColor = buttonTextColor2;
-                        }
-                    }
-
-                    using (Operations operationsForm = new Operations(platform.Labwares[0], "dispense"))
-                    {
-                        if (operationsForm.ShowDialog() == DialogResult.OK)
-                        {
-                            platform.Labwares[0].volumes = operationsForm.volumes;
-                        }
-                    }
-                }
-
-                else if (getTipOperation[0] == true)
-                {
-                    for (int i = 0; i < labwareCount; i++)
-                    {
-                        getTipOperation[i] = false;
-                        if (platform.LabwareOccupied[i] == true)
-                        {
-                            labwareButtons[i].BackColor = buttonSelectedColor;
-                            labwareButtons[i].ForeColor = buttonTextColor1;
-                        }
-                        else if (platform.LabwareOccupied[i] == false)
-                        {
-                            labwareButtons[i].BackColor = buttonBackgroundColor2;
-                            labwareButtons[i].ForeColor = buttonTextColor2;
-                        }
-                    }
-
-                    using (Operations operationsForm = new Operations(platform.Labwares[0], "getTip"))
-                    {
-                        if (operationsForm.ShowDialog() == DialogResult.OK)
-                        {
-                            platform.Labwares[0].volumes = operationsForm.volumes;
-                        }
-                    }
-                }
-            }
-            else if (e.Button == MouseButtons.Right && platform.LabwareOccupied[0] == true)
-            {
-                labwareMenuStrip.Show(this, new Point(Cursor.Position.X, Cursor.Position.Y));//places the menu at the pointer position
-            }
-        }
-
-        private void labware2_MouseDown(object sender, MouseEventArgs e)
-        {
-            if (e.Button == MouseButtons.Left)
-            {
-                if (e.Clicks == 1 && platform.LabwareOccupied[1] == false)
-                {
-                    wellplateButton.BackColor = buttonSelectedColor;
-                    tubeStandButton.BackColor = buttonSelectedColor;
-                    tipBoxButton.BackColor = buttonSelectedColor;
-                    labwareSelected[1] = true;
-                }
-                else if (e.Clicks >= 2 && platform.LabwareOccupied[1] == true)
-                {
-                    open_labware_properties(1);
-                }
-                else if (aspirateOperation[1] == true)
-                {
-                    for (int i = 0; i < labwareCount; i++)
-                    {
-                        aspirateOperation[i] = false;
-                        if (platform.LabwareOccupied[i] == true)
-                        {
-                            labwareButtons[i].BackColor = buttonSelectedColor;
-                            labwareButtons[i].ForeColor = buttonTextColor1;
-                        }
-                        else if (platform.LabwareOccupied[i] == false)
-                        {
-                            labwareButtons[i].BackColor = buttonBackgroundColor2;
-                            labwareButtons[i].ForeColor = buttonTextColor2;
-                        }
-                    }
-
-                    using (Operations operationsForm = new Operations(platform.Labwares[1], "aspirate"))
-                    {
-                        if (operationsForm.ShowDialog() == DialogResult.OK)
-                        {
-                            platform.Labwares[1].volumes = operationsForm.volumes;
-                        }
-                    }
-                }
-                else if (dispenseOperation[1] == true)
-                {
-                    for (int i = 0; i < labwareCount; i++)
-                    {
-                        dispenseOperation[i] = false;
-                        if (platform.LabwareOccupied[i] == true)
-                        {
-                            labwareButtons[i].BackColor = buttonSelectedColor;
-                            labwareButtons[i].ForeColor = buttonTextColor1;
-                        }
-                        else if (platform.LabwareOccupied[i] == false)
-                        {
-                            labwareButtons[i].BackColor = buttonBackgroundColor2;
-                            labwareButtons[i].ForeColor = buttonTextColor2;
-                        }
-                    }
-
-                    using (Operations operationsForm = new Operations(platform.Labwares[1], "dispense"))
-                    {
-                        if (operationsForm.ShowDialog() == DialogResult.OK)
-                        {
-                            platform.Labwares[1].volumes = operationsForm.volumes;
-                        }
-                    }
-                }
-            }
-            else if (getTipOperation[1] == true)
+            if (platform.TipAttached == true)
             {
                 for (int i = 0; i < labwareCount; i++)
                 {
-                    getTipOperation[i] = false;
-                    if (platform.LabwareOccupied[i] == true)
+                    if (platform.Labwares[i] != null && (platform.Labwares[i].LabwareType == "wellplate" || platform.Labwares[i].LabwareType == "tubestand"))
                     {
-                        labwareButtons[i].BackColor = buttonSelectedColor;
-                        labwareButtons[i].ForeColor = buttonTextColor1;
-                    }
-                    else if (platform.LabwareOccupied[i] == false)
-                    {
-                        labwareButtons[i].BackColor = buttonBackgroundColor2;
-                        labwareButtons[i].ForeColor = buttonTextColor2;
+                        labwareButtons[i].BackColor = buttonOperationsColor;
+                        aspirateOperation[i] = true;
+                        labwareAvailable = true;
                     }
                 }
 
-                using (Operations operationsForm = new Operations(platform.Labwares[1], "getTip"))
+                if (labwareAvailable == false)
                 {
-                    if (operationsForm.ShowDialog() == DialogResult.OK)
-                    {
-                        platform.Labwares[1].volumes = operationsForm.volumes;
-                    }
+                    MessageBox.Show("Before you can aspirate or dispense," +
+                        " add a tip box to the platform," +
+                        " add a 'Get Tip' operation," +
+                        " and add a wellplate or tubestand to the platform."
+                        , "Error: No Available Labware", MessageBoxButtons.OK, MessageBoxIcon.Error);
                 }
             }
-            else if (e.Button == MouseButtons.Right && platform.LabwareOccupied[1] == true)
+            else if (platform.TipAttached == false)
             {
-                labwareMenuStrip.Show(this, new Point(Cursor.Position.X, Cursor.Position.Y));//places the menu at the pointer position
+                MessageBox.Show("Before you can aspirate or dispense," +
+                  " add a tip box to the platform," +
+                  " add a 'Get Tip' operation," +
+                  " and add a wellplate or tubestand to the platform."
+                  , "Error: No Tip Attached", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }
-        private void labware3_MouseDown(object sender, MouseEventArgs e)
+        private void dispenseButton_Click(object sender, EventArgs e)
         {
-            if (e.Button == MouseButtons.Left)
+            bool labwareAvailable = false;
+
+            if (platform.TipAttached == true)
             {
-                if (e.Clicks == 1 && platform.LabwareOccupied[2] == false)
+                for (int i = 0; i < labwareCount; i++)
                 {
-                    wellplateButton.BackColor = buttonSelectedColor;
-                    tubeStandButton.BackColor = buttonSelectedColor;
-                    tipBoxButton.BackColor = buttonSelectedColor;
-                    labwareSelected[2] = true;
-                }
-                else if (e.Clicks >= 2 && platform.LabwareOccupied[2] == true)
-                {
-                    open_labware_properties(2);
-                }
-                else if (aspirateOperation[2] == true)
-                {
-                    for (int i = 0; i < labwareCount; i++)
+                    if (platform.Labwares[i] != null && (platform.Labwares[i].LabwareType == "wellplate" || platform.Labwares[i].LabwareType == "tubestand"))
                     {
-                        getTipOperation[i] = false;
-                        if (platform.LabwareOccupied[i] == true)
-                        {
-                            labwareButtons[i].BackColor = buttonSelectedColor;
-                            labwareButtons[i].ForeColor = buttonTextColor1;
-                        }
-                        else if (platform.LabwareOccupied[i] == false)
-                        {
-                            labwareButtons[i].BackColor = buttonBackgroundColor2;
-                            labwareButtons[i].ForeColor = buttonTextColor2;
-                        }
+                        labwareButtons[i].BackColor = buttonOperationsColor;
+                        dispenseOperation[i] = true;
+                        labwareAvailable = true;
                     }
+                }
 
-                    using (Operations operationsForm = new Operations(platform.Labwares[2], "aspirate"))
-                    {
-                        if (operationsForm.ShowDialog() == DialogResult.OK)
-                        {
-                            platform.Labwares[2].volumes = operationsForm.volumes;
-                        }
-                    }
-                }
-                else if (dispenseOperation[2] == true)
+                if (labwareAvailable == false)
                 {
-                    for (int i = 0; i < labwareCount; i++)
-                    {
-                        dispenseOperation[i] = false;
-                        if (labwareOccupied[i] == true)
-                        {
-                            labwareButtons[i].BackColor = buttonSelectedColor;
-                            labwareButtons[i].ForeColor = buttonTextColor1;
-                        }
-                        else if (labwareOccupied[i] == false)
-                        {
-                            labwareButtons[i].BackColor = buttonBackgroundColor2;
-                            labwareButtons[i].ForeColor = buttonTextColor2;
-                        }
-                    }
-
-                    using (Operations operationsForm = new Operations(labwares[2], "dispense"))
-                    {
-                        if (operationsForm.ShowDialog() == DialogResult.OK)
-                        {
-                            labwares[2].volumes = operationsForm.volumes;
-                        }
-                    }
+                    MessageBox.Show("Before you can aspirate or dispense," +
+                        " add a tip box to the platform," +
+                        " add a 'Get Tip' operation," +
+                        " and add a wellplate or tubestand to the platform."
+                        , "Error: No Available Labware", MessageBoxButtons.OK, MessageBoxIcon.Error);
                 }
-                else if (getTipOperation[2] == true)
+                else if (platform.TipAttached == false)
                 {
-                    for (int i = 0; i < labwareCount; i++)
-                    {
-                        getTipOperation[i] = false;
-                        if (labwareOccupied[i] == true)
-                        {
-                            labwareButtons[i].BackColor = buttonSelectedColor;
-                            labwareButtons[i].ForeColor = buttonTextColor1;
-                        }
-                        else if (labwareOccupied[i] == false)
-                        {
-                            labwareButtons[i].BackColor = buttonBackgroundColor2;
-                            labwareButtons[i].ForeColor = buttonTextColor2;
-                        }
-                    }
-
-                    using (Operations operationsForm = new Operations(labwares[2], "getTip"))
-                    {
-                        if (operationsForm.ShowDialog() == DialogResult.OK)
-                        {
-                            labwares[2].volumes = operationsForm.volumes;
-                        }
-                    }
+                    MessageBox.Show("Before you can aspirate or dispense," +
+                      " add a tip box to the platform," +
+                      " add a 'Get Tip' operation," +
+                      " and add a wellplate or tubestand to the platform."
+                      , "Error: No Tip Attached", MessageBoxButtons.OK, MessageBoxIcon.Error);
                 }
-            }
-            else if (e.Button == MouseButtons.Right && labwareOccupied[2] == true)
-            {
-                labwareMenuStrip.Show(this, new Point(Cursor.Position.X, Cursor.Position.Y));//places the menu at the pointer position
             }
         }
-        private void labware4_MouseDown(object sender, MouseEventArgs e)
-        {
-            if (e.Button == MouseButtons.Left)
-            {
-                if (e.Clicks == 1 && labwareOccupied[3] == false)
-                {
-                    wellplateButton.BackColor = buttonSelectedColor;
-                    tubeStandButton.BackColor = buttonSelectedColor;
-                    tipBoxButton.BackColor = buttonSelectedColor;
-                    labwareSelected[3] = true;
-                }
-                else if (e.Clicks >= 2 && labwareOccupied[3] == true)
-                {
-                    open_labware_properties(3);
-                }
-                else if (aspirateOperation[3] == true)
-                {
-                    for (int i = 0; i < labwareCount; i++)
-                    {
-                        aspirateOperation[i] = false;
-                        if (labwareOccupied[i] == true)
-                        {
-                            labwareButtons[i].BackColor = buttonSelectedColor;
-                            labwareButtons[i].ForeColor = buttonTextColor1;
-                        }
-                        else if (labwareOccupied[i] == false)
-                        {
-                            labwareButtons[i].BackColor = buttonBackgroundColor2;
-                            labwareButtons[i].ForeColor = buttonTextColor2;
-                        }
-                    }
-
-                    using (Operations operationsForm = new Operations(labwares[3], "aspirate"))
-                    {
-                        if (operationsForm.ShowDialog() == DialogResult.OK)
-                        {
-                            labwares[3].volumes = operationsForm.volumes;
-                        }
-                    }
-                }
-                else if (dispenseOperation[3] == true)
-                {
-                    for (int i = 0; i < labwareCount; i++)
-                    {
-                        dispenseOperation[i] = false;
-                        if (labwareOccupied[i] == true)
-                        {
-                            labwareButtons[i].BackColor = buttonSelectedColor;
-                            labwareButtons[i].ForeColor = buttonTextColor1;
-                        }
-                        else if (labwareOccupied[i] == false)
-                        {
-                            labwareButtons[i].BackColor = buttonBackgroundColor2;
-                            labwareButtons[i].ForeColor = buttonTextColor2;
-                        }
-                    }
-
-                    using (Operations operationsForm = new Operations(labwares[3], "dispense"))
-                    {
-                        if (operationsForm.ShowDialog() == DialogResult.OK)
-                        {
-                            labwares[3].volumes = operationsForm.volumes;
-                        }
-                    }
-                }
-                else if (getTipOperation[3] == true)
-                {
-                    for (int i = 0; i < labwareCount; i++)
-                    {
-                        getTipOperation[i] = false;
-                        if (labwareOccupied[i] == true)
-                        {
-                            labwareButtons[i].BackColor = buttonSelectedColor;
-                            labwareButtons[i].ForeColor = buttonTextColor1;
-                        }
-                        else if (labwareOccupied[i] == false)
-                        {
-                            labwareButtons[i].BackColor = buttonBackgroundColor2;
-                            labwareButtons[i].ForeColor = buttonTextColor2;
-                        }
-                    }
-
-                    using (Operations operationsForm = new Operations(labwares[3], "getTip"))
-                    {
-                        if (operationsForm.ShowDialog() == DialogResult.OK)
-                        {
-                            labwares[3].volumes = operationsForm.volumes;
-                        }
-                    }
-                }
-            }
-            else if (e.Button == MouseButtons.Right && labwareOccupied[3] == true)
-            {
-                labwareMenuStrip.Show(this, new Point(Cursor.Position.X, Cursor.Position.Y));//places the menu at the pointer position
-            }
-        }
-        */
-
-        //labware buttons
+        /* Available Labware Buttons
+         * -96 wellplate
+         * -tubestand
+         * -200 uL tipbox
+         */
         private void wellplate_Click(object sender, EventArgs e)
         {
             wellplateButton.BackColor = buttonBackgroundColor1;
             tubeStandButton.BackColor = buttonBackgroundColor1;
             tipBoxButton.BackColor = buttonBackgroundColor1;
 
-            for(int i = 0; i < labwareCount; i++)
+            for (int i = 0; i < labwareCount; i++)
             {
                 if (labwareSelected[i] == true && platform.LabwareOccupied[i] == false)
                 {
@@ -856,36 +633,155 @@ namespace BioCloneBot
                 }
             }
         }
-
-        private void textBox1_TextChanged_2(object sender, EventArgs e)
+        /* Platform Labware Buttons
+         * -Thermocycler - to be added
+         * -Trash - to be added
+         * -Labware 1
+         * -Labware 2
+         * -Labware 3
+         * -Labware 4
+         */
+        private void thermocycler_Click(object sender, EventArgs e)
         {
-            //this.commandList.AutoSize = false;
-           // this.commandList.Size = new System.Drawing.Size(289, 600);
+            
         }
-
-        private void startExperiment_Click(object sender, EventArgs e)
+        private void trash_Click(object sender, EventArgs e)
         {
-            DialogResult msg = MessageBox.Show("The device will now begin homing. Please make sure the platform is empty before continuing.", "Homing Device" +
-                "", MessageBoxButtons.OKCancel, MessageBoxIcon.Exclamation);
+
         }
-
-        private void loadSample_Click(object sender, EventArgs e)
+        private void labware_MouseDown(object sender, MouseEventArgs e)
         {
-            if (this.deviceCommands.Count == 0)
+            Button button = sender as Button;
+            int labwarePosition = -1;
+
+            for(int i = 0; i < labwareCount; i++)
             {
-                this.deviceCommands.Add("0000%");
-                this.deviceCommands.Add("0001" + "110 " + "200.00" + "200.00" + "000.00" + "%");
-                this.deviceCommands.Add("0001" + "001" + "000.00" + "000.00" + "100.00" + "%");
-                update_Command_List();
+                if (button.Name == "labwareButton1")
+                {
+                    labwarePosition = 0;
+                }
+                else if (button.Name == "labwareButton2")
+                {
+                    labwarePosition = 1;
+                }
+                else if (button.Name == "labwareButton3")
+                {
+                    labwarePosition = 2;
+                }
+                else if (button.Name == "labwareButton4")
+                {
+                    labwarePosition = 3;
+                }
             }
 
-            else
+            if (e.Button == MouseButtons.Left)
             {
-                MessageBox.Show("Sample experiments can only be loaded if there are no operations in the Protocol Queue.", "Error: Cannot Load Sample Experiment", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                if (e.Clicks == 1 && platform.LabwareOccupied[labwarePosition] == false)
+                {
+                    wellplateButton.BackColor = buttonSelectedColor;
+                    tubeStandButton.BackColor = buttonSelectedColor;
+                    tipBoxButton.BackColor = buttonSelectedColor;
+                    labwareSelected[labwarePosition] = true;
+                }
+                else if (e.Clicks >= 2 && platform.LabwareOccupied[labwarePosition] == true)
+                {
+                    open_labware_properties(labwarePosition);
+                }
+                //Get Tip Operation
+                if (getTipOperation[labwarePosition] == true)
+                {
+                    for (int i = 0; i < labwareCount; i++)
+                    {
+                        getTipOperation[i] = false;
+                        if (platform.LabwareOccupied[i] == true)
+                        {
+                            labwareButtons[i].BackColor = buttonSelectedColor;
+                            labwareButtons[i].ForeColor = buttonTextColor1;
+                        }
+                        else if (platform.LabwareOccupied[i] == false)
+                        {
+                            labwareButtons[i].BackColor = buttonBackgroundColor2;
+                            labwareButtons[i].ForeColor = buttonTextColor2;
+                        }
+                    }
+
+                    using (OperationsForm operationsForm = new OperationsForm(platform.Labwares[labwarePosition], platform.VolumeInTip, platform.TipCapacity, "getTip"))
+                    {
+                        if (operationsForm.ShowDialog() == DialogResult.OK)
+                        {
+                            platform.TipAttached = true;
+                            platform.VolumeInTip = 0;
+                            platform.TipCapacity = operationsForm.MaxVolume;
+                            platform.SelectedPosition = operationsForm.SelectedPosition;
+                            getTip(labwarePosition);
+                        }
+                    }
+                }
+                //Aspirite Volume Operation
+                else if (aspirateOperation[labwarePosition] == true)
+                {
+                    for (int i = 0; i < labwareCount; i++)
+                    {
+                        aspirateOperation[i] = false;
+                        if (platform.LabwareOccupied[i] == true)
+                        {
+                            labwareButtons[i].BackColor = buttonSelectedColor;
+                            labwareButtons[i].ForeColor = buttonTextColor1;
+                        }
+                        else if (platform.LabwareOccupied[i] == false)
+                        {
+                            labwareButtons[i].BackColor = buttonBackgroundColor2;
+                            labwareButtons[i].ForeColor = buttonTextColor2;
+                        }
+                    }
+
+                    using (OperationsForm operationsForm = new OperationsForm(platform.Labwares[labwarePosition], platform.VolumeInTip, platform.TipCapacity, "aspirate"))
+                    {
+                        if (operationsForm.ShowDialog() == DialogResult.OK)
+                        {
+                            platform.Labwares[labwarePosition].Volumes = operationsForm.Volumes;
+                            platform.VolumeInTip = operationsForm.VolumeMoved;
+                            platform.SelectedPosition = operationsForm.SelectedPosition;
+                            aspirateVolume(labwarePosition, operationsForm.VolumeMoved);
+                        }
+                    }
+                }
+                //Dispense Volume Operation
+                else if (dispenseOperation[labwarePosition] == true)
+                {
+                    for (int i = 0; i < labwareCount; i++)
+                    {
+                        dispenseOperation[i] = false;
+                        if (platform.LabwareOccupied[i] == true)
+                        {
+                            labwareButtons[i].BackColor = buttonSelectedColor;
+                            labwareButtons[i].ForeColor = buttonTextColor1;
+                        }
+                        else if (platform.LabwareOccupied[i] == false)
+                        {
+                            labwareButtons[i].BackColor = buttonBackgroundColor2;
+                            labwareButtons[i].ForeColor = buttonTextColor2;
+                        }
+                    }
+
+                    using (OperationsForm operationsForm = new OperationsForm(platform.Labwares[labwarePosition], platform.VolumeInTip, platform.TipCapacity, "dispense"))
+                    {
+                        if (operationsForm.ShowDialog() == DialogResult.OK)
+                        {
+                            platform.Labwares[labwarePosition].Volumes = operationsForm.Volumes;
+                            platform.VolumeInTip = operationsForm.VolumeMoved;
+                            platform.SelectedPosition = operationsForm.SelectedPosition;
+                            dispenseVolume(labwarePosition, operationsForm.VolumeMoved);
+                        }
+                    }
+                }
+
             }
-
+            else if (e.Button == MouseButtons.Right && platform.LabwareOccupied[0] == true)
+            {
+                labwareMenuStrip.Show(this, new Point(Cursor.Position.X, Cursor.Position.Y));//places the menu at the pointer position
+            }
         }
-
         private void labware1PropertiesToolStripMenuItem_Click(object sender, EventArgs e)
         {
             using (LabwarePropertiesForm labwarePropertiesForm = new LabwarePropertiesForm(platform.Labwares[0]))
@@ -966,10 +862,9 @@ namespace BioCloneBot
                 platform.RemoveLabware(3);
             }
         }
-
         private void labware1MenuStrip_Opening(object sender, CancelEventArgs e)
         {
-            if(platform.LabwareOccupied[0] == false)
+            if (platform.LabwareOccupied[0] == false)
             {
                 labware1PropertiesToolStripMenuItem.Enabled = false;
                 removeLabware1ToolStripMenuItem.Enabled = false;
@@ -980,7 +875,6 @@ namespace BioCloneBot
                 removeLabware1ToolStripMenuItem.Enabled = true;
             }
         }
-
         private void labware2MenuStrip_Opening(object sender, CancelEventArgs e)
         {
             if (platform.LabwareOccupied[1] == false)
@@ -994,7 +888,6 @@ namespace BioCloneBot
                 removeLabware2ToolStripMenuItem.Enabled = true;
             }
         }
-
         private void labware3MenuStrip_Opening(object sender, CancelEventArgs e)
         {
             if (platform.LabwareOccupied[2] == false)
@@ -1008,7 +901,6 @@ namespace BioCloneBot
                 removeLabware3ToolStripMenuItem.Enabled = true;
             }
         }
-
         private void labware4MenuStrip_Opening(object sender, CancelEventArgs e)
         {
             if (platform.LabwareOccupied[3] == false)
@@ -1022,75 +914,19 @@ namespace BioCloneBot
                 removeLabware4ToolStripMenuItem.Enabled = true;
             }
         }
-
-        private void homeDeviceButton_Click(object sender, EventArgs e)
+        private void open_labware_properties(int labwarePosition)
         {
-            this.deviceCommands.Add("0000%\n");
-            update_Command_List();
-        }
-
-        private void getTipButton_Click(object sender, EventArgs e)
-        {
-            bool labwareAvailable = false;
-
-            for (int i = 0; i < labwareCount; i++)
+            /*
+            using (LabwarePropertiesForm labwarePropertiesForm = new LabwarePropertiesForm(platform.Labwares[labwarePosition].labwareType,
+                platform.Labwares[labwarePosition].maxVolume,
+                platform.Labwares[labwarePosition].volumes))
+            */
+            using (LabwarePropertiesForm labwarePropertiesForm = new LabwarePropertiesForm(platform.Labwares[labwarePosition]))
             {
-                if (platform.Labwares[i] != null && (platform.Labwares[i].LabwareType == "tipbox"))
+                if (labwarePropertiesForm.ShowDialog() == DialogResult.OK)
                 {
-                    labwareButtons[i].BackColor = buttonOperationsColor;
-                    getTipOperation[i] = true;
-                    labwareAvailable = true;
+                    platform.Labwares[labwarePosition].Volumes = labwarePropertiesForm.Volumes;
                 }
-            }
-
-            if (labwareAvailable == false)
-            {
-                MessageBox.Show("Before you can attach a fresh tip, add a tipbox to the platform.", "Error: No Available Tipbox", MessageBoxButtons.OK, MessageBoxIcon.Error);
-            }
-        }
-
-        private void removeTipButton_Click(object sender, EventArgs e)
-        {
-
-        }
-
-        private void aspirateButton_Click(object sender, EventArgs e)
-        {
-            bool labwareAvailable = false;
-
-            for (int i = 0; i < labwareCount; i++)
-            {
-                if (platform.Labwares[i] != null && (platform.Labwares[i].LabwareType == "wellplate" || platform.Labwares[i].LabwareType == "tubestand"))
-                {
-                    labwareButtons[i].BackColor = buttonOperationsColor;
-                    aspirateOperation[i] = true;
-                    labwareAvailable = true;
-                }
-            }
-
-            if (labwareAvailable == false)
-            {
-                MessageBox.Show("Before you can aspirate or dispense, first add a wellplate or tubestand to the platform.", "Error: No Available Labware", MessageBoxButtons.OK, MessageBoxIcon.Error);
-            }
-        }
-
-        private void dispenseButton_Click(object sender, EventArgs e)
-        {
-            bool labwareAvailable = false;
-
-            for (int i = 0; i < labwareCount; i++)
-            {
-                if (platform.Labwares[i] != null && (platform.Labwares[i].LabwareType == "wellplate" || platform.Labwares[i].LabwareType == "tubestand"))
-                {
-                    labwareButtons[i].BackColor = buttonOperationsColor;
-                    dispenseOperation[i] = true;
-                    labwareAvailable = true;
-                }
-            }
-
-            if (labwareAvailable == false)
-            {
-                MessageBox.Show("Before you can aspirate or dispense, first add a wellplate or tubestand to the platform.", "Error: No Available Labware", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }
     }

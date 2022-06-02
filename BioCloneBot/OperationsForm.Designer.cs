@@ -1,6 +1,6 @@
 ﻿namespace BioCloneBot
 {
-    partial class Operations
+    partial class OperationsForm
     {
         /// <summary>
         /// Required designer variable.
@@ -31,7 +31,7 @@
             this.splitContainer1 = new System.Windows.Forms.SplitContainer();
             this.tableLayoutPanel2 = new System.Windows.Forms.TableLayoutPanel();
             this.confirmationButton = new System.Windows.Forms.Button();
-            this.volumeInputTextBox = new System.Windows.Forms.TextBox();
+            this.inputVolumeTextBox = new System.Windows.Forms.TextBox();
             this.OKButton = new System.Windows.Forms.Button();
             this.CancelButton = new System.Windows.Forms.Button();
             this.operationTextBox = new System.Windows.Forms.TextBox();
@@ -49,9 +49,6 @@
             this.splitContainer1.Location = new System.Drawing.Point(0, 0);
             this.splitContainer1.Name = "splitContainer1";
             // 
-            // splitContainer1.Panel1
-            // 
-            // 
             // splitContainer1.Panel2
             // 
             this.splitContainer1.Panel2.Controls.Add(this.tableLayoutPanel2);
@@ -66,13 +63,13 @@
             this.tableLayoutPanel2.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 50F));
             this.tableLayoutPanel2.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 50F));
             this.tableLayoutPanel2.Controls.Add(this.confirmationButton, 1, 0);
-            this.tableLayoutPanel2.Controls.Add(this.volumeInputTextBox, 0, 0);
+            this.tableLayoutPanel2.Controls.Add(this.inputVolumeTextBox, 0, 0);
             this.tableLayoutPanel2.Controls.Add(this.OKButton, 1, 5);
             this.tableLayoutPanel2.Controls.Add(this.CancelButton, 0, 5);
             this.tableLayoutPanel2.Controls.Add(this.operationTextBox, 0, 1);
             this.tableLayoutPanel2.Dock = System.Windows.Forms.DockStyle.Fill;
             this.tableLayoutPanel2.Location = new System.Drawing.Point(0, 0);
-            this.tableLayoutPanel2.Margin = new System.Windows.Forms.Padding(2);
+            this.tableLayoutPanel2.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
             this.tableLayoutPanel2.Name = "tableLayoutPanel2";
             this.tableLayoutPanel2.RowCount = 6;
             this.tableLayoutPanel2.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 32F));
@@ -96,14 +93,14 @@
             this.confirmationButton.UseVisualStyleBackColor = true;
             this.confirmationButton.Click += new System.EventHandler(this.confirmationButton_Click);
             // 
-            // volumeInputTextBox
+            // inputVolumeTextBox
             // 
-            this.volumeInputTextBox.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Left | System.Windows.Forms.AnchorStyles.Right)));
-            this.volumeInputTextBox.Location = new System.Drawing.Point(3, 6);
-            this.volumeInputTextBox.Name = "volumeInputTextBox";
-            this.volumeInputTextBox.Size = new System.Drawing.Size(83, 20);
-            this.volumeInputTextBox.TabIndex = 1;
-            this.volumeInputTextBox.Text = "volumeInput";
+            this.inputVolumeTextBox.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Left | System.Windows.Forms.AnchorStyles.Right)));
+            this.inputVolumeTextBox.Location = new System.Drawing.Point(3, 6);
+            this.inputVolumeTextBox.Name = "inputVolumeTextBox";
+            this.inputVolumeTextBox.Size = new System.Drawing.Size(83, 20);
+            this.inputVolumeTextBox.TabIndex = 1;
+            this.inputVolumeTextBox.Text = "inputVolume";
             // 
             // OKButton
             // 
@@ -111,7 +108,7 @@
             | System.Windows.Forms.AnchorStyles.Right)));
             this.OKButton.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.OKButton.Location = new System.Drawing.Point(91, 531);
-            this.OKButton.Margin = new System.Windows.Forms.Padding(2);
+            this.OKButton.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
             this.OKButton.Name = "OKButton";
             this.OKButton.Size = new System.Drawing.Size(85, 23);
             this.OKButton.TabIndex = 0;
@@ -125,7 +122,7 @@
             | System.Windows.Forms.AnchorStyles.Right)));
             this.CancelButton.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.CancelButton.Location = new System.Drawing.Point(2, 531);
-            this.CancelButton.Margin = new System.Windows.Forms.Padding(2);
+            this.CancelButton.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
             this.CancelButton.Name = "CancelButton";
             this.CancelButton.Size = new System.Drawing.Size(85, 23);
             this.CancelButton.TabIndex = 0;
@@ -139,17 +136,18 @@
             this.tableLayoutPanel2.SetColumnSpan(this.operationTextBox, 2);
             this.operationTextBox.Location = new System.Drawing.Point(3, 38);
             this.operationTextBox.Name = "operationTextBox";
+            this.operationTextBox.ReadOnly = true;
             this.operationTextBox.Size = new System.Drawing.Size(172, 20);
             this.operationTextBox.TabIndex = 2;
             this.operationTextBox.Text = "operation";
             // 
-            // Operations
+            // OperationsForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(984, 560);
             this.Controls.Add(this.splitContainer1);
-            this.Name = "Operations";
+            this.Name = "OperationsForm";
             this.Text = "AspirateForm";
             this.splitContainer1.Panel2.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)(this.splitContainer1)).EndInit();
@@ -163,7 +161,7 @@
         #endregion
 
         private System.Windows.Forms.SplitContainer splitContainer1;
-        private System.Windows.Forms.TextBox volumeInputTextBox;
+        private System.Windows.Forms.TextBox inputVolumeTextBox;
         private System.Windows.Forms.Button OKButton;
         private System.Windows.Forms.Button CancelButton;
         private System.Windows.Forms.Button confirmationButton;

@@ -49,9 +49,10 @@ namespace BioCloneBot
             this.tableLayoutPanel4 = new System.Windows.Forms.TableLayoutPanel();
             this.protocolLabel = new System.Windows.Forms.Label();
             this.commandList = new System.Windows.Forms.TextBox();
+            this.startExperiment = new System.Windows.Forms.Button();
             this.serialMessage = new System.Windows.Forms.TextBox();
             this.loadSample = new System.Windows.Forms.Button();
-            this.startExperiment = new System.Windows.Forms.Button();
+            this.saveProtocolButton = new System.Windows.Forms.Button();
             this.splitContainer2 = new System.Windows.Forms.SplitContainer();
             this.tableLayoutPanel5 = new System.Windows.Forms.TableLayoutPanel();
             this.operationsLabel = new System.Windows.Forms.Label();
@@ -191,11 +192,15 @@ namespace BioCloneBot
             // 
             // sendMessage
             // 
+            this.sendMessage.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
             this.sendMessage.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(18)))), ((int)(((byte)(18)))), ((int)(((byte)(20)))));
+            this.sendMessage.Font = new System.Drawing.Font("Microsoft Sans Serif", 14F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.sendMessage.ForeColor = System.Drawing.Color.White;
-            this.sendMessage.Location = new System.Drawing.Point(3, 654);
+            this.sendMessage.Location = new System.Drawing.Point(155, 840);
             this.sendMessage.Name = "sendMessage";
-            this.sendMessage.Size = new System.Drawing.Size(75, 23);
+            this.sendMessage.Size = new System.Drawing.Size(146, 87);
             this.sendMessage.TabIndex = 4;
             this.sendMessage.Text = "Send";
             this.sendMessage.UseVisualStyleBackColor = false;
@@ -203,23 +208,31 @@ namespace BioCloneBot
             // 
             // home
             // 
+            this.home.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
             this.home.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(18)))), ((int)(((byte)(18)))), ((int)(((byte)(20)))));
+            this.home.Font = new System.Drawing.Font("Microsoft Sans Serif", 14F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.home.ForeColor = System.Drawing.Color.White;
-            this.home.Location = new System.Drawing.Point(3, 840);
+            this.home.Location = new System.Drawing.Point(155, 561);
             this.home.Name = "home";
-            this.home.Size = new System.Drawing.Size(146, 47);
+            this.home.Size = new System.Drawing.Size(146, 87);
             this.home.TabIndex = 15;
             this.home.Text = "Home Device";
             this.home.UseVisualStyleBackColor = false;
-            this.home.Click += new System.EventHandler(this.home_Button);
+            this.home.Click += new System.EventHandler(this.homeButton_Click);
             // 
             // closeSerialPort
             // 
+            this.closeSerialPort.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
             this.closeSerialPort.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(18)))), ((int)(((byte)(18)))), ((int)(((byte)(20)))));
+            this.closeSerialPort.Font = new System.Drawing.Font("Microsoft Sans Serif", 14F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.closeSerialPort.ForeColor = System.Drawing.Color.White;
             this.closeSerialPort.Location = new System.Drawing.Point(155, 747);
             this.closeSerialPort.Name = "closeSerialPort";
-            this.closeSerialPort.Size = new System.Drawing.Size(146, 23);
+            this.closeSerialPort.Size = new System.Drawing.Size(146, 87);
             this.closeSerialPort.TabIndex = 16;
             this.closeSerialPort.Text = "Close Serial Port";
             this.closeSerialPort.UseVisualStyleBackColor = false;
@@ -227,11 +240,15 @@ namespace BioCloneBot
             // 
             // openSerialPort
             // 
+            this.openSerialPort.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
             this.openSerialPort.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(18)))), ((int)(((byte)(18)))), ((int)(((byte)(20)))));
+            this.openSerialPort.Font = new System.Drawing.Font("Microsoft Sans Serif", 14F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.openSerialPort.ForeColor = System.Drawing.Color.White;
             this.openSerialPort.Location = new System.Drawing.Point(3, 747);
             this.openSerialPort.Name = "openSerialPort";
-            this.openSerialPort.Size = new System.Drawing.Size(146, 23);
+            this.openSerialPort.Size = new System.Drawing.Size(146, 87);
             this.openSerialPort.TabIndex = 17;
             this.openSerialPort.Text = "Open Serial Port";
             this.openSerialPort.UseVisualStyleBackColor = false;
@@ -260,19 +277,23 @@ namespace BioCloneBot
             // 
             // tableLayoutPanel4
             // 
+            this.tableLayoutPanel4.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
             this.tableLayoutPanel4.ColumnCount = 2;
             this.tableLayoutPanel4.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 50F));
             this.tableLayoutPanel4.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 50F));
             this.tableLayoutPanel4.Controls.Add(this.protocolLabel, 0, 0);
             this.tableLayoutPanel4.Controls.Add(this.commandList, 0, 1);
             this.tableLayoutPanel4.Controls.Add(this.closeSerialPort, 1, 4);
-            this.tableLayoutPanel4.Controls.Add(this.sendMessage, 0, 3);
             this.tableLayoutPanel4.Controls.Add(this.openSerialPort, 0, 4);
-            this.tableLayoutPanel4.Controls.Add(this.serialMessage, 1, 3);
-            this.tableLayoutPanel4.Controls.Add(this.home, 0, 5);
-            this.tableLayoutPanel4.Controls.Add(this.loadSample, 1, 5);
             this.tableLayoutPanel4.Controls.Add(this.startExperiment, 0, 2);
-            this.tableLayoutPanel4.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.tableLayoutPanel4.Controls.Add(this.serialMessage, 0, 5);
+            this.tableLayoutPanel4.Controls.Add(this.sendMessage, 1, 5);
+            this.tableLayoutPanel4.Controls.Add(this.loadSample, 1, 3);
+            this.tableLayoutPanel4.Controls.Add(this.saveProtocolButton, 0, 3);
+            this.tableLayoutPanel4.Controls.Add(this.home, 1, 2);
+            this.tableLayoutPanel4.Font = new System.Drawing.Font("Microsoft Sans Serif", 14F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.tableLayoutPanel4.Location = new System.Drawing.Point(0, 0);
             this.tableLayoutPanel4.Name = "tableLayoutPanel4";
             this.tableLayoutPanel4.RowCount = 6;
@@ -313,40 +334,65 @@ namespace BioCloneBot
             this.commandList.ScrollBars = System.Windows.Forms.ScrollBars.Vertical;
             this.commandList.Size = new System.Drawing.Size(298, 459);
             this.commandList.TabIndex = 18;
-            this.commandList.TextChanged += new System.EventHandler(this.textBox1_TextChanged_2);
-            // 
-            // serialMessage
-            // 
-            this.serialMessage.Location = new System.Drawing.Point(155, 654);
-            this.serialMessage.Multiline = true;
-            this.serialMessage.Name = "serialMessage";
-            this.serialMessage.Size = new System.Drawing.Size(146, 21);
-            this.serialMessage.TabIndex = 6;
-            // 
-            // loadSample
-            // 
-            this.loadSample.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(18)))), ((int)(((byte)(18)))), ((int)(((byte)(20)))));
-            this.loadSample.ForeColor = System.Drawing.Color.White;
-            this.loadSample.Location = new System.Drawing.Point(155, 840);
-            this.loadSample.Name = "loadSample";
-            this.loadSample.Size = new System.Drawing.Size(146, 23);
-            this.loadSample.TabIndex = 20;
-            this.loadSample.Text = "Load Sample Experiment";
-            this.loadSample.UseVisualStyleBackColor = false;
-            this.loadSample.Click += new System.EventHandler(this.loadSample_Click);
             // 
             // startExperiment
             // 
+            this.startExperiment.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
             this.startExperiment.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(18)))), ((int)(((byte)(18)))), ((int)(((byte)(20)))));
             this.startExperiment.Font = new System.Drawing.Font("Microsoft Sans Serif", 14F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.startExperiment.ForeColor = System.Drawing.Color.White;
             this.startExperiment.Location = new System.Drawing.Point(3, 561);
             this.startExperiment.Name = "startExperiment";
-            this.startExperiment.Size = new System.Drawing.Size(146, 36);
+            this.startExperiment.Size = new System.Drawing.Size(146, 87);
             this.startExperiment.TabIndex = 19;
             this.startExperiment.Text = "Start Experiment";
             this.startExperiment.UseVisualStyleBackColor = false;
-            this.startExperiment.Click += new System.EventHandler(this.startExperiment_Click);
+            this.startExperiment.Click += new System.EventHandler(this.startExperimentButton_Click);
+            // 
+            // serialMessage
+            // 
+            this.serialMessage.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.serialMessage.Location = new System.Drawing.Point(3, 840);
+            this.serialMessage.Multiline = true;
+            this.serialMessage.Name = "serialMessage";
+            this.serialMessage.Size = new System.Drawing.Size(146, 87);
+            this.serialMessage.TabIndex = 6;
+            // 
+            // loadSample
+            // 
+            this.loadSample.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.loadSample.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(18)))), ((int)(((byte)(18)))), ((int)(((byte)(20)))));
+            this.loadSample.Font = new System.Drawing.Font("Microsoft Sans Serif", 14.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.loadSample.ForeColor = System.Drawing.Color.White;
+            this.loadSample.Location = new System.Drawing.Point(155, 654);
+            this.loadSample.Name = "loadSample";
+            this.loadSample.Size = new System.Drawing.Size(146, 87);
+            this.loadSample.TabIndex = 20;
+            this.loadSample.Text = "Load Sample Experiment";
+            this.loadSample.UseVisualStyleBackColor = false;
+            this.loadSample.Click += new System.EventHandler(this.loadSample_Click);
+            // 
+            // saveProtocolButton
+            // 
+            this.saveProtocolButton.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.saveProtocolButton.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(18)))), ((int)(((byte)(18)))), ((int)(((byte)(20)))));
+            this.saveProtocolButton.Font = new System.Drawing.Font("Microsoft Sans Serif", 14.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.saveProtocolButton.ForeColor = System.Drawing.Color.White;
+            this.saveProtocolButton.Location = new System.Drawing.Point(3, 654);
+            this.saveProtocolButton.Name = "saveProtocolButton";
+            this.saveProtocolButton.Size = new System.Drawing.Size(146, 87);
+            this.saveProtocolButton.TabIndex = 22;
+            this.saveProtocolButton.Text = "Save Protocol";
+            this.saveProtocolButton.UseVisualStyleBackColor = false;
+            this.saveProtocolButton.Click += new System.EventHandler(this.saveProtocolButton_Click);
             // 
             // splitContainer2
             // 
@@ -510,7 +556,7 @@ namespace BioCloneBot
             this.operationsTBD1Button.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
             | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
-            this.operationsTBD1Button.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(18)))), ((int)(((byte)(18)))), ((int)(((byte)(20)))));
+            this.operationsTBD1Button.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(33)))), ((int)(((byte)(33)))), ((int)(((byte)(33)))));
             this.operationsTBD1Button.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.operationsTBD1Button.ForeColor = System.Drawing.Color.White;
             this.operationsTBD1Button.Location = new System.Drawing.Point(2, 440);
@@ -526,7 +572,7 @@ namespace BioCloneBot
             this.operationsTBD2Button.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
             | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
-            this.operationsTBD2Button.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(18)))), ((int)(((byte)(18)))), ((int)(((byte)(20)))));
+            this.operationsTBD2Button.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(33)))), ((int)(((byte)(33)))), ((int)(((byte)(33)))));
             this.operationsTBD2Button.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.operationsTBD2Button.ForeColor = System.Drawing.Color.White;
             this.operationsTBD2Button.Location = new System.Drawing.Point(2, 509);
@@ -542,7 +588,7 @@ namespace BioCloneBot
             this.operationsTBD3Button.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
             | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
-            this.operationsTBD3Button.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(18)))), ((int)(((byte)(18)))), ((int)(((byte)(20)))));
+            this.operationsTBD3Button.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(33)))), ((int)(((byte)(33)))), ((int)(((byte)(33)))));
             this.operationsTBD3Button.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.operationsTBD3Button.ForeColor = System.Drawing.Color.White;
             this.operationsTBD3Button.Location = new System.Drawing.Point(2, 578);
@@ -558,7 +604,7 @@ namespace BioCloneBot
             this.operationsTBD4Button.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
             | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
-            this.operationsTBD4Button.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(18)))), ((int)(((byte)(18)))), ((int)(((byte)(20)))));
+            this.operationsTBD4Button.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(33)))), ((int)(((byte)(33)))), ((int)(((byte)(33)))));
             this.operationsTBD4Button.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.operationsTBD4Button.ForeColor = System.Drawing.Color.White;
             this.operationsTBD4Button.Location = new System.Drawing.Point(2, 647);
@@ -574,7 +620,7 @@ namespace BioCloneBot
             this.operationsTBD5Button.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
             | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
-            this.operationsTBD5Button.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(18)))), ((int)(((byte)(18)))), ((int)(((byte)(20)))));
+            this.operationsTBD5Button.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(33)))), ((int)(((byte)(33)))), ((int)(((byte)(33)))));
             this.operationsTBD5Button.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.operationsTBD5Button.ForeColor = System.Drawing.Color.White;
             this.operationsTBD5Button.Location = new System.Drawing.Point(2, 716);
@@ -590,7 +636,7 @@ namespace BioCloneBot
             this.operationsTBD6Button.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
             | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
-            this.operationsTBD6Button.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(18)))), ((int)(((byte)(18)))), ((int)(((byte)(20)))));
+            this.operationsTBD6Button.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(33)))), ((int)(((byte)(33)))), ((int)(((byte)(33)))));
             this.operationsTBD6Button.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.operationsTBD6Button.ForeColor = System.Drawing.Color.White;
             this.operationsTBD6Button.Location = new System.Drawing.Point(2, 785);
@@ -606,7 +652,7 @@ namespace BioCloneBot
             this.operationsTBD7Button.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
             | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
-            this.operationsTBD7Button.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(18)))), ((int)(((byte)(18)))), ((int)(((byte)(20)))));
+            this.operationsTBD7Button.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(33)))), ((int)(((byte)(33)))), ((int)(((byte)(33)))));
             this.operationsTBD7Button.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.operationsTBD7Button.ForeColor = System.Drawing.Color.White;
             this.operationsTBD7Button.Location = new System.Drawing.Point(2, 854);
@@ -736,7 +782,7 @@ namespace BioCloneBot
             // 
             // labwareTBD1Button
             // 
-            this.labwareTBD1Button.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(18)))), ((int)(((byte)(18)))), ((int)(((byte)(20)))));
+            this.labwareTBD1Button.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(33)))), ((int)(((byte)(33)))), ((int)(((byte)(33)))));
             this.labwareTBD1Button.Dock = System.Windows.Forms.DockStyle.Fill;
             this.labwareTBD1Button.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.labwareTBD1Button.ForeColor = System.Drawing.Color.White;
@@ -749,7 +795,7 @@ namespace BioCloneBot
             // 
             // labwareTBD2Button
             // 
-            this.labwareTBD2Button.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(18)))), ((int)(((byte)(18)))), ((int)(((byte)(20)))));
+            this.labwareTBD2Button.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(33)))), ((int)(((byte)(33)))), ((int)(((byte)(33)))));
             this.labwareTBD2Button.Dock = System.Windows.Forms.DockStyle.Fill;
             this.labwareTBD2Button.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.labwareTBD2Button.ForeColor = System.Drawing.Color.White;
@@ -762,7 +808,7 @@ namespace BioCloneBot
             // 
             // labwareTBD3Button
             // 
-            this.labwareTBD3Button.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(18)))), ((int)(((byte)(18)))), ((int)(((byte)(20)))));
+            this.labwareTBD3Button.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(33)))), ((int)(((byte)(33)))), ((int)(((byte)(33)))));
             this.labwareTBD3Button.Dock = System.Windows.Forms.DockStyle.Fill;
             this.labwareTBD3Button.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.labwareTBD3Button.ForeColor = System.Drawing.Color.White;
@@ -775,7 +821,7 @@ namespace BioCloneBot
             // 
             // labwareTBD4Button
             // 
-            this.labwareTBD4Button.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(18)))), ((int)(((byte)(18)))), ((int)(((byte)(20)))));
+            this.labwareTBD4Button.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(33)))), ((int)(((byte)(33)))), ((int)(((byte)(33)))));
             this.labwareTBD4Button.Dock = System.Windows.Forms.DockStyle.Fill;
             this.labwareTBD4Button.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.labwareTBD4Button.ForeColor = System.Drawing.Color.White;
@@ -788,7 +834,7 @@ namespace BioCloneBot
             // 
             // labwareTBD5Button
             // 
-            this.labwareTBD5Button.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(18)))), ((int)(((byte)(18)))), ((int)(((byte)(20)))));
+            this.labwareTBD5Button.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(33)))), ((int)(((byte)(33)))), ((int)(((byte)(33)))));
             this.labwareTBD5Button.Dock = System.Windows.Forms.DockStyle.Fill;
             this.labwareTBD5Button.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.labwareTBD5Button.ForeColor = System.Drawing.Color.White;
@@ -801,7 +847,7 @@ namespace BioCloneBot
             // 
             // labwareTBD6Button
             // 
-            this.labwareTBD6Button.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(18)))), ((int)(((byte)(18)))), ((int)(((byte)(20)))));
+            this.labwareTBD6Button.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(33)))), ((int)(((byte)(33)))), ((int)(((byte)(33)))));
             this.labwareTBD6Button.Dock = System.Windows.Forms.DockStyle.Fill;
             this.labwareTBD6Button.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.labwareTBD6Button.ForeColor = System.Drawing.Color.White;
@@ -814,7 +860,7 @@ namespace BioCloneBot
             // 
             // labwareTBD7Button
             // 
-            this.labwareTBD7Button.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(18)))), ((int)(((byte)(18)))), ((int)(((byte)(20)))));
+            this.labwareTBD7Button.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(33)))), ((int)(((byte)(33)))), ((int)(((byte)(33)))));
             this.labwareTBD7Button.Dock = System.Windows.Forms.DockStyle.Fill;
             this.labwareTBD7Button.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.labwareTBD7Button.ForeColor = System.Drawing.Color.White;
@@ -827,7 +873,7 @@ namespace BioCloneBot
             // 
             // labwareTBD8Button
             // 
-            this.labwareTBD8Button.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(18)))), ((int)(((byte)(18)))), ((int)(((byte)(20)))));
+            this.labwareTBD8Button.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(33)))), ((int)(((byte)(33)))), ((int)(((byte)(33)))));
             this.labwareTBD8Button.Dock = System.Windows.Forms.DockStyle.Fill;
             this.labwareTBD8Button.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.labwareTBD8Button.ForeColor = System.Drawing.Color.White;
@@ -840,7 +886,7 @@ namespace BioCloneBot
             // 
             // labwareTBD9Button
             // 
-            this.labwareTBD9Button.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(18)))), ((int)(((byte)(18)))), ((int)(((byte)(20)))));
+            this.labwareTBD9Button.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(33)))), ((int)(((byte)(33)))), ((int)(((byte)(33)))));
             this.labwareTBD9Button.Dock = System.Windows.Forms.DockStyle.Fill;
             this.labwareTBD9Button.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.labwareTBD9Button.ForeColor = System.Drawing.Color.White;
@@ -902,7 +948,7 @@ namespace BioCloneBot
             // thermocyclerButton
             // 
             this.thermocyclerButton.Anchor = System.Windows.Forms.AnchorStyles.Right;
-            this.thermocyclerButton.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(18)))), ((int)(((byte)(18)))), ((int)(((byte)(20)))));
+            this.thermocyclerButton.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(33)))), ((int)(((byte)(33)))), ((int)(((byte)(33)))));
             this.thermocyclerButton.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
             this.thermocyclerButton.Font = new System.Drawing.Font("Microsoft Sans Serif", 20F, System.Drawing.FontStyle.Bold);
             this.thermocyclerButton.ForeColor = System.Drawing.Color.White;
@@ -921,7 +967,7 @@ namespace BioCloneBot
             // trashButton
             // 
             this.trashButton.Anchor = System.Windows.Forms.AnchorStyles.Left;
-            this.trashButton.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(18)))), ((int)(((byte)(18)))), ((int)(((byte)(20)))));
+            this.trashButton.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(33)))), ((int)(((byte)(33)))), ((int)(((byte)(33)))));
             this.trashButton.Cursor = System.Windows.Forms.Cursors.Default;
             this.trashButton.Font = new System.Drawing.Font("Microsoft Sans Serif", 20F, System.Drawing.FontStyle.Bold);
             this.trashButton.ForeColor = System.Drawing.Color.White;
@@ -1219,6 +1265,7 @@ namespace BioCloneBot
         private Button labwareTBD6Button;
         private Button labwareTBD7Button;
         private Button labwareTBD8Button;
+        private Button saveProtocolButton;
     }
 }
 

@@ -15,6 +15,7 @@ namespace BioCloneBot
         public Tubestand()
         {
             dimensions = new double[3] {125.5144, 83.2644, 56.5986};
+            topLeftCorner = new double[2];
             startLocation = new double[2] { 14.525, 6.725 };
             row = 4;
             col = 6;
@@ -26,6 +27,7 @@ namespace BioCloneBot
             tubeDistance = 19.55;
             tubeDiameter = 11.25;
 
+            reservoirSeparation = tubeDistance;
             //initializes all tube volumes to 0.0 uL
             for (int i = 0; i < row; i++)
             {
@@ -35,5 +37,6 @@ namespace BioCloneBot
                 }
             }
         }
+
     }
 }

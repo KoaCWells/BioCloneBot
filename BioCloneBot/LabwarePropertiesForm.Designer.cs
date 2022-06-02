@@ -49,7 +49,7 @@
             this.splitContainer1.FixedPanel = System.Windows.Forms.FixedPanel.Panel1;
             this.splitContainer1.IsSplitterFixed = true;
             this.splitContainer1.Location = new System.Drawing.Point(0, 0);
-            this.splitContainer1.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.splitContainer1.Margin = new System.Windows.Forms.Padding(4);
             this.splitContainer1.Name = "splitContainer1";
             this.splitContainer1.Panel1MinSize = 800;
             // 
@@ -103,7 +103,7 @@
             this.tableLayoutPanel2.SetColumnSpan(this.selectAllButton, 2);
             this.selectAllButton.Dock = System.Windows.Forms.DockStyle.Fill;
             this.selectAllButton.Location = new System.Drawing.Point(4, 43);
-            this.selectAllButton.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.selectAllButton.Margin = new System.Windows.Forms.Padding(4);
             this.selectAllButton.Name = "selectAllButton";
             this.selectAllButton.Size = new System.Drawing.Size(492, 31);
             this.selectAllButton.TabIndex = 21;
@@ -167,7 +167,7 @@
             this.Controls.Add(this.splitContainer1);
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.Fixed3D;
             this.KeyPreview = true;
-            this.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.Margin = new System.Windows.Forms.Padding(4);
             this.MaximizeBox = false;
             this.MinimizeBox = false;
             this.Name = "LabwarePropertiesForm";

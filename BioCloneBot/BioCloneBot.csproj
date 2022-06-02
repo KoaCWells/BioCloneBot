@@ -46,12 +46,13 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Operation.cs" />
     <Compile Include="Platform.cs" />
-    <Compile Include="Operations.cs">
+    <Compile Include="OperationsForm.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="Operations.Designer.cs">
-      <DependentUpon>Operations.cs</DependentUpon>
+    <Compile Include="OperationsForm.Designer.cs">
+      <DependentUpon>OperationsForm.cs</DependentUpon>
     </Compile>
     <Compile Include="LabwarePropertiesForm.cs">
       <SubType>Form</SubType>
@@ -71,8 +72,8 @@
     </Compile>
     <Compile Include="BioCloneBot.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <EmbeddedResource Include="Operations.resx">
-      <DependentUpon>Operations.cs</DependentUpon>
+    <EmbeddedResource Include="OperationsForm.resx">
+      <DependentUpon>OperationsForm.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="ControlForm.resx">
       <DependentUpon>ControlForm.cs</DependentUpon>
