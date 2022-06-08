@@ -33,7 +33,7 @@ namespace BioCloneBot
             
             if(this.command == "home")
             {
-                steps.Add("0000%");
+                steps.Add("#0000%");
                 xLocation = 0.0;
                 yLocation = 0.0;
                 zLocation = 0.0;
@@ -224,21 +224,21 @@ namespace BioCloneBot
             yLocation = yDest;
             zLocation = zDest;
 
-            steps.Add("0001" + xDir + yDir + zDir + x + y + z + "%");
+            steps.Add("#0001" + xDir + yDir + zDir + x + y + z + "%");
         }
         private void removeTip()
         {
-            steps.Add("0010%");
+            steps.Add("#0010%");
         }
         private void aspirateVolume(double volumeAspirated)
         {
             string volume = convertToTwoDecimalDouble(volumeAspirated);
-            steps.Add("0011" + volume + "%");
+            steps.Add("#0011" + volume + "%");
         }
         private void dispenseVolume(double volumeDispensed)
         {
             string volume = convertToTwoDecimalDouble(volumeDispensed);
-            steps.Add("0100" + volume + "%");
+            steps.Add("#0100" + volume + "%");
         }
 
         private string convertToTwoDecimalDouble(double input)

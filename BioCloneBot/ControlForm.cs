@@ -8,12 +8,12 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 using System.IO.Ports;
+using System.IO;
 
 namespace BioCloneBot
 {
     public partial class ControlForm : Form
     {
-        
         //the global variables
         private int xDir;
         private int yDir;
@@ -23,16 +23,11 @@ namespace BioCloneBot
         private double xLocation;
         private double yLocation;
         private double zLocation;
-        //private double xDest;
-        //private double yDest;
-        //private double zDest;
-        //private double volumeMoved;
         private bool[] labwareSelected;
         private bool[] aspirateOperation;
         private bool[] dispenseOperation;
         private bool[] getTipOperation;
 
-        //create new Platform object with 4 labware slots
         private Platform platform;
         private List<string> deviceCommands;
         private List<string> protocolList;
@@ -45,8 +40,6 @@ namespace BioCloneBot
         private Color buttonTextColor2 = Color.FromArgb(194, 148, 255);
         private Color buttonOperationsColor = Color.FromArgb(177, 255, 154);
 
-        //During Form1 initilization, goes through each available serial port one by one sending the "ping" message. If "pong" is received back, the Arduino has been found then
-        //opens a serial connection with the Arduino. If not found, displays an error message to try again.
         public ControlForm()
         {
             InitializeComponent();
@@ -62,10 +55,6 @@ namespace BioCloneBot
             xLocation = -1.0;
             yLocation = -1.0;
             zLocation = -1.0;
-            //xDest = -1.0;
-            //yDest = -1.0;
-            //zDest = -1.0;
-            //volumeMoved = -1.0;
             
             for(int i = 0; i < labwareCount; i++)
             {
@@ -92,19 +81,25 @@ namespace BioCloneBot
          * 
          * 
          */
+        //During BioClone initilization, goes through each available serial port one by one sending the "ping" message. If "pong" is received back, the Arduino has been found then
+        //opens a serial connection with the Arduino. If not found, displays an error message to try again.
         private void initialize_Serial_Port()
         {
             string[] ports = System.IO.Ports.SerialPort.GetPortNames();
+            string connectionMessage = "#ping%";
             string response = "";
+            char receivedCharacter = ' ';
             bool handshake = false;
+            bool messageComplete = false;
             int i = 0;
+            byte[] messageCharacter = new byte[1];
 
             while (!handshake)
             {
                 if (i == ports.Length)
                 {
                     i = 0;
-                    DialogResult msg = MessageBox.Show("Arduino not found.", " Error: Device Not Found", MessageBoxButtons.RetryCancel, MessageBoxIcon.Error);
+                    DialogResult msg = MessageBox.Show("BioCloneBot not found.", " Error: Device Not Found", MessageBoxButtons.RetryCancel, MessageBoxIcon.Error);
 
                     if (msg == DialogResult.Cancel)
                     {
@@ -116,6 +111,7 @@ namespace BioCloneBot
                 try
                 {
                     serialPort1.Open();
+                    //serialPort1.ReadTimeout = 500;
                     serialPort1.BaudRate = 9600;
                 }
                 catch (Exception ex)
@@ -125,21 +121,47 @@ namespace BioCloneBot
 
                 if (serialPort1.IsOpen)
                 {
-                    serialPort1.DiscardInBuffer();
-                    serialPort1.Write("ping%");
-                    System.Threading.Thread.Sleep(50);
-                    response = serialPort1.ReadExisting();
-                    Console.WriteLine(response);
-
-                    if (response == "pong")
+                    for (int j = 0; j < connectionMessage.Length; j++)
                     {
-                        handshake = true;
+                        messageCharacter[0] = Convert.ToByte(connectionMessage[j]);
+                        serialPort1.Write(messageCharacter, 0, 1);
                     }
-                    else
+
+                    try
                     {
-                        serialPort1.Close();
+                        receivedCharacter = Convert.ToChar(serialPort1.ReadByte());
+                    }
+                    catch(Exception ex)
+                    {
+                        Console.WriteLine(ex.Message);
+                    }
+                    
+                    if(receivedCharacter == '#')
+                    {
+                        while (messageComplete == false)
+                        {
+                            receivedCharacter = Convert.ToChar(serialPort1.ReadByte());
+                            if (receivedCharacter != '%')
+                            {
+                                response += receivedCharacter;
+                            }
+                            else
+                            {
+                                if (response == "pong")
+                                {
+                                    messageComplete = true;
+                                    handshake = true;
+                                }
+                            }
+                        }
+                    }
+
+                    if(messageComplete == true && handshake == true)
+                    {
+                        break;
                     }
                 }
+                serialPort1.Close();
                 i++;
             }
         }
@@ -195,7 +217,7 @@ namespace BioCloneBot
                 xLocation = xDest;
                 yLocation = yDest;
                 zLocation = zDest;
-                deviceCommands.Add("0001" + xDir + yDir + zDir + xTravel + yTravel + zTravel + "%");
+                deviceCommands.Add("#0001" + xDir + yDir + zDir + xTravel + yTravel + zTravel + "%");
                 numberOfCommands++;
             }
         }
@@ -291,11 +313,15 @@ namespace BioCloneBot
          */
         private void startExperimentButton_Click(object sender, EventArgs e)
         {
+            string command = "";
+            string response = "";
+            char receivedCharacter = ' ';
             int count = 0;
-            MessageBox.Show("Click OK to confirm and start the experiment", "Starting Experiment", MessageBoxButtons.OK, MessageBoxIcon.Information);
-            //DialogResult msg = MessageBox.Show("The device will now begin homing. Please make sure the platform is empty before continuing.", "Homing Device" +
-            //   "", MessageBoxButtons.OKCancel, MessageBoxIcon.Exclamation);
             bool commandCompleted = false;
+            byte[] messageCharacter = new byte[1];
+
+            MessageBox.Show("Click OK to confirm and start the experiment", "Starting Experiment", MessageBoxButtons.OK, MessageBoxIcon.Information);
+
             for(int i = 0; i < platform.Operations.Count; i++)
             {
                 for(int j = 0; j < platform.Operations[i].Steps.Count; j++)
@@ -304,16 +330,45 @@ namespace BioCloneBot
                     {
                         if (serialPort1.IsOpen)
                         {
+
                             commandCompleted = false;
-                            serialPort1.Write(platform.Operations[i].Steps[j]);
-                            serialMessage.Clear();
+                            response = "";
+                            command = platform.Operations[i].Steps[j];
+                            for (int k = 0; k < command.Length; k++)
+                            {
+                                messageCharacter[0] = Convert.ToByte(command[k]);
+                                serialPort1.Write(messageCharacter, 0, 1);
+                            }
+                            serialPort1.DiscardOutBuffer();
                             while(commandCompleted == false)
                             {
-                                //System.Threading.Thread.Sleep(10000);
-                                //serialPort1.Write(platform.Operations[i].Steps[j]);
-                                if (serialPort1.ReadExisting() == "complete")
+                                try
                                 {
-                                    commandCompleted = true;
+                                    receivedCharacter = Convert.ToChar(serialPort1.ReadByte());
+                                }
+                                catch (Exception ex)
+                                {
+                                    Console.WriteLine(ex.Message);
+                                }
+
+                                if (receivedCharacter == '#')
+                                {
+                                    while (commandCompleted == false)
+                                    {
+                                        receivedCharacter = Convert.ToChar(serialPort1.ReadByte());
+                                        if (receivedCharacter != '%')
+                                        {
+                                            response += receivedCharacter;
+                                        }
+                                        else
+                                        {
+                                            if (response == "complete")
+                                            {
+                                                commandCompleted = true;
+                                                serialPort1.DiscardInBuffer();
+                                            }
+                                        }
+                                    }
                                 }
                             }
                         }
@@ -328,15 +383,21 @@ namespace BioCloneBot
         }
         private void homeButton_Click(object sender, EventArgs e)
         {
+            string homeMessage = "#0000%";
+            byte[] messageCharacter = new byte[1];
             try
             {
                 if (serialPort1.IsOpen)
                 {
                     MessageBox.Show("BioCloneBot will now start homing. Please make sure the platform is empty before continuining.", "Homing Device", MessageBoxButtons.OK, MessageBoxIcon.Information);
-                    serialPort1.Write("0000%");
                     xLocation = 0.0;
                     yLocation = 0.0;
                     zLocation = 0.0;
+                    for (int i = 0; i < homeMessage.Length; i++)
+                    {
+                        messageCharacter[0] = Convert.ToByte(homeMessage[i]);
+                        serialPort1.Write(messageCharacter, 0, 1);
+                    }
                 }
             }
             catch (Exception ex)
@@ -346,7 +407,21 @@ namespace BioCloneBot
         }
         private void saveProtocolButton_Click(object sender, EventArgs e)
         {
+            Stream myStream;
+            SaveFileDialog saveFileDialog1 = new SaveFileDialog();
 
+            saveFileDialog1.Filter = "txt files (*.txt)|*.txt|All files (*.*)|*.*";
+            saveFileDialog1.FilterIndex = 2;
+            saveFileDialog1.RestoreDirectory = true;
+
+            if (saveFileDialog1.ShowDialog() == DialogResult.OK)
+            {
+                if ((myStream = saveFileDialog1.OpenFile()) != null)
+                {
+                    // Code to write the stream goes here.
+                    myStream.Close();
+                }
+            }
         }
         private void loadSample_Click(object sender, EventArgs e)
         {
@@ -430,17 +505,33 @@ namespace BioCloneBot
         }
         private void sendBtn_Click(object sender, EventArgs e)
         {
+            char[] test;
+            string command = "";
+            command = serialMessage.Text;
+            bool commandCompleted = false;
+            char receivedCharacter = ' ';
+            string received = "";
+            string response = "";
+            Byte testbyte;
+
             try
             {
                 if (serialPort1.IsOpen)
                 {
-                    serialPort1.Write(serialMessage.Text);
+                    for (int i = 0; i < command.Length; i++)
+                    {
+                        serialPort1.Write(command[i].ToString());
+                        //receivedCharacter = Convert.ToChar(serialPort1.ReadByte());
+                    }
+                    received = serialPort1.ReadTo("%");
+                    commandList.Text += received;
+                    Console.Write(response);
                     serialMessage.Clear();
                 }
             }
             catch (Exception ex)
             {
-                MessageBox.Show(ex.Message, "Message", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                MessageBox.Show(ex.Message, "Serial Port failed to open.", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }
         /* Operations Buttons
