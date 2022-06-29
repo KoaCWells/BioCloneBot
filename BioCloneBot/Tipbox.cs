@@ -24,7 +24,7 @@ namespace BioCloneBot
              */
             dimensions = new double[3] { 127.76, 85.48, 15.50 };
             topLeftCorner = new double[2];
-            startLocation = new double[2] { 14.38, 11.24 };
+            startLocation = new double[2] { 14.90, 11.40 };
             row = 8;
             col = 12;
             maxVolume = 200.00;
@@ -34,7 +34,7 @@ namespace BioCloneBot
             totalTips = 96;
             remainingTips = 96;
             tipDistance = 9.00;
-            tipDiameter = 5.50;
+            tipDiameter = 7.00;
 
             reservoirSeparation = tipDistance;
 

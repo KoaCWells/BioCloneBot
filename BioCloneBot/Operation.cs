@@ -11,11 +11,9 @@ namespace BioCloneBot
         private List<string> steps = new List<string>();
         private string command;
         private double volumeMoved;
-        //location before operation
         private double xLocation;
         private double yLocation;
         private double zLocation;
-        //destination 
         private double xDest;
         private double yDest;
         private double zDest;
@@ -23,10 +21,15 @@ namespace BioCloneBot
         private double yDir;
         private double zDir;
         private int labwarePosition;
-        private int[] selectedReservoirPosition; //row and column of labware
+        private int[] selectedReservoirPosition; //row and column of labware selected
         private Labware labware; //source or destination labware
-        
-        //home device operation
+
+        public List<string> Steps
+        {
+            get { return steps; }
+            set { steps = value; }
+        }
+
         public Operation(string command)
         {
             this.command = command;
@@ -34,18 +37,14 @@ namespace BioCloneBot
             if(this.command == "home")
             {
                 steps.Add("#0000%");
+                steps.Add("#0001110012.00033.00000.00%");
+                steps.Add("#0011025.00%");
                 xLocation = 0.0;
                 yLocation = 0.0;
                 zLocation = 0.0;
             }
         }
 
-        public List<string> Steps
-        {
-            get { return steps; }
-            set { steps = value; }
-        }
-        //get tip device operation
         public Operation(string command, double xLocation, double yLocation, double zLocation, 
             double xDest, double yDest, double zDest, int labwarePosition, int[] selectedReservoirPosition, Labware labware)
         {
@@ -64,21 +63,18 @@ namespace BioCloneBot
                 this.selectedReservoirPosition = selectedReservoirPosition;
                 this.labware = labware;
 
-                movePump(xLocation, yLocation, 0.0);
-                zLocation = 0.0;
                 movePump(xDest, yDest, zLocation);
                 xLocation = xDest;
                 yLocation = yDest;
-                movePump(xLocation, yLocation, zDest);
-                zLocation = zDest;
-                movePump(xLocation, yLocation, zDest + 0.5);
-                zLocation = zDest + 0.5;
+                movePump(xLocation, yLocation, zDest - 30.0);
+                zLocation = zDest - 20.0;
+                movePump(xLocation, yLocation, zLocation + 1.0);
+                zLocation = zLocation + 1.0;
                 movePump(xLocation, yLocation, 0.0);
                 zLocation = 0.0;
             }
         }
 
-        //remove tip device operation
         public Operation(string command, double xLocation, double yLocation, double zLocation, 
             double xDest, double yDest)
         {
@@ -93,17 +89,17 @@ namespace BioCloneBot
                 this.yDest = yDest;
                 this.zDest = -1.0;
 
-                movePump(xLocation, yLocation, 0.0);
-                zLocation = 0.0;
+                //movePump(xLocation, yLocation, 0.0);
+                //zLocation = 0.0;
                 movePump(xDest, yDest, zLocation);
                 xLocation = xDest;
                 yLocation = yDest;
-                movePump(xLocation, yLocation, 20.0);
-                zLocation = 20.0;
-                //movePump(xLocation, yLocation, zDest + 0.5);
+                movePump(xLocation, yLocation, 40.0);
+                zLocation = 40.0;
                 removeTip();
                 movePump(xLocation, yLocation, 0.0);
                 zLocation = 0.0;
+                aspirateVolume(25);
             }
         }
         //aspirate/dispense device operation
@@ -126,30 +122,38 @@ namespace BioCloneBot
                 this.selectedReservoirPosition = selectedReservoirPosition;
                 this.labware = labware;
 
-                movePump(xLocation, yLocation, 0.0);
-                zLocation = 0.0;
-                movePump(xDest, yDest, zLocation + 0.5);
-                zLocation = zLocation + 0.5;
+                movePump(xDest, yDest, zLocation);
+                xLocation = xDest;
+                yLocation = yDest;
                 movePump(xLocation, yLocation, zDest);
                 zLocation = zDest;
                 aspirateVolume(volumeMoved);
-                //movePump(xLocation, yLocation, zDest + 0.5);
-                movePump(xLocation, yLocation, zLocation - 5.0);
-                zLocation = zLocation - 5.0;
+                movePump(xLocation, yLocation, 0.0);
+                zLocation = 0.0;
             }
             else if(command == "dispense")
             {
+                this.volumeMoved = volumeMoved;
                 this.xLocation = xLocation;
                 this.yLocation = yLocation;
                 this.zLocation = zLocation;
                 this.xDest = xDest;
                 this.yDest = yDest;
                 this.zDest = zDest;
-                this.volumeMoved = volumeMoved;
+
                 //for saving operations only
                 this.labwarePosition = labwarePosition;
                 this.selectedReservoirPosition = selectedReservoirPosition;
                 this.labware = labware;
+
+                movePump(xDest, yDest, zLocation);
+                xLocation = xDest;
+                yLocation = yDest;
+                movePump(xLocation, yLocation, zDest);
+                zLocation = zDest;
+                dispenseVolume(volumeMoved);
+                movePump(xLocation, yLocation, 0.0);
+                zLocation = 0.0;
             }
         }
 

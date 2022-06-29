@@ -198,9 +198,8 @@ void setup() {
 }
 
 void loop() {
-
   /*
- * List of pvossible device commands
+ * List of possible device commands
  * -0000 home device: homes x, y, z, and p stepper motors
  * -0001 move pump: move carriage to x, y, z location (XXX.XX location in mm)
  * -0010 remove tip: remove tip and leave room for trailing air gap (50.0uL)
@@ -264,7 +263,7 @@ void loop() {
     }
     else if(curr_command == "0011"){ //aspirate volume
       for(int i = 4; i < 10; i++){
-        volume[i-6] = host_message[i];
+        volume[i-4] = host_message[i];
       }
       aspirate_vol = strtod(volume, &ptr_end);
       aspirate(aspirate_vol);
@@ -272,7 +271,7 @@ void loop() {
     }
     else if(curr_command == "0100"){  //dispense volume
       for(int i = 4; i < 10; i++){
-        volume[i-6] = host_message[i];
+        volume[i-4] = host_message[i];
       }
       dispense_vol = strtod(volume, &ptr_end);
       dispense(dispense_vol);
@@ -420,13 +419,27 @@ void movePump(char x_direction, char y_direction, char z_direction, double x_dis
     digitalWrite(X_DIR, HIGH);
   }
 
-  for(int i = 0; i < (x_dist/.1); i++){
-    for(int j = 0; j < 16; j++){
-      digitalWrite(X_STEP, HIGH);
-      delayMicroseconds(axis_step_delay);
-      digitalWrite(X_STEP, LOW);
-      delayMicroseconds(axis_step_delay);
-    }
+//  for(int i = 0; i < (x_dist/.1); i++){
+//    for(int j = 0; j < 16; j++){
+//      digitalWrite(X_STEP, HIGH);
+//      delayMicroseconds(axis_step_delay);
+//      digitalWrite(X_STEP, LOW);
+//      delayMicroseconds(axis_step_delay);
+//    }
+//  }
+//  for(float i = 0; i < (x_dist/.25); i++){
+//    for(float j = 0; j < 4; j++){
+//      digitalWrite(X_STEP, HIGH);
+//      delayMicroseconds(axis_step_delay);
+//      digitalWrite(X_STEP, LOW);
+//      delayMicroseconds(axis_step_delay);
+//    }
+//  }
+  for(double i = 0; i < (x_dist/.00625); i++){
+    digitalWrite(X_STEP, HIGH);
+    delayMicroseconds(axis_step_delay);
+    digitalWrite(X_STEP, LOW);
+    delayMicroseconds(axis_step_delay);
   }
 
   if(y_direction == '0'){
@@ -436,13 +449,27 @@ void movePump(char x_direction, char y_direction, char z_direction, double x_dis
     digitalWrite(Y_DIR, HIGH);
   }
 
-  for(int i = 0; i < (y_dist/.1); i++){
-    for(int j = 0; j < 16; j++){
-      digitalWrite(Y_STEP, HIGH);
-      delayMicroseconds(axis_step_delay);
-      digitalWrite(Y_STEP, LOW);
-      delayMicroseconds(axis_step_delay);
-    }
+//  for(int i = 0; i < (y_dist/.1); i++){
+//    for(int j = 0; j < 16; j++){
+//      digitalWrite(Y_STEP, HIGH);
+//      delayMicroseconds(axis_step_delay);
+//      digitalWrite(Y_STEP, LOW);
+//      delayMicroseconds(axis_step_delay);
+//    }
+//  }
+//  for(float i = 0; i < (y_dist/.25); i++){
+//    for(float j = 0; j < 4; j++){
+//      digitalWrite(Y_STEP, HIGH);
+//      delayMicroseconds(axis_step_delay);
+//      digitalWrite(Y_STEP, LOW);
+//      delayMicroseconds(axis_step_delay);
+//    }
+//  }
+  for(double i = 0; i < (y_dist/.00625); i++){
+    digitalWrite(Y_STEP, HIGH);
+    delayMicroseconds(axis_step_delay);
+    digitalWrite(Y_STEP, LOW);
+    delayMicroseconds(axis_step_delay);
   }
 
   if(z_direction == '0'){
@@ -453,13 +480,33 @@ void movePump(char x_direction, char y_direction, char z_direction, double x_dis
   }
   
   digitalWrite(Z_DIR, z_direction - '0');
-  for(int i = 0; i < (z_dist/.1); i++){
-    for(int j = 0; j < 8; j++){
-      digitalWrite(Z_STEP, HIGH);
-      delayMicroseconds(axis_step_delay);
-      digitalWrite(Z_STEP, LOW);
-      delayMicroseconds(axis_step_delay);
-    }
+  lcd.setCursor(1,0);
+  lcd.clear();
+  lcd.print(z_dist);
+  //move .1mm a bunch of times until z_dist is passed
+//  for(int i = 0; i < (z_dist/.1); i++){
+//    //move 0.1 mm
+//    for(int j = 0; j < 80; j++){
+//      digitalWrite(Z_STEP, HIGH);
+//      delayMicroseconds(axis_step_delay);
+//      digitalWrite(Z_STEP, LOW);
+//      delayMicroseconds(axis_step_delay);
+//    }
+//  }
+//  for(float i = 0; i < (z_dist/.01); i++){
+//    //move 0.1 mm
+//    for(int j = 0; j < 8; j++){
+//      digitalWrite(Z_STEP, HIGH);
+//      delayMicroseconds(axis_step_delay);
+//      digitalWrite(Z_STEP, LOW);
+//      delayMicroseconds(axis_step_delay);
+//    }
+//  }
+  for(double i = 0; i < (z_dist/.00125); i++){
+    digitalWrite(Z_STEP, HIGH);
+    delayMicroseconds(axis_step_delay);
+    digitalWrite(Z_STEP, LOW);
+    delayMicroseconds(axis_step_delay);
   }
 }
 
@@ -475,6 +522,7 @@ void removeTip(){
     digitalWrite(P_STEP,LOW);
     delayMicroseconds(pump_step_delay);
   }
+  delay(50);
   digitalWrite(P_DIR, LOW);
   while(!digitalRead(P_LIMIT)){
     digitalWrite(P_STEP, HIGH);
@@ -490,29 +538,31 @@ void removeTip(){
     delayMicroseconds(pump_step_delay);
   }
 
-  digitalWrite(P_DIR, HIGH);
   homing = 0;
-  delay(10);
 }
 
 void aspirate(double volume){
+  homing = 1;
   digitalWrite(P_DIR, LOW);
-  for(int i = 0; i < volume/0.04; i++){
+  for(int i = 0; i < volume/0.041667; i++){
     digitalWrite(P_STEP, HIGH);
     delayMicroseconds(pump_step_delay);
     digitalWrite(P_STEP, LOW);
     delayMicroseconds(pump_step_delay);
   }
+  homing = 0;
 }
 
 void dispense(double volume){
+  homing = 1;
   digitalWrite(P_DIR, HIGH);
-  for(int i = 0; i < volume/0.04; i++){
+  for(int i = 0; i < volume/0.041667; i++){
     digitalWrite(P_STEP, HIGH);
     delayMicroseconds(pump_step_delay);
     digitalWrite(P_STEP, LOW);
     delayMicroseconds(pump_step_delay);
   }
+  homing = 0;
 }
 
 //adjusts microstepping, timing, and steps/revolution for each motor
@@ -545,9 +595,7 @@ void setMicrostepping(int step_size){
       digitalWrite(Z_MS1, LOW);
       digitalWrite(Z_MS2, HIGH);
       axis_step_delay = 1000;
-      pump_step_delay = 500;
       axis_rev_steps = 400;
-      pump_rev_steps = 800;
       x_step_dist = 1000E-7;
       y_step_dist = 1000E-7;
       z_step_dist = 2000E-5;
@@ -563,9 +611,9 @@ void setMicrostepping(int step_size){
       digitalWrite(Z_MS1, HIGH);
       digitalWrite(Z_MS2, LOW);
       axis_step_delay = 500;
-      pump_step_delay = 250;
+      //pump_step_delay = 250;
       axis_rev_steps = 800;
-      pump_rev_steps = 1600;
+      //pump_rev_steps = 1600;
       x_step_dist = 500E-7;
       y_step_dist = 500E-7;
       z_step_dist = 1000E-5;
@@ -581,9 +629,9 @@ void setMicrostepping(int step_size){
       digitalWrite(Z_MS1, HIGH);
       digitalWrite(Z_MS2, HIGH);
       axis_step_delay = 250;
-      pump_step_delay = 125;
+      //pump_step_delay = 125;
       axis_rev_steps = 1600;
-      pump_rev_steps = 3200;
+      //pump_rev_steps = 3200;
       x_step_dist = 250E-7;
       y_step_dist = 250E-7;
       z_step_dist = 500E-5;
@@ -614,7 +662,8 @@ void setMicrostepping(int step_size){
       digitalWrite(Z_MS0, HIGH);
       digitalWrite(Z_MS1, HIGH);
       digitalWrite(Z_MS2, HIGH);
-      axis_step_delay = 63;
+      //axis_step_delay = 63;
+      axis_step_delay = 125;
       axis_rev_steps = 6400;
       x_step_dist = 63E-7;
       y_step_dist = 63E-7;
@@ -713,13 +762,13 @@ String receiveHostMessage(){
 }
 void xLimitPressed(){
   if(homing == 0){
-    digitalWrite(X_SLEEP, LOW);
+    //digitalWrite(X_SLEEP, LOW);
   }
 }
 
 void yLimitPressed(){
   if(homing == 0){
-    digitalWrite(Y_SLEEP, LOW);
+    //digitalWrite(Y_SLEEP, LOW);
   }
 }
 

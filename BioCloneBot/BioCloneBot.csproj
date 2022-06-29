@@ -46,6 +46,12 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="ManualControlForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="ManualControlForm.Designer.cs">
+      <DependentUpon>ManualControlForm.cs</DependentUpon>
+    </Compile>
     <Compile Include="Operation.cs" />
     <Compile Include="Platform.cs" />
     <Compile Include="OperationsForm.cs">
@@ -72,6 +78,9 @@
     </Compile>
     <Compile Include="BioCloneBot.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <EmbeddedResource Include="ManualControlForm.resx">
+      <DependentUpon>ManualControlForm.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="OperationsForm.resx">
       <DependentUpon>OperationsForm.cs</DependentUpon>
     </EmbeddedResource>

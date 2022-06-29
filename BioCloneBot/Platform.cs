@@ -28,19 +28,19 @@ namespace BioCloneBot
         {
             this.labwareCount = labwareCount;
             selectedPosition = new int[2] { -1, -1 };
-            volumeInTip = 0.0;
-            tipCapacity = 0.0;
-            xMax = 406.0;
-            yMax = 406.0;
-            zMax = 60.0;
-            trashLocation = new double[2] { 292.5, 78.5 };
-            pumpPosition = new double[2] { -1.0, -1.0 };
+            volumeInTip = 0.00;
+            tipCapacity = 0.00;
+            xMax = 406.00;
+            yMax = 406.00;
+            zMax = 125.00;
+            trashLocation = new double[2] { 292.00, 329.25 };
+            pumpPosition = new double[2] { -1.00, -1.00 };
             tipAttached = false;
             labwareOccupied = new bool[this.labwareCount];
             labwares = new Labware[this.labwareCount];
             operations = new List<Operation>();
 
-            for ( int i = 0; i < this.labwareCount; i++)
+            for (int i = 0; i < this.labwareCount; i++)
             {
                 labwareOccupied[i] = false;
                 labwares[i] = null;
@@ -124,25 +124,25 @@ namespace BioCloneBot
             if(position == 0)
             {
                 topLeftCorner[0] = 52.0;
-                topLeftCorner[1] = 136.0;
+                topLeftCorner[1] = 247.0;
                 labwares[position].TopLeftCorner = topLeftCorner;
             }
             else if(position == 1)
             {
                 topLeftCorner[0] = 228.0;
-                topLeftCorner[1] = 136.0;
+                topLeftCorner[1] = 247.0;
                 labwares[position].TopLeftCorner = topLeftCorner;
             }
             else if(position == 2)
             {
                 topLeftCorner[0] = 52.0;
-                topLeftCorner[1] = 286.25;
+                topLeftCorner[1] = 121.75;
                 labwares[position].TopLeftCorner = topLeftCorner;
             }
             else if(position == 3)
             {
                 topLeftCorner[0] = 228.0;
-                topLeftCorner[1] = 286.25;
+                topLeftCorner[1] = 121.75;
                 labwares[position].TopLeftCorner = topLeftCorner;
             }
         }

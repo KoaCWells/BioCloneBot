@@ -14,9 +14,9 @@ namespace BioCloneBot
 
         public Tubestand()
         {
-            dimensions = new double[3] {125.5144, 83.2644, 56.5986};
+            dimensions = new double[3] {125.50, 85.20, 62.60};
             topLeftCorner = new double[2];
-            startLocation = new double[2] { 14.525, 6.725 };
+            startLocation = new double[2] { 14.30, 11.00 };
             row = 4;
             col = 6;
             maxVolume = 1500.00; //1.5 mL or 1500 uL
@@ -24,8 +24,8 @@ namespace BioCloneBot
             labwareType = "tubestand";
             
             tubeCount = row*col;
-            tubeDistance = 19.55;
-            tubeDiameter = 11.25;
+            tubeDistance = 19.67;
+            tubeDiameter = 7.30;
 
             reservoirSeparation = tubeDistance;
             //initializes all tube volumes to 0.0 uL
@@ -37,6 +37,5 @@ namespace BioCloneBot
                 }
             }
         }
-
     }
 }

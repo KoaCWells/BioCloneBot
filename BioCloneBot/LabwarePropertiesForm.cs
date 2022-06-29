@@ -104,10 +104,10 @@ namespace BioCloneBot
             labwareReservoirsTableLayout.ColumnCount = col;
             labwareReservoirsTableLayout.Dock = DockStyle.Fill;
             labwareReservoirsTableLayout.Padding = new Padding(40, 40, 40, 40);
-            labwareReservoirsTableLayout.MouseDown += tableLayoutPanel1_MouseDown;
-            labwareReservoirsTableLayout.MouseMove += tableLayoutPanel1_MouseMove;
-            labwareReservoirsTableLayout.MouseUp += tableLayoutPanel1_MouseUp;
-            labwareReservoirsTableLayout.Paint += tableLayoutPanel1_Paint;
+            labwareReservoirsTableLayout.MouseDown += reservoirsTableLayoutPanel_MouseDown;
+            labwareReservoirsTableLayout.MouseMove += reservoirsTableLayoutPanel_MouseMove;
+            labwareReservoirsTableLayout.MouseUp += reservoirsTableLayoutPanel_MouseUp;
+            labwareReservoirsTableLayout.Paint += reservoirsTableLayoutPanel_Paint;
             splitContainer1.Panel1.Controls.Add(labwareReservoirsTableLayout);
             reservoirButtons = new Button[row, col];
 
@@ -151,7 +151,7 @@ namespace BioCloneBot
 
         //Runs when left click occurs inside of tableLayoutPanel
         //stores initial click (x,y) location in startPoint
-        private void tableLayoutPanel1_MouseDown(object sender, MouseEventArgs e)
+        private void reservoirsTableLayoutPanel_MouseDown(object sender, MouseEventArgs e)
         {
             if (e.Button == MouseButtons.Left)
             {
@@ -165,7 +165,7 @@ namespace BioCloneBot
         //cursor to re-draw selection rubberband. Since C# Rectangle objects are
         //drawn from the top left (x, y) point, there are four scenarios for updating
         //the rectangle depending on where the cursor moves from startPoint
-        private void tableLayoutPanel1_MouseMove(object sender, MouseEventArgs e)
+        private void reservoirsTableLayoutPanel_MouseMove(object sender, MouseEventArgs e)
         {
             if (e.Button == MouseButtons.Left)
             {
@@ -206,7 +206,7 @@ namespace BioCloneBot
             }
         }
 
-        private void tableLayoutPanel1_MouseUp(object sender, MouseEventArgs e)
+        private void reservoirsTableLayoutPanel_MouseUp(object sender, MouseEventArgs e)
         {
             endPoint.X = e.X;
             endPoint.Y = e.Y;
@@ -227,7 +227,7 @@ namespace BioCloneBot
             splitContainer1.Panel1.Refresh();
         }
 
-        private void tableLayoutPanel1_Paint(object sender, PaintEventArgs e)
+        private void reservoirsTableLayoutPanel_Paint(object sender, PaintEventArgs e)
         {
             using (SolidBrush brush = new SolidBrush(Color.Gray))
             using (Pen pen = new Pen(brush))

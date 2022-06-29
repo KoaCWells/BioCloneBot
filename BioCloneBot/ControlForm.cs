@@ -111,7 +111,7 @@ namespace BioCloneBot
                 try
                 {
                     serialPort1.Open();
-                    //serialPort1.ReadTimeout = 500;
+                    serialPort1.ReadTimeout = 500;
                     serialPort1.BaudRate = 9600;
                 }
                 catch (Exception ex)
@@ -140,7 +140,15 @@ namespace BioCloneBot
                     {
                         while (messageComplete == false)
                         {
-                            receivedCharacter = Convert.ToChar(serialPort1.ReadByte());
+                            try
+                            {
+                                receivedCharacter = Convert.ToChar(serialPort1.ReadByte());
+                            }
+                            catch (Exception ex)
+                            {
+                                Console.WriteLine(ex.Message);
+                            }
+
                             if (receivedCharacter != '%')
                             {
                                 response += receivedCharacter;
@@ -176,51 +184,7 @@ namespace BioCloneBot
                 }
             }
         }
-        private void movePump(double xDest, double yDest, double zDest)
-        {
-            double xTravel = 0;
-            double yTravel = 0;
-            double zTravel = 0;
-
-            if (xDest > xLocation)
-            {
-                xDir = 0;
-                xTravel = xDest - xLocation;
-            }
-            else if (xDest < xLocation)
-            {
-                xDir = 1;
-                xTravel = xLocation - xDest;
-            }
-            if (yDest > yLocation)
-            {
-                yDir = 0;
-                yTravel = yDest - yLocation;
-            }
-            else if (yDest < yLocation)
-            {
-                yDir = 1;
-                yTravel = yLocation - yDest;
-            }
-            if (zDest > zLocation)
-            {
-                zDir = 0;
-                zTravel = zDest - zLocation;
-            }
-            else if (zDest < zLocation)
-            {
-                zDir = 1;
-                zTravel = zLocation - zDest;
-            }
-            if (!(xLocation == xDest && yLocation == yDest && zLocation == zDest))
-            {
-                xLocation = xDest;
-                yLocation = yDest;
-                zLocation = zDest;
-                deviceCommands.Add("#0001" + xDir + yDir + zDir + xTravel + yTravel + zTravel + "%");
-                numberOfCommands++;
-            }
-        }
+        
         private double[] calculateTravelDistance(int position, int[] wellLocation)
         {
             double[] destination = new double[3];
@@ -228,23 +192,19 @@ namespace BioCloneBot
             double[] topLeftCorner = platform.Labwares[position].TopLeftCorner;
             double[] startLocation = platform.Labwares[position].StartLocation;
 
-            destination[0] = topLeftCorner[0] + startLocation[0] + elementSeparation * wellLocation[0];
-            destination[1] = topLeftCorner[1] + startLocation[1] + elementSeparation * wellLocation[1];
+            destination[0] = topLeftCorner[0] + startLocation[0] + elementSeparation * wellLocation[1];
+            destination[1] = topLeftCorner[1] - startLocation[1] - elementSeparation * wellLocation[0];
             destination[2] = platform.ZMax - platform.Labwares[position].Dimensions[2] - 5.0;
 
             return destination;
         }
         private void getTip(int labwarePosition)
         {
-            //movePump(xLocation, yLocation, 0.0);
-            //deviceCommands.Add(move over)
-            //deviceCommands.Add(move down)
-            //deviceCommands.Add(move down)
-            //deviceCommands.Add(move up all the way)
             double[] destination = calculateTravelDistance(labwarePosition, platform.SelectedPosition);
             platform.Operations.Add(new Operation("gettip", xLocation, yLocation, zLocation, destination[0], destination[1], destination[2], 
                 labwarePosition, platform.SelectedPosition, platform.Labwares[labwarePosition]));
-            numberOfCommands = numberOfCommands + 5;
+
+            numberOfCommands += 4;
             xLocation = destination[0];
             yLocation = destination[1];
             zLocation = 0.0;
@@ -253,11 +213,8 @@ namespace BioCloneBot
         }
         private void removeTip()
         {
-            //deviceCommands.Add(move up);
-            //deviceCommands.Add(move over);
-            //deviceCommands.Add(eject tip);
             platform.Operations.Add(new Operation("removetip", xLocation, yLocation, zLocation, platform.TrashLocation[0], platform.TrashLocation[1]));
-            numberOfCommands = numberOfCommands + 5;
+            numberOfCommands += 5;
             xLocation = platform.TrashLocation[0];
             yLocation = platform.TrashLocation[1];
             zLocation = 0.0;
@@ -266,44 +223,28 @@ namespace BioCloneBot
         }
         private void aspirateVolume(int labwarePosition, double volumeAspirated)
         {
-            /*
-            movePump(xLocation, yLocation, 0.0); //move up
-            calculateTravelDistance(labwarePosition, platform.SelectedPosition); //move over and down
-            movePump(xLocation, yLocation, zLocation - 5.0);
-            //deviceCommands.Add(move over);
-            //deviceCommands.Add(move down);
-            //deviceCommands.Add(suck volume);
-            //deviceCommands.Add(move above labware)
-            numberOfCommands = numberOfCommands + 5;
-            
-            updateCommand_List();
-            deviceCommands.Add("0010" + volume + "%");
-            numberOfCommands++;
-            */
-
             double[] destination = calculateTravelDistance(labwarePosition, platform.SelectedPosition);
             platform.Operations.Add(new Operation("aspirate", volumeAspirated, xLocation, yLocation, zLocation, destination[0], destination[1], destination[2],
                 labwarePosition, platform.SelectedPosition, platform.Labwares[labwarePosition]));
-            numberOfCommands = numberOfCommands + 5;
+
+            numberOfCommands += 4;
+            xLocation = destination[0];
+            yLocation = destination[1];
+            zLocation = 0;
             protocolList.Add("Aspirated " + volumeAspirated + "uL from " + platform.Labwares[labwarePosition].LabwareType + " in position " + (labwarePosition + 1));
             updateCommand_List();
         }
         private void dispenseVolume(int labwarePosition, double volumeDispensed)
         {
-            //movePump(xLocation, yLocation, 0.0);
-            //deviceCommands.Add(move up)
-            //deviceCommands.Add(move over);
-            //deviceCommands.Add(move down);
-            //deviceCommands.Add(dispense volume);
-            //deviceCommands.Add(move above labware);
-            //updateCommand_List();
-            //deviceCommands.Add("0011" + volumeDispensed + "%");
-            //numberOfCommands++;
 
             double[] destination = calculateTravelDistance(labwarePosition, platform.SelectedPosition);
-            platform.Operations.Add(new Operation("aspirate", volumeDispensed, xLocation, yLocation, zLocation, destination[0], destination[1], destination[2],
+            platform.Operations.Add(new Operation("dispense", volumeDispensed, xLocation, yLocation, zLocation, destination[0], destination[1], destination[2],
                 labwarePosition, platform.SelectedPosition, platform.Labwares[labwarePosition]));
-            numberOfCommands = numberOfCommands + 5;
+
+            numberOfCommands += 4;
+            xLocation = destination[0];
+            yLocation = destination[1];
+            zLocation = 0;
             protocolList.Add("Dispensed " + volumeDispensed + "uL to " + platform.Labwares[labwarePosition].LabwareType + " in position " + (labwarePosition + 1));
             updateCommand_List();
         }
@@ -330,7 +271,6 @@ namespace BioCloneBot
                     {
                         if (serialPort1.IsOpen)
                         {
-
                             commandCompleted = false;
                             response = "";
                             command = platform.Operations[i].Steps[j];
@@ -365,6 +305,7 @@ namespace BioCloneBot
                                             if (response == "complete")
                                             {
                                                 commandCompleted = true;
+                                                MessageBox.Show("Press OK to start next command.", " Testing each command", MessageBoxButtons.OK, MessageBoxIcon.Information);
                                                 serialPort1.DiscardInBuffer();
                                             }
                                         }
@@ -446,13 +387,6 @@ namespace BioCloneBot
 
             if (this.deviceCommands.Count == 0)
             {
-
-                /*
-                this.deviceCommands.Add("0000%");
-                this.deviceCommands.Add("0001" + "110 " + "200.00" + "200.00" + "000.00" + "%");
-                this.deviceCommands.Add("0001" + "001" + "000.00" + "000.00" + "100.00" + "%");
-                updateCommand_List();
-                */
                 platform.AddLabware(0, "wellplate");
                 platform.LabwareOccupied[0] = true;
                 platform.Labwares[0].Volumes = wellplateVolume1;
@@ -492,16 +426,25 @@ namespace BioCloneBot
             if (!serialPort1.IsOpen)
             {
                 initialize_Serial_Port();
-                DialogResult msg = MessageBox.Show("Serial port opened.", "Serial port opened.", MessageBoxButtons.OK);
+                MessageBox.Show("Serial port opened.", "Serial port opened.", MessageBoxButtons.OK);
             }
         }
         private void close_Serial_Click(object sender, EventArgs e)
         {
+            if(serialPort1.IsOpen)
+            {
+                serialPort1.Close();
+            }
+            initialize_Serial_Port();
+            MessageBox.Show("Connection established.", "Arduino Found", MessageBoxButtons.OK);
+
+            /*
             if (serialPort1.IsOpen)
             {
                 serialPort1.Close();
                 DialogResult msg = MessageBox.Show("Serial port closed.", "Serial port closed.", MessageBoxButtons.OK);
             }
+            */
         }
         private void sendBtn_Click(object sender, EventArgs e)
         {
@@ -512,7 +455,7 @@ namespace BioCloneBot
             char receivedCharacter = ' ';
             string received = "";
             string response = "";
-            Byte testbyte;
+            byte[] messageCharacter = new byte[1];
 
             try
             {
@@ -520,9 +463,11 @@ namespace BioCloneBot
                 {
                     for (int i = 0; i < command.Length; i++)
                     {
-                        serialPort1.Write(command[i].ToString());
-                        //receivedCharacter = Convert.ToChar(serialPort1.ReadByte());
+                        messageCharacter[0] = Convert.ToByte(command[i]);
+                        serialPort1.Write(messageCharacter, 0, 1);
                     }
+                    serialPort1.DiscardOutBuffer();
+ 
                     received = serialPort1.ReadTo("%");
                     commandList.Text += received;
                     Console.Write(response);
@@ -547,10 +492,8 @@ namespace BioCloneBot
         private void homeDeviceButton_Click(object sender, EventArgs e)
         {
             platform.Operations.Add(new Operation("home"));
-            //platform.addOperation(z)
-            //deviceCommands.Add("0000%");
             protocolList.Add("Home Device");
-            numberOfCommands++;
+            numberOfCommands += 3;
             xLocation = 0.0;
             yLocation = 0.0;
             zLocation = 0.0;
@@ -1017,6 +960,16 @@ namespace BioCloneBot
                 if (labwarePropertiesForm.ShowDialog() == DialogResult.OK)
                 {
                     platform.Labwares[labwarePosition].Volumes = labwarePropertiesForm.Volumes;
+                }
+            }
+        }
+
+        private void manuallyMovePumpToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            using (ManualControlForm manualControlForm = new ManualControlForm(serialPort1))
+            {
+                if (manualControlForm.ShowDialog() == DialogResult.OK)
+                {
                 }
             }
         }
