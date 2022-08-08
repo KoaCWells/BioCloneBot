@@ -9,35 +9,41 @@ namespace BioCloneBot
     public class Platform
     {
         private int labwareCount;
+        private int numberOfOperations;
         private int[] selectedPosition;
         private double volumeInTip;
         private double tipCapacity;
+        private double xLocation;
+        private double yLocation;
+        private double zLocation;
         private double xMax;
         private double yMax;
         private double zMax;
         private double[] trashLocation;
-        private double[] pumpPosition;
         private bool tipAttached;
         private bool[] labwareOccupied;
         private Labware[] labwares;
+        private List<string> protocolList;
         private List<Operation> operations;
 
-        //to be added at a later time
-        //private Thermocycler thermocycler;
         public Platform(int labwareCount)
         {
             this.labwareCount = labwareCount;
+            numberOfOperations = 0;
             selectedPosition = new int[2] { -1, -1 };
             volumeInTip = 0.00;
             tipCapacity = 0.00;
+            xLocation = -1.0;
+            yLocation = -1.0;
+            zLocation = -1.0;
             xMax = 406.00;
             yMax = 406.00;
-            zMax = 125.00;
+            zMax = 135.00;
             trashLocation = new double[2] { 292.00, 329.25 };
-            pumpPosition = new double[2] { -1.00, -1.00 };
             tipAttached = false;
             labwareOccupied = new bool[this.labwareCount];
             labwares = new Labware[this.labwareCount];
+            protocolList = new List<string>();
             operations = new List<Operation>();
 
             for (int i = 0; i < this.labwareCount; i++)
@@ -45,6 +51,15 @@ namespace BioCloneBot
                 labwareOccupied[i] = false;
                 labwares[i] = null;
             }
+        }
+        public int LabwareCount
+        {
+            get { return labwareCount; }
+        }
+        public int NumberOfOperations
+        {
+            get { return numberOfOperations; }
+            set { numberOfOperations = value; }
         }
         public double VolumeInTip
         {
@@ -55,6 +70,21 @@ namespace BioCloneBot
         {
             get { return tipCapacity; }
             set { tipCapacity = value; }
+        }
+        public double XLocation
+        {
+            get { return xLocation; }
+            set { xLocation = value; }
+        }
+        public double YLocation
+        {
+            get { return yLocation; }
+            set { yLocation = value; }
+        }
+        public double ZLocation
+        {
+            get { return zLocation; }
+            set { zLocation = value; }
         }
         public double XMax
         {
@@ -75,11 +105,6 @@ namespace BioCloneBot
         {
             get { return trashLocation; }
         }
-        public double[] PumpPosition
-        {
-            get { return pumpPosition; }
-            set { pumpPosition = value; }
-        }
         public int[] SelectedPosition
         {
             get { return selectedPosition; }
@@ -97,6 +122,11 @@ namespace BioCloneBot
         public Labware[] Labwares
         {
             get { return labwares; }
+        }
+        public List<string> ProtocolList
+        {
+            get { return protocolList; }
+            set { protocolList = value; }
         }
         public List<Operation> Operations
         {
@@ -121,28 +151,35 @@ namespace BioCloneBot
             labwareOccupied[position] = true;
 
             //Sets distance from home point (0,0) to the top left corner of the labware
-            if(position == 0)
+            //topLeftCorner[0] refers to the x location
+            //topLeftCorner[1] refers to the y location
+
+            //labware position 1
+            if (position == 0)
             {
-                topLeftCorner[0] = 52.0;
-                topLeftCorner[1] = 247.0;
+                topLeftCorner[0] = 51.50;
+                topLeftCorner[1] = 246.00;
                 labwares[position].TopLeftCorner = topLeftCorner;
             }
-            else if(position == 1)
+            //labware position 2
+            else if (position == 1)
             {
-                topLeftCorner[0] = 228.0;
-                topLeftCorner[1] = 247.0;
+                topLeftCorner[0] = 227.50;
+                topLeftCorner[1] = 246.00;
                 labwares[position].TopLeftCorner = topLeftCorner;
             }
-            else if(position == 2)
+            //labware position 3
+            else if (position == 2)
             {
-                topLeftCorner[0] = 52.0;
-                topLeftCorner[1] = 121.75;
+                topLeftCorner[0] = 51.50;
+                topLeftCorner[1] = 121.25;
                 labwares[position].TopLeftCorner = topLeftCorner;
             }
-            else if(position == 3)
+            //labware position 4
+            else if (position == 3)
             {
-                topLeftCorner[0] = 228.0;
-                topLeftCorner[1] = 121.75;
+                topLeftCorner[0] = 227.50;
+                topLeftCorner[1] = 121.25;
                 labwares[position].TopLeftCorner = topLeftCorner;
             }
         }

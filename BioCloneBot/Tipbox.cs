@@ -12,23 +12,25 @@ namespace BioCloneBot
         private int remainingTips;
         private double tipDistance;
         private double tipDiameter;
-        private double[,] tips;
+        private double[][] tips;
 
         public Tipbox()
         {
-            /* place holder data
-             * dimensions 
-             * start_location
-             * tip_distance
-             * tip_diameter
-             */
-            dimensions = new double[3] { 127.76, 85.48, 15.50 };
+            //length, width, and height of labware
+            //dimensions of orange tip box
+            //dimensions = new double[3] { 127.76, 80.48, 35.50 };
+            dimensions = new double[3] { 127.76, 80.48, 50.00 };
             topLeftCorner = new double[2];
-            startLocation = new double[2] { 14.90, 11.40 };
+            //x and y distance from the top left corner of labware position to center of reservoir
+            startLocation = new double[2] { 15.50, 16.00 };
             row = 8;
             col = 12;
             maxVolume = 200.00;
-            tips = new double[row, col];
+            tips = new double[row][];
+            for (int i = 0; i < row; i++)
+            {
+                tips[i] = new double[col];
+            }
             labwareType = "tipbox";
 
             totalTips = 96;
@@ -43,7 +45,7 @@ namespace BioCloneBot
             {
                 for (int j = 0; j < col; j++)
                 {
-                    tips[i, j] = 1.0;
+                    tips[i][j] = 1.0;
                 }
             }
             volumes = tips;

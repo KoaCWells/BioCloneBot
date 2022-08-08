@@ -14,17 +14,23 @@ namespace BioCloneBot
 
         public Tubestand()
         {
-            dimensions = new double[3] {125.50, 85.20, 62.60};
+            //length, width, height of labware
+            dimensions = new double[3] {125.50, 85.20, 63.40};
             topLeftCorner = new double[2];
-            startLocation = new double[2] { 14.30, 11.00 };
+            //x and y distance from the top left corner of labware position to center of reservoir
+            startLocation = new double[2] { 17.80, 12.80 };
             row = 4;
             col = 6;
             maxVolume = 1500.00; //1.5 mL or 1500 uL
-            volumes = new double[row, col];
+            volumes = new double[row][];
+            for (int i = 0; i < row; i++)
+            {
+                volumes[i] = new double[col];
+            }
             labwareType = "tubestand";
             
             tubeCount = row*col;
-            tubeDistance = 19.67;
+            tubeDistance = 19.75;
             tubeDiameter = 7.30;
 
             reservoirSeparation = tubeDistance;
@@ -33,7 +39,7 @@ namespace BioCloneBot
             {
                 for (int j = 0; j < col; j++)
                 {
-                    volumes[i, j] = 0.0;
+                    volumes[i][j] = 0.0;
                 }
             }
         }

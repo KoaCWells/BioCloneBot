@@ -20,10 +20,12 @@ namespace BioCloneBot
         private double volumeInTip;
         private double tipCapacity;
         private double volumeMoved;
-        private double[,] volumes;
+        private double mixVolume;
+        private double[][] volumes;
         private int row;
         private int col;
         private int tableLayoutElementSize;
+        private int mixCount;
         private int[] selectedPosition;
         private Labware labware;
         private Bitmap emptyButtonBackground = null;
@@ -31,20 +33,78 @@ namespace BioCloneBot
         private Bitmap selectedButtonBackground = null;
         private TableLayoutPanel labwareReservoirsTableLayout = new TableLayoutPanel();
         private Button[,] reservoirButtons = null;
+        public double[][] Volumes
+        {
+            get { return volumes; }
+        }
+        public double MaxVolume
+        {
+            get { return maxVolume; }
+        }
+        public double VolumeMoved
+        {
+            get { return volumeMoved; }
+        }
+        public double VolumeMixed
+        {
+            get { return mixVolume; }
+        }
+        public int MixCount
+        {
+            get { return mixCount; }
+        }
+        public int[] SelectedPosition
+        {
+            get { return selectedPosition; }
+            set { selectedPosition = value; }
+        }
         public OperationsForm(Labware labware, double volumeInTip, double tipCapacity, string mode)
         {
             InitializeComponent();
             if (mode == "aspirate")
             {
                 this.Text = "Aspirate Operation";
+                confirmationButton.Text = "Aspirate";
+                volumeLabelTextBox.Text = "Volume to aspirate:";
+                inputVolumeTextBox.Text = "0.0";
+                inputVolumeTextBox.Visible = true;
+                mixCountLabelTextBox.Visible = false;
+                mixCountInputTextBox.Visible = false;
+                airGapCheckBox.Visible = true;
             }
             else if (mode == "dispense")
             {
                 this.Text = "Dispense Operation";
+                confirmationButton.Text = "Dispense";
+                volumeLabelTextBox.Text = "Volume to dispense:";
+                inputVolumeTextBox.Text = "0.0";
+                inputVolumeTextBox.Visible = true;
+                mixCountLabelTextBox.Visible = false;
+                mixCountInputTextBox.Visible = false;
+                airGapCheckBox.Visible = true;
             }
             else if (mode == "getTip")
             {
                 this.Text = "Attach Tip Operation";
+                confirmationButton.Text = "Attach Tip";
+                inputVolumeTextBox.Visible = false;
+                volumeLabelTextBox.Visible = false;
+                mixCountLabelTextBox.Visible = false;
+                mixCountInputTextBox.Visible = false;
+                airGapCheckBox.Visible = false;
+            }
+            else if (mode == "mix")
+            {
+                this.Text = "Mix Operation";
+                confirmationButton.Text = "Mix";
+                volumeLabelTextBox.Text = "Volume to mix:";
+                inputVolumeTextBox.Text = "0.0";
+                mixCountLabelTextBox.Text = "Number of mixes:";
+                mixCountInputTextBox.Text = "1";
+                inputVolumeTextBox.Visible = true;
+                mixCountLabelTextBox.Visible = true;
+                mixCountInputTextBox.Visible = true;
+                airGapCheckBox.Visible = false;
             }
 
             this.ClientSize = new Size(1000, 560);
@@ -58,7 +118,11 @@ namespace BioCloneBot
             this.volumeInTip = volumeInTip;
             this.tipCapacity = tipCapacity;
             volumeMoved = 0.0;
-            volumes = labware.Volumes;
+            volumes = new double[labware.Row][];
+            for (int i = 0; i < labware.Row; i++)
+            {
+                volumes[i] = labware.Volumes[i].Clone() as double[];
+            }
             selectedPosition = new int[2] { -1, -1 };
 
             if (labwareType == "wellplate")
@@ -117,57 +181,22 @@ namespace BioCloneBot
                     labwareReservoirsTableLayout.ColumnStyles.Add(new ColumnStyle(SizeType.Absolute, tableLayoutElementSize));
                     wellsSelected[i, j] = false;
 
-                    if (volumes[i, j] > 0)
+                    if (volumes[i][j] > 0)
                     {
                         reservoirButtons[i, j].BackgroundImage = fullButtonBackground;
                     }
-                    else if (volumes[i, j] == 0)
+                    else if (volumes[i][j] == 0)
                     {
                         reservoirButtons[i, j].BackgroundImage = emptyButtonBackground;
                     }
 
                     if (labwareType != "tipbox")
                     {
-                        reservoirButtons[i, j].Text = volumes[i, j].ToString();
+                        reservoirButtons[i, j].Text = volumes[i][j].ToString();
                     }
                 }
             }
-
-            if (mode == "aspirate")
-            {
-                confirmationButton.Text = "Aspirate";
-            }
-
-            else if (mode == "dispense")
-            {
-                confirmationButton.Text = "Dispense";
-            }
-
-            else if (mode == "getTip")
-            {
-                confirmationButton.Text = "Attach Tip";
-            }
         }
-        public double[,] Volumes 
-        {
-            get { return volumes; }
-        }
-        public double MaxVolume
-        {
-            get { return maxVolume; }
-        }
-
-        public double VolumeMoved
-        {
-            get { return volumeMoved; }
-        }
-
-        public int[] SelectedPosition
-        {
-            get { return selectedPosition; }
-            set { selectedPosition = value; }
-        }
-
       
         private void reservoirSelection_Click(object sender, EventArgs e)
         {
@@ -189,13 +218,13 @@ namespace BioCloneBot
             else if (selectedPosition[0] != -1 && selectedPosition[1] != -1)
             {
                 //Unselect the previous selection if there is one
-                wellsSelected[selectedPosition[0], selectedPosition[1]] = false;
+                wellsSelected[selectedPosition[0],selectedPosition[1]] = false;
 
-                if (volumes[selectedPosition[0], selectedPosition[1]] == 0)
+                if (volumes[selectedPosition[0]][selectedPosition[1]] == 0)
                 {
                     reservoirButtons[selectedPosition[0], selectedPosition[1]].BackgroundImage = emptyButtonBackground;
                 }
-                else if (volumes[selectedPosition[0], selectedPosition[1]] > 0)
+                else if (volumes[selectedPosition[0]][selectedPosition[1]] > 0)
                 {
                     reservoirButtons[selectedPosition[0], selectedPosition[1]].BackgroundImage = fullButtonBackground;
                 }
@@ -239,21 +268,21 @@ namespace BioCloneBot
                                 MessageBox.Show("Pipette tip maximum capacity is: " + tipCapacity + "uL", " Error: Exceeded Maximum Volume", MessageBoxButtons.OK, MessageBoxIcon.Error);
                             }
                             //If setVolume exceeds volume inside of the selected well, aspirate well volume instead of setVolume
-                            else if (setVolume > volumes[selectedPosition[0], selectedPosition[1]])
+                            else if (setVolume > volumes[selectedPosition[0]][selectedPosition[1]])
                             {
-                                volumeMoved = volumes[selectedPosition[0], selectedPosition[1]];
+                                volumeMoved = volumes[selectedPosition[0]][selectedPosition[1]];
                                 operationTextBox.Text = volumeMoved + "uL aspirated.";
-                                volumes[selectedPosition[0], selectedPosition[1]] = 0.0;
-                                reservoirButtons[selectedPosition[0], selectedPosition[1]].Text = volumes[selectedPosition[0], selectedPosition[1]].ToString();
+                                volumes[selectedPosition[0]][selectedPosition[1]] = 0.0;
+                                reservoirButtons[selectedPosition[0], selectedPosition[1]].Text = volumes[selectedPosition[0]][selectedPosition[1]].ToString();
                                 operationConfirmed = true;
                             }
                             //If setVolume is equal to or less than well volume, subtract setVolume from selected well volume
-                            else if (setVolume <= volumes[selectedPosition[0], selectedPosition[1]])
+                            else if (setVolume <= volumes[selectedPosition[0]][selectedPosition[1]])
                             {
                                 volumeMoved = setVolume;
                                 operationTextBox.Text = volumeMoved + "uL aspirated.";
-                                volumes[selectedPosition[0], selectedPosition[1]] -= Double.Parse(inputVolumeTextBox.Text);
-                                reservoirButtons[selectedPosition[0], selectedPosition[1]].Text = volumes[selectedPosition[0], selectedPosition[1]].ToString();
+                                volumes[selectedPosition[0]][selectedPosition[1]] -= Double.Parse(inputVolumeTextBox.Text);
+                                reservoirButtons[selectedPosition[0], selectedPosition[1]].Text = volumes[selectedPosition[0]][selectedPosition[1]].ToString();
                                 operationConfirmed = true;
                             }
                         }
@@ -280,7 +309,7 @@ namespace BioCloneBot
                                 MessageBox.Show("You cannot dispense more than the volume currently inside the tip: " + volumeInTip + "uL", " Error: Exceeded Available Volume", MessageBoxButtons.OK, MessageBoxIcon.Error);
                             }
                             //If setVolume + selected well volume exceeds maxVolume of well, error
-                            else if (setVolume + volumes[selectedPosition[0], selectedPosition[1]] > maxVolume)
+                            else if (setVolume + volumes[selectedPosition[0]][selectedPosition[1]] > maxVolume)
                             {
                                 MessageBox.Show("Maximum volume exceeded: " + maxVolume + "uL", " Error: Exceeded Maximum Volume", MessageBoxButtons.OK, MessageBoxIcon.Error);
                             }
@@ -288,8 +317,8 @@ namespace BioCloneBot
                             {
                                 volumeMoved = setVolume;
                                 operationTextBox.Text = volumeMoved + "uL dispensed.";
-                                volumes[selectedPosition[0], selectedPosition[1]] += Double.Parse(inputVolumeTextBox.Text);
-                                reservoirButtons[selectedPosition[0], selectedPosition[1]].Text = volumes[selectedPosition[0], selectedPosition[1]].ToString();
+                                volumes[selectedPosition[0]][selectedPosition[1]] += Double.Parse(inputVolumeTextBox.Text);
+                                reservoirButtons[selectedPosition[0], selectedPosition[1]].Text = volumes[selectedPosition[0]][selectedPosition[1]].ToString();
                                 volumeInTip -= setVolume;
                                 operationConfirmed = true;
                             }
@@ -300,16 +329,30 @@ namespace BioCloneBot
                     else if (mode == "getTip")
                     {
                         operationTextBox.Text = inputVolumeTextBox.Text + "Tip attached.";
-                        volumes[selectedPosition[0], selectedPosition[1]] = 0.0;
+                        volumes[selectedPosition[0]][selectedPosition[1]] = 0.0;
                         operationConfirmed = true;
+                    }
+                    else if(mode == "mix")
+                    {
+                        if (inputVolumeTextBox.Text == "" || !Double.TryParse(inputVolumeTextBox.Text, out _) || !int.TryParse(mixCountInputTextBox.Text, out _))
+                        {
+                            MessageBox.Show("Volume must be a decimal number and mix count must be an integer.", "Error: Invalid Volume", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                        }
+                        else
+                        {
+                            operationTextBox.Text = "Mixing " + inputVolumeTextBox.Text + "uL " + mixCountInputTextBox.Text + " times.";
+                            mixVolume = Convert.ToDouble(inputVolumeTextBox.Text);
+                            mixCount = Convert.ToInt32(mixCountInputTextBox.Text);
+                            operationConfirmed = true;
+                        }
                     }
 
                     //Reset background for selected reservoirButton
-                    if (volumes[selectedPosition[0], selectedPosition[1]] == 0.0)
+                    if (volumes[selectedPosition[0]][selectedPosition[1]] == 0.0)
                     {
                         reservoirButtons[selectedPosition[0], selectedPosition[1]].BackgroundImage = emptyButtonBackground;
                     }
-                    else if (volumes[selectedPosition[0], selectedPosition[1]] > 0.0)
+                    else if (volumes[selectedPosition[0]][selectedPosition[1]] > 0.0)
                     {
                         reservoirButtons[selectedPosition[0], selectedPosition[1]].BackgroundImage = fullButtonBackground;
                     }
@@ -320,12 +363,17 @@ namespace BioCloneBot
         //Closes the LabwarePropertiesForm, returning an OK saving the changed volumes for the labwares object passed to the form
         private void OKButton_Click(object sender, EventArgs e)
         {
-            if(selectedPosition[0] == -1 && selectedPosition[1] == -1)
+            if (selectedPosition[0] == -1 && selectedPosition[1] == -1)
             {
                 MessageBox.Show("Select one of the options and click confirm. Otherwise, click cancel.", "Error: Nothing Selected.", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
-            else if(operationConfirmed == true)
+            else if (operationConfirmed == true)
             {
+                if ((mode == "aspirate" || mode == "dispense") && airGapCheckBox.Checked)
+                {
+                    volumeMoved += 25.00;
+                }
+
                 this.DialogResult = DialogResult.OK;
                 this.Close();
             }

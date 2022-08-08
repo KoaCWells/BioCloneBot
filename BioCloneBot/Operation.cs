@@ -11,6 +11,7 @@ namespace BioCloneBot
         private List<string> steps = new List<string>();
         private string command;
         private double volumeMoved;
+        private double volumeMixed;
         private double xLocation;
         private double yLocation;
         private double zLocation;
@@ -21,6 +22,7 @@ namespace BioCloneBot
         private double yDir;
         private double zDir;
         private int labwarePosition;
+        private int mixCount;
         private int[] selectedReservoirPosition; //row and column of labware selected
         private Labware labware; //source or destination labware
 
@@ -37,8 +39,6 @@ namespace BioCloneBot
             if(this.command == "home")
             {
                 steps.Add("#0000%");
-                steps.Add("#0001110012.00033.00000.00%");
-                steps.Add("#0011025.00%");
                 xLocation = 0.0;
                 yLocation = 0.0;
                 zLocation = 0.0;
@@ -66,10 +66,10 @@ namespace BioCloneBot
                 movePump(xDest, yDest, zLocation);
                 xLocation = xDest;
                 yLocation = yDest;
-                movePump(xLocation, yLocation, zDest - 30.0);
-                zLocation = zDest - 20.0;
-                movePump(xLocation, yLocation, zLocation + 1.0);
-                zLocation = zLocation + 1.0;
+                movePump(xLocation, yLocation, zDest);
+                zLocation = zDest;
+                movePump(xLocation, yLocation, zLocation + 3.0);
+                zLocation = zLocation + 4.0;
                 movePump(xLocation, yLocation, 0.0);
                 zLocation = 0.0;
             }
@@ -89,13 +89,11 @@ namespace BioCloneBot
                 this.yDest = yDest;
                 this.zDest = -1.0;
 
-                //movePump(xLocation, yLocation, 0.0);
-                //zLocation = 0.0;
                 movePump(xDest, yDest, zLocation);
                 xLocation = xDest;
                 yLocation = yDest;
-                movePump(xLocation, yLocation, 40.0);
-                zLocation = 40.0;
+                movePump(xLocation, yLocation, 30.0);
+                zLocation = 30.0;
                 removeTip();
                 movePump(xLocation, yLocation, 0.0);
                 zLocation = 0.0;
@@ -151,12 +149,47 @@ namespace BioCloneBot
                 yLocation = yDest;
                 movePump(xLocation, yLocation, zDest);
                 zLocation = zDest;
-                dispenseVolume(volumeMoved);
+                dispenseVolume(volumeMoved + 25.0);
                 movePump(xLocation, yLocation, 0.0);
                 zLocation = 0.0;
+                aspirateVolume(25);
             }
         }
+        //mix operation
+        public Operation(string command, double volumeMixed, double xLocation, double yLocation, double zLocation,
+            double xDest, double yDest, double zDest, int mixCount, int labwarePosition, int[] selectedReservoirPosition, Labware labware)
+        {
+            this.command = command;
+            if(command == "mix")
+            {
+                this.volumeMoved = 0.0;
+                this.volumeMixed = volumeMixed;
+                this.xLocation = xLocation;
+                this.yLocation = yLocation;
+                this.zLocation = zLocation;
+                this.xDest = xDest;
+                this.yDest = yDest;
+                this.zDest = zDest;
+                this.mixCount = mixCount;
 
+                //for saving operations only
+                this.labwarePosition = labwarePosition;
+                this.selectedReservoirPosition = selectedReservoirPosition;
+                this.labware = labware;
+
+                aspirateVolume(25.0);
+                movePump(xDest, yDest, zLocation);
+                xLocation = xDest;
+                yLocation = yDest;
+                movePump(xLocation, yLocation, zDest);
+                zLocation = zDest;
+                mix(mixCount, volumeMixed);
+                dispenseVolume(25);
+                movePump(xLocation, yLocation, 0.0);
+                zLocation = 0.0;
+                aspirateVolume(25.0);
+            }
+        }
         private void movePump(double xDest, double yDest, double zDest)
         {
             string x = "";
@@ -244,6 +277,12 @@ namespace BioCloneBot
             string volume = convertToTwoDecimalDouble(volumeDispensed);
             steps.Add("#0100" + volume + "%");
         }
+        private void mix(int numberOfMixes, double volumeMixed)
+        {
+            string mixCount = convertToThreeDigitInt(numberOfMixes);
+            string volume = convertToTwoDecimalDouble(volumeMixed);
+            steps.Add("#0101" + mixCount + volume + "%");
+        }
 
         private string convertToTwoDecimalDouble(double input)
         {
@@ -291,6 +330,24 @@ namespace BioCloneBot
             }
 
             conversion = leftSide + "." + rightSide;
+            return conversion;
+        }
+
+        private string convertToThreeDigitInt(int input)
+        {
+            string conversion = input.ToString();
+            if(conversion.Length == 1)
+            {
+                conversion = "00" + conversion;
+            }
+            else if(conversion.Length == 2)
+            {
+                conversion = "0" + conversion;
+            }
+            else if(conversion.Length == 3)
+            {
+                conversion = conversion;
+            }
             return conversion;
         }
     }

@@ -14,13 +14,20 @@ namespace BioCloneBot
 
         public Wellplate()
         {
-            dimensions = new double[3] { 127.76, 85.48, 15.50 }; //length, width, height
+            //length, width, height of labware
+            //dimensions = new double[3] { 127.76, 85.48, 15.50 }; //length, width, height
+            dimensions = new double[3] { 127.76, 86.48, 32.30 }; //length, width, height
             topLeftCorner = new double[2];
-            startLocation = new double[2] { 14.38, 11.24 }; //x and y distance from the top left corner of the plate
+            //x and y distance from the top left corner of labware position to center of reservoir
+            startLocation = new double[2] { 14.38, 15.5 }; //x and y distance from the top left corner of the plate
             row = 8;
             col = 12;
             maxVolume = 200.00; //200.00 uL
-            volumes = new double[this.row, this.col];
+            volumes = new double[row][];
+            for (int i = 0; i < row; i++)
+            {
+                volumes[i] = new double[col];
+            }
             labwareType = "wellplate";
 
             wellCount = 96;
@@ -34,7 +41,7 @@ namespace BioCloneBot
             {
                 for (int j = 0; j < col; j++)
                 {
-                    volumes[i, j] = 0.0;
+                    volumes[i][j] = 0.0;
                 }
             }
         }

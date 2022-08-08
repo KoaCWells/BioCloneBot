@@ -15,7 +15,7 @@ namespace BioCloneBot
         private string labwareType;
         private bool[,] wellsSelected;
         private double maxVolume;
-        private double[,] volumes;
+        private double[][] volumes;
         private int row;
         private int col;
         private int tableLayoutElementSize;
@@ -29,7 +29,7 @@ namespace BioCloneBot
         private TableLayoutPanel labwareReservoirsTableLayout = new TableLayoutPanel();
         private Button[,] reservoirButtons = null;
 
-        public double[,] Volumes
+        public double[][] Volumes
         {
             get { return volumes; }
         }
@@ -56,7 +56,11 @@ namespace BioCloneBot
             endPoint = new Point(0, 0);
             labwareType = labware.LabwareType;
             maxVolume = labware.MaxVolume;
-            volumes = labware.Volumes;
+            volumes = new double[labware.Row][];
+            for (int i = 0; i < labware.Row; i++)
+            {
+                volumes[i] = labware.Volumes[i].Clone() as double[];
+            }
 
             if (labwareType == "wellplate")
             {
@@ -123,18 +127,18 @@ namespace BioCloneBot
                     labwareReservoirsTableLayout.Controls.Add(reservoirButtons[i, j], j, i);
                     labwareReservoirsTableLayout.ColumnStyles.Add(new ColumnStyle(SizeType.Absolute, tableLayoutElementSize));
 
-                    if (volumes[i, j] > 0)
+                    if (volumes[i][j] > 0)
                     {
                         reservoirButtons[i, j].BackgroundImage = fullButtonBackground;
                     }
-                    else if (volumes[i, j] == 0)
+                    else if (volumes[i][j] == 0)
                     {
                         reservoirButtons[i, j].BackgroundImage = emptyButtonBackground;
                     }
 
                     if(labwareType != "tipbox")
                     {
-                        reservoirButtons[i, j].Text = volumes[i, j].ToString();
+                        reservoirButtons[i, j].Text = volumes[i][j].ToString();
                     }
                 }
                 this.DoubleBuffered = true;
@@ -305,24 +309,24 @@ namespace BioCloneBot
                     {
                         if (wellsSelected[i, j] == true && setVolume > 0)
                         {
-                           volumes[i, j] = Convert.ToDouble(setVolume);
+                           volumes[i][j] = Convert.ToDouble(setVolume);
                             reservoirButtons[i, j].BackgroundImage = fullButtonBackground;
                             wellsSelected[i, j] = false;
 
                             if (labwareType != "tipbox")
                             {
-                                reservoirButtons[i, j].Text = volumes[i, j].ToString();
+                                reservoirButtons[i, j].Text = volumes[i][j].ToString();
                             }
                         }
                         else if (wellsSelected[i, j] == true && setVolume == 0)
                         {
-                            volumes[i, j] = setVolume;
+                            volumes[i][j] = setVolume;
                             reservoirButtons[i, j].BackgroundImage = emptyButtonBackground;
                             wellsSelected[i, j] = false;
 
                             if (labwareType != "tipbox")
                             {
-                                reservoirButtons[i, j].Text = volumes[i, j].ToString();
+                                reservoirButtons[i, j].Text = volumes[i][j].ToString();
                             }
                         }
                     }
@@ -351,13 +355,13 @@ namespace BioCloneBot
                 {
                     if (wellsSelected[i, j] == true)
                     {
-                        volumes[i, j] = 0.0;
+                        volumes[i][j] = 0.0;
                         reservoirButtons[i, j].BackgroundImage = emptyButtonBackground;
                         wellsSelected[i, j] = false;
 
                         if (labwareType != "tipbox")
                         {
-                            reservoirButtons[i, j].Text = volumes[i, j].ToString();
+                            reservoirButtons[i, j].Text = volumes[i][j].ToString();
                         }
                     }
                 }
@@ -373,7 +377,7 @@ namespace BioCloneBot
                 {
                     for (int j = 0; j < col; j++)
                     {
-                        if (volumes[i, j] > 0)
+                        if (volumes[i][j] > 0)
                         {
                             reservoirButtons[i, j].BackgroundImage = fullButtonBackground;
                         }

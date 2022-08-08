@@ -15,11 +15,16 @@ namespace BioCloneBot
         protected double[] dimensions;
         protected double[] topLeftCorner;
         protected double[] startLocation;
-        protected double[,] volumes;
+        protected double[][] volumes;
         protected string labwareType;
-        public Labware()
-        {
 
+        public int Row
+        {
+            get { return row; }
+        }
+        public int Col
+        {
+            get { return col; }
         }
         public double MaxVolume 
         {
@@ -43,7 +48,7 @@ namespace BioCloneBot
             get { return startLocation; }
             set { startLocation = value; }
         }
-        public double[,] Volumes 
+        public double[][] Volumes 
         { 
             get { return volumes; }
             set { volumes = value; }
