@@ -12,25 +12,36 @@ namespace BioCloneBot
         private string command;
         private double volumeMoved;
         private double volumeMixed;
+        private double xStart;
+        private double yStart;
+        private double zStart;
         private double xLocation;
         private double yLocation;
         private double zLocation;
         private double xDest;
         private double yDest;
         private double zDest;
-        private double xDir;
-        private double yDir;
-        private double zDir;
         private int labwarePosition;
         private int mixCount;
         private int[] selectedReservoirPosition; //row and column of labware selected
         private Labware labware; //source or destination labware
 
-        public List<string> Steps
-        {
-            get { return steps; }
-            set { steps = value; }
-        }
+        public List<string> Steps { get { return steps; } set { steps = value; } }
+        public string Command { get { return command; } set { command = value; } }
+        public double VolumeMoved { get { return volumeMoved; } set { volumeMoved = value; } }
+        public double VolumeMixed { get { return volumeMixed; } set { volumeMixed = value; } }
+        public double XStart { get { return xStart; } set { xStart = value; } }
+        public double YStart { get { return yStart; } set { yStart = value; } }
+        public double ZStart { get { return zStart; } set { zStart = value; } }
+        public double XLocation { get { return xLocation; } set { xLocation = value; } }
+        public double YLocation { get { return yLocation; } set { yLocation = value; } }
+        public double ZLocation { get { return zLocation; } set { zLocation = value; } }
+        public double XDest { get { return xDest; } set { xDest = value; } }
+        public double YDest { get { return yDest; } set { yDest = value; } }
+        public double ZDest { get { return zDest; } set { zDest = value; } }
+        public int LabwarePosition { get { return labwarePosition; } set { labwarePosition = value; } }
+        public int MixCount { get { return mixCount; } set { mixCount = value; } }
+        public int[] SelectedReservoirPosition { get { return selectedReservoirPosition; } set { selectedReservoirPosition = value; } }
 
         public Operation(string command)
         {
@@ -63,6 +74,10 @@ namespace BioCloneBot
                 this.selectedReservoirPosition = selectedReservoirPosition;
                 this.labware = labware;
 
+                xStart = xLocation;
+                yStart = yLocation;
+                zStart = zLocation;
+
                 movePump(xDest, yDest, zLocation);
                 xLocation = xDest;
                 yLocation = yDest;
@@ -88,6 +103,10 @@ namespace BioCloneBot
                 this.xDest = xDest;
                 this.yDest = yDest;
                 this.zDest = -1.0;
+
+                xStart = xLocation;
+                yStart = yLocation;
+                zStart = zLocation;
 
                 movePump(xDest, yDest, zLocation);
                 xLocation = xDest;
@@ -120,6 +139,10 @@ namespace BioCloneBot
                 this.selectedReservoirPosition = selectedReservoirPosition;
                 this.labware = labware;
 
+                xStart = xLocation;
+                yStart = yLocation;
+                zStart = zLocation;
+
                 movePump(xDest, yDest, zLocation);
                 xLocation = xDest;
                 yLocation = yDest;
@@ -143,6 +166,10 @@ namespace BioCloneBot
                 this.labwarePosition = labwarePosition;
                 this.selectedReservoirPosition = selectedReservoirPosition;
                 this.labware = labware;
+
+                xStart = xLocation;
+                yStart = yLocation;
+                zStart = zLocation;
 
                 movePump(xDest, yDest, zLocation);
                 xLocation = xDest;
@@ -176,6 +203,10 @@ namespace BioCloneBot
                 this.labwarePosition = labwarePosition;
                 this.selectedReservoirPosition = selectedReservoirPosition;
                 this.labware = labware;
+
+                xStart = xLocation;
+                yStart = yLocation;
+                zStart = zLocation;
 
                 aspirateVolume(25.0);
                 movePump(xDest, yDest, zLocation);
