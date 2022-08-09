@@ -2,8 +2,8 @@
 # This .gitignore file was automatically created by Microsoft(R) Visual Studio.
 ################################################################################
 
-.vs/*
-BioCloneBot/bin
-BioCloneBot/obj
+.\.vs\*
+.\BioCloneBot\bin\*
+.\BioCloneBot\obj\*
 AnalysisReport.sarif
 upgrade-assistant.clef
