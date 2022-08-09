@@ -74,7 +74,7 @@ namespace BioCloneBot
             string connectionMessage = "#ping%";
             string response = "";
             char receivedCharacter = ' ';
-            bool handshake = true;
+            bool handshake = false;
             bool messageComplete = false;
             int i = 0;
             byte[] messageCharacter = new byte[1];
@@ -416,7 +416,7 @@ namespace BioCloneBot
                     platform.XLocation = (double)platformNode!["XLocation"]!;
                     platform.YLocation = (double)platformNode!["YLocation"]!;
                     platform.ZLocation = (double)platformNode!["ZLocation"]!;
-                    //ignore XMaxs
+                    //ignore XMax
                     //ignore YMax
                     //ignore ZMax
                     //ignore TrashLocation
@@ -525,9 +525,9 @@ namespace BioCloneBot
                         {
                             platform.Operations.Add(new Operation(
                                 "gettip",
-                                (double)operationNode!["XLocation"]!,
-                                (double)operationNode!["YLocation"]!,
-                                (double)operationNode!["ZLocation"]!,
+                                (double)operationNode!["XStart"]!,
+                                (double)operationNode!["YStart"]!,
+                                (double)operationNode!["ZStart"]!,
                                 (double)operationNode!["XDest"]!,
                                 (double)operationNode!["YDest"]!,
                                 (double)operationNode!["ZDest"]!,
@@ -539,9 +539,9 @@ namespace BioCloneBot
                         {
                             platform.Operations.Add(new Operation(
                                 "removetip",
-                                (double)operationNode!["XLocation"]!,
-                                (double)operationNode!["YLocation"]!,
-                                (double)operationNode!["ZLocation"]!,
+                                (double)operationNode!["XStart"]!,
+                                (double)operationNode!["YStart"]!,
+                                (double)operationNode!["ZStart"]!,
                                 (double)operationNode!["XDest"]!,
                                 (double)operationNode!["YDest"]!));
                         }
@@ -550,9 +550,9 @@ namespace BioCloneBot
                             platform.Operations.Add(new Operation(
                                 "aspirate",
                                 (double)operationNode!["VolumeMoved"]!,
-                                (double)operationNode!["XLocation"]!,
-                                (double)operationNode!["YLocation"]!,
-                                (double)operationNode!["ZLocation"]!,
+                                (double)operationNode!["XStart"]!,
+                                (double)operationNode!["YStart"]!,
+                                (double)operationNode!["ZStart"]!,
                                 (double)operationNode!["XDest"]!,
                                 (double)operationNode!["YDest"]!,
                                 (double)operationNode!["ZDest"]!,
@@ -565,9 +565,9 @@ namespace BioCloneBot
                             platform.Operations.Add(new Operation(
                                 "dispense",
                                 (double)operationNode!["VolumeMoved"]!,
-                                (double)operationNode!["XLocation"]!,
-                                (double)operationNode!["YLocation"]!,
-                                (double)operationNode!["ZLocation"]!,
+                                (double)operationNode!["XStart"]!,
+                                (double)operationNode!["YStart"]!,
+                                (double)operationNode!["ZStart"]!,
                                 (double)operationNode!["XDest"]!,
                                 (double)operationNode!["YDest"]!,
                                 (double)operationNode!["ZDest"]!,
@@ -580,9 +580,9 @@ namespace BioCloneBot
                             platform.Operations.Add(new Operation(
                                 "mix",
                                 (double)operationNode!["VolumeMixed"]!,
-                                (double)operationNode!["XLocation"]!,
-                                (double)operationNode!["YLocation"]!,
-                                (double)operationNode!["ZLocation"]!,
+                                (double)operationNode!["XStart"]!,
+                                (double)operationNode!["YStart"]!,
+                                (double)operationNode!["ZStart"]!,
                                 (double)operationNode!["XDest"]!,
                                 (double)operationNode!["YDest"]!,
                                 (double)operationNode!["ZDest"]!,

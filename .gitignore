@@ -3,5 +3,7 @@
 ################################################################################
 
 .vs/*
+BioCloneBot/bin
+BioCloneBot/obj
 AnalysisReport.sarif
 upgrade-assistant.clef
