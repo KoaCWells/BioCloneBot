@@ -3,8 +3,8 @@
 ################################################################################
 
 /.vs
-#/BioCloneBot/bin
-#/BioCloneBot/obj
+/BioCloneBot/bin
+/BioCloneBot/obj
 /Firmware/DeviceController
 /Firmware/DeviceControllerV2
 /Firmware/DeviceControllerV3
