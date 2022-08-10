@@ -76,7 +76,14 @@ namespace BioCloneBot
                 }
                 else if (passedDecimal == true)
                 {
-                    rightSide += conversion[i];
+                    if (rightSide.Length < 2)
+                    {
+                        rightSide += conversion[i];
+                    }
+                    else
+                    {
+                        break;
+                    }
                 }
             }
 
