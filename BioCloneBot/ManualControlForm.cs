@@ -302,7 +302,7 @@ namespace BioCloneBot
             byte[] messageCharacter = new byte[1];
             xLocation = 0.0;
             yLocation = 0.0;
-            zLocation = platform.ZMax;
+            zLocation = 0.0;
 
             try
             {

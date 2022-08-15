@@ -15,7 +15,7 @@ namespace BioCloneBot
         public Tubestand()
         {
             //length, width, height of labware
-            dimensions = new double[3] {125.50, 85.20, 63.40};
+            dimensions = new double[3] {125.50, 85.20, 60.90};
             topLeftCorner = new double[2];
             //x and y distance from the top left corner of labware position to center of reservoir
             startLocation = new double[2] { 17.80, 12.80 };
