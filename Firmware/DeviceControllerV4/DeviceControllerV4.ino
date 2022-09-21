@@ -196,6 +196,7 @@ void setup() {
   attachInterrupt(digitalPinToInterrupt(Z_LIMIT), zLimitPressed, FALLING);
   attachInterrupt(digitalPinToInterrupt(P_LIMIT), pLimitPressed, FALLING);
 
+  setMicrostepping(32); //sets microstepping of all 3-axis drivers to 1/32
   homing = 0;
   // set up the LCD's number of columns and rows:
   lcd.begin(16, 2);
@@ -330,7 +331,7 @@ void loop() {
   */
 void homeCarriage(){
   enableMotors(); //enables all stepper motor drivers
-  setMicrostepping(32); //sets microstepping of all 3-axis drivers to 1/32
+
   homing = 1; //disables limit switch overrupts for the purpose of homing
   int count = 0;
   //sets initial direction of all motors towards their limit switches
