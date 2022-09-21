@@ -156,6 +156,10 @@ bool message_complete;
 void setup() {
   Serial.begin(9600);
 
+  pump_step_delay = 500; //time delay between HIGH/LOW digital control signal in microseconds
+  pump_rev_steps = 400; //steps per revolution
+  p_step_dist = 157E-6; //mm per step
+
   //sets all stepper motor control pins to output
   for(int i = 22; i <= 45; i++){
     pinMode(i, OUTPUT);
@@ -164,10 +168,7 @@ void setup() {
   digitalWrite(P_MS0, LOW);
   digitalWrite(P_MS1, LOW);
   digitalWrite(P_MS2, LOW);
-  pump_step_delay = 1000; //time delay between HIGH/LOW digital control signal in microseconds
-  pump_rev_steps = 400; //steps per revolution
-  p_step_dist = 157E-6; //mm per step
-  
+
   //defines indicator LEDs: MOVE for carriage movement, PUMP for pump movement, and CONN for a successful serial connection
   pinMode(MOVE_LED,OUTPUT);
   pinMode(PUMP_LED,OUTPUT);
@@ -220,6 +221,11 @@ void loop() {
     x_dist = 0.0;
     y_dist = 0.0;
     z_dist = 0.0;
+    aspirate_vol = 0.0;
+    dispense_vol = 0.0;
+    mix_vol = 0.0;
+    mix_count = 0.0;
+    
     lcd.setCursor(0,1);
     host_message = receiveHostMessage();
     lcd.print(host_message);
@@ -434,7 +440,7 @@ void homeCarriage(){
     delayMicroseconds(pump_step_delay);
   }
   //back off pump for 25.0 uL trailing air gap
-  for(int i = 0; i < 25.0/0.041667; i++){
+  for(int i = 0; i < 25.0/0.020774; i++){
     digitalWrite(P_STEP, HIGH);
     delayMicroseconds(pump_step_delay);
     digitalWrite(P_STEP, LOW);
@@ -531,7 +537,9 @@ void removeTip(){
 void aspirate(double volume){
   homing = 1;
   digitalWrite(P_DIR, LOW);
-  for(int i = 0; i < volume/0.041667; i++){
+  //.041667 for 500 uL syringe
+  //0.020774 for 250 uL syringe
+  for(int i = 0; i < volume/0.020774; i++){
     digitalWrite(P_STEP, HIGH);
     delayMicroseconds(pump_step_delay);
     digitalWrite(P_STEP, LOW);
@@ -543,7 +551,7 @@ void aspirate(double volume){
 void dispense(double volume){
   homing = 1;
   digitalWrite(P_DIR, HIGH);
-  for(int i = 0; i < volume/0.041667; i++){
+  for(int i = 0; i < volume/0.020774; i++){
     digitalWrite(P_STEP, HIGH);
     delayMicroseconds(pump_step_delay);
     digitalWrite(P_STEP, LOW);
@@ -556,14 +564,14 @@ void mix(double mix_count, double volume)
 {
   for(int i = 0; i < mix_count; i++){
     digitalWrite(P_DIR, LOW);
-    for(int j = 0; j < volume/0.041667; j++){
+    for(int j = 0; j < volume/0.020774; j++){
       digitalWrite(P_STEP, HIGH);
       delayMicroseconds(pump_step_delay);
       digitalWrite(P_STEP, LOW);
       delayMicroseconds(pump_step_delay);
     }
     digitalWrite(P_DIR, HIGH);
-    for(int j = 0; j < volume/0.041667; j++){
+    for(int j = 0; j < volume/0.020774; j++){
       digitalWrite(P_STEP, HIGH);
       delayMicroseconds(pump_step_delay);
       digitalWrite(P_STEP, LOW);
@@ -571,7 +579,7 @@ void mix(double mix_count, double volume)
     }
   }
   digitalWrite(P_DIR, HIGH);
-  for(int i = 0; i < 25.0/0.041667; i++){
+  for(int i = 0; i < 25.0/0.020774; i++){
     digitalWrite(P_STEP, HIGH);
     delayMicroseconds(pump_step_delay);
     digitalWrite(P_STEP, LOW);
@@ -676,8 +684,8 @@ void setMicrostepping(int step_size){
       digitalWrite(Z_MS0, HIGH);
       digitalWrite(Z_MS1, HIGH);
       digitalWrite(Z_MS2, HIGH);
-      //axis_step_delay = 63;
-      axis_step_delay = 125;
+      axis_step_delay = 63;
+      //axis_step_delay = 125;
       axis_rev_steps = 6400;
       x_step_dist = 63E-7;
       y_step_dist = 63E-7;
