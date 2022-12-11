@@ -139,6 +139,7 @@ double mix_count;
 double x_dist;
 double y_dist;
 double z_dist;
+double vol_per_step;
 char x_dir;
 char y_dir;
 char z_dir;
@@ -159,6 +160,10 @@ void setup() {
   pump_step_delay = 500; //time delay between HIGH/LOW digital control signal in microseconds
   pump_rev_steps = 400; //steps per revolution
   p_step_dist = 157E-6; //mm per step
+  //0.041667 for 500 uL syringe
+  //0.020774 for 250 uL syringe
+  //0.004166 for 50 uL gastight syringe
+  vol_per_step = 0.020774;
 
   //sets all stepper motor control pins to output
   for(int i = 22; i <= 45; i++){
@@ -441,7 +446,9 @@ void homeCarriage(){
     delayMicroseconds(pump_step_delay);
   }
   //back off pump for 25.0 uL trailing air gap
-  for(int i = 0; i < 25.0/0.020774; i++){
+  //25.0 for 250 uL syringe
+  //5.0 for 50 uL syringe
+  for(int i = 0; i < 25.0/vol_per_step; i++){
     digitalWrite(P_STEP, HIGH);
     delayMicroseconds(pump_step_delay);
     digitalWrite(P_STEP, LOW);
@@ -538,9 +545,7 @@ void removeTip(){
 void aspirate(double volume){
   homing = 1;
   digitalWrite(P_DIR, LOW);
-  //.041667 for 500 uL syringe
-  //0.020774 for 250 uL syringe
-  for(int i = 0; i < volume/0.020774; i++){
+  for(int i = 0; i < volume/vol_per_step; i++){
     digitalWrite(P_STEP, HIGH);
     delayMicroseconds(pump_step_delay);
     digitalWrite(P_STEP, LOW);
@@ -552,7 +557,7 @@ void aspirate(double volume){
 void dispense(double volume){
   homing = 1;
   digitalWrite(P_DIR, HIGH);
-  for(int i = 0; i < volume/0.020774; i++){
+  for(int i = 0; i < volume/vol_per_step; i++){
     digitalWrite(P_STEP, HIGH);
     delayMicroseconds(pump_step_delay);
     digitalWrite(P_STEP, LOW);
@@ -565,26 +570,19 @@ void mix(double mix_count, double volume)
 {
   for(int i = 0; i < mix_count; i++){
     digitalWrite(P_DIR, LOW);
-    for(int j = 0; j < volume/0.020774; j++){
+    for(int j = 0; j < volume/vol_per_step; j++){
       digitalWrite(P_STEP, HIGH);
       delayMicroseconds(pump_step_delay);
       digitalWrite(P_STEP, LOW);
       delayMicroseconds(pump_step_delay);
     }
     digitalWrite(P_DIR, HIGH);
-    for(int j = 0; j < volume/0.020774; j++){
+    for(int j = 0; j < volume/vol_per_step; j++){
       digitalWrite(P_STEP, HIGH);
       delayMicroseconds(pump_step_delay);
       digitalWrite(P_STEP, LOW);
       delayMicroseconds(pump_step_delay);
     }
-  }
-  digitalWrite(P_DIR, HIGH);
-  for(int i = 0; i < 25.0/0.020774; i++){
-    digitalWrite(P_STEP, HIGH);
-    delayMicroseconds(pump_step_delay);
-    digitalWrite(P_STEP, LOW);
-    delayMicroseconds(pump_step_delay);
   }
 }
 

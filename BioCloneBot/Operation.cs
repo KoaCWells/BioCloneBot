@@ -21,6 +21,7 @@ namespace BioCloneBot
         private double xDest;
         private double yDest;
         private double zDest;
+        private double backlashAdjustment;
         private int labwarePosition;
         private int mixCount;
         private int[] selectedReservoirPosition; //row and column of labware selected
@@ -46,8 +47,8 @@ namespace BioCloneBot
         public Operation(string command)
         {
             this.command = command;
-            
-            if(this.command == "home")
+
+            if (this.command == "home")
             {
                 steps.Add("#0000%");
                 xLocation = 0.0;
@@ -56,7 +57,7 @@ namespace BioCloneBot
             }
         }
 
-        public Operation(string command, double xLocation, double yLocation, double zLocation, 
+        public Operation(string command, double xLocation, double yLocation, double zLocation,
             double xDest, double yDest, double zDest, int labwarePosition, int[] selectedReservoirPosition, Labware labware)
         {
             this.command = command;
@@ -84,13 +85,13 @@ namespace BioCloneBot
                 movePump(xLocation, yLocation, zDest);
                 zLocation = zDest;
                 movePump(xLocation, yLocation, zLocation + 3.0);
-                zLocation = zLocation + 4.0;
+                zLocation = zLocation + 3.0;
                 movePump(xLocation, yLocation, 0.0);
                 zLocation = 0.0;
             }
         }
 
-        public Operation(string command, double xLocation, double yLocation, double zLocation, 
+        public Operation(string command, double xLocation, double yLocation, double zLocation,
             double xDest, double yDest)
         {
             this.command = command;
@@ -107,7 +108,10 @@ namespace BioCloneBot
                 xStart = xLocation;
                 yStart = yLocation;
                 zStart = zLocation;
-
+                //5.0 for 50uL syringe
+                //backlashAdjustment = 5.0;
+                //10.o for 250uL syringe
+                backlashAdjustment = 25.0;
                 movePump(xDest, yDest, zLocation);
                 xLocation = xDest;
                 yLocation = yDest;
@@ -116,7 +120,10 @@ namespace BioCloneBot
                 removeTip();
                 movePump(xLocation, yLocation, 0.0);
                 zLocation = 0.0;
-                aspirateVolume(25);
+                //for 250 uL syringe
+                //aspirateVolume(25);
+                //for 50 uL syringe
+                aspirateVolume(backlashAdjustment);
             }
         }
         //aspirate/dispense device operation
@@ -126,6 +133,7 @@ namespace BioCloneBot
             this.command = command;
             if (command == "aspirate")
             {
+                double adjustedVolume = 0.0;
                 this.volumeMoved = volumeMoved;
                 this.xLocation = xLocation;
                 this.yLocation = yLocation;
@@ -148,11 +156,13 @@ namespace BioCloneBot
                 yLocation = yDest;
                 movePump(xLocation, yLocation, zDest);
                 zLocation = zDest;
-                aspirateVolume(volumeMoved);
+
+                adjustedVolume = (volumeMoved + 0.3437) / 0.9294;
+                aspirateVolume(adjustedVolume);
                 movePump(xLocation, yLocation, 0.0);
                 zLocation = 0.0;
             }
-            else if(command == "dispense")
+            else if (command == "dispense")
             {
                 this.volumeMoved = volumeMoved;
                 this.xLocation = xLocation;
@@ -171,15 +181,26 @@ namespace BioCloneBot
                 yStart = yLocation;
                 zStart = zLocation;
 
+                //5.0 for 50uL syringe
+                //backlashAdjustment = 5.0;
+                //10.o for 250uL syringe
+                backlashAdjustment = 25.0;
+
                 movePump(xDest, yDest, zLocation);
                 xLocation = xDest;
                 yLocation = yDest;
                 movePump(xLocation, yLocation, zDest);
                 zLocation = zDest;
-                dispenseVolume(volumeMoved + 25.0);
+                //for 250 uL syringe
+                //dispenseVolume(volumeMoved + 25.0);
+                //for 50 uL syringe
+                dispenseVolume(volumeMoved + backlashAdjustment);
                 movePump(xLocation, yLocation, 0.0);
                 zLocation = 0.0;
-                aspirateVolume(25);
+                //for 250 uL syringe
+                //aspirateVolume(25);
+                //for 50 uL syringe
+                aspirateVolume(backlashAdjustment);
             }
         }
         //mix operation
@@ -187,7 +208,7 @@ namespace BioCloneBot
             double xDest, double yDest, double zDest, int mixCount, int labwarePosition, int[] selectedReservoirPosition, Labware labware)
         {
             this.command = command;
-            if(command == "mix")
+            if (command == "mix")
             {
                 this.volumeMoved = 0.0;
                 this.volumeMixed = volumeMixed;
@@ -207,18 +228,31 @@ namespace BioCloneBot
                 xStart = xLocation;
                 yStart = yLocation;
                 zStart = zLocation;
+                //5.0 for 50uL syringe
+                //backlashAdjustment = 5.0;
+                //10.o for 250uL syringe
+                backlashAdjustment = 25.0;
 
-                aspirateVolume(25.0);
+                //for 250 uL syringe
+                //aspirateVolume(25.0);
+                //for 50 uL syringe
+                aspirateVolume(backlashAdjustment);
                 movePump(xDest, yDest, zLocation);
                 xLocation = xDest;
                 yLocation = yDest;
                 movePump(xLocation, yLocation, zDest);
                 zLocation = zDest;
                 mix(mixCount, volumeMixed);
-                dispenseVolume(25);
+                //for 250 uL syringe
+                //dispenseVolume(25);
+                //for 50 uL syringe
+                dispenseVolume(backlashAdjustment);
                 movePump(xLocation, yLocation, 0.0);
                 zLocation = 0.0;
-                aspirateVolume(25.0);
+                //for 250 uL syringe
+                //aspirateVolume(25.0);
+                //for 50 uL syringe
+                aspirateVolume(backlashAdjustment);
             }
         }
         private void movePump(double xDest, double yDest, double zDest)
@@ -336,7 +370,7 @@ namespace BioCloneBot
                 {
                     leftSide += conversion[i];
                 }
-                else if(passedDecimal == true)
+                else if (passedDecimal == true)
                 {
                     if (rightSide.Length < 2)
                     {
@@ -349,20 +383,20 @@ namespace BioCloneBot
                 }
             }
 
-            if(leftSide.Length == 1)
+            if (leftSide.Length == 1)
             {
                 leftSide = "00" + leftSide;
             }
-            else if(leftSide.Length == 2)
+            else if (leftSide.Length == 2)
             {
                 leftSide = "0" + leftSide;
             }
 
-            if(rightSide.Length == 0)
+            if (rightSide.Length == 0)
             {
                 rightSide += "00";
             }
-            else if(rightSide.Length == 1)
+            else if (rightSide.Length == 1)
             {
                 rightSide += "0";
             }
@@ -374,15 +408,15 @@ namespace BioCloneBot
         private string convertToThreeDigitInt(int input)
         {
             string conversion = input.ToString();
-            if(conversion.Length == 1)
+            if (conversion.Length == 1)
             {
                 conversion = "00" + conversion;
             }
-            else if(conversion.Length == 2)
+            else if (conversion.Length == 2)
             {
                 conversion = "0" + conversion;
             }
-            else if(conversion.Length == 3)
+            else if (conversion.Length == 3)
             {
                 conversion = conversion;
             }

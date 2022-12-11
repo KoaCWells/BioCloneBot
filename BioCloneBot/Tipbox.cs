@@ -19,10 +19,10 @@ namespace BioCloneBot
             //length, width, and height of labware
             //dimensions of orange tip box
             //dimensions = new double[3] { 127.76, 80.48, 35.50 };
-            dimensions = new double[3] { 127.76, 80.48, 50.00 };
+            dimensions = new double[3] { 127.76, 80.48, 46.00 };
             topLeftCorner = new double[2];
             //x and y distance from the top left corner of labware position to center of reservoir
-            startLocation = new double[2] { 15.50, 16.00 };
+            startLocation = new double[2] { 15.80, 14.50 };
             row = 8;
             col = 12;
             maxVolume = 200.00;
@@ -35,7 +35,7 @@ namespace BioCloneBot
 
             totalTips = 96;
             remainingTips = 96;
-            tipDistance = 9.00;
+            tipDistance = 8.90;
             tipDiameter = 7.00;
 
             reservoirSeparation = tipDistance;
