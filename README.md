@@ -4,6 +4,9 @@ The BioCloneBot is an open-source automated liquid handler developed to satisfy 
 Visual Studio 2022 is required to make modifications to the front-end and the Arduino IDE or VS Code is required to modify the device firmware. Solidworks 2022 is required to open the original 3D model files. STLs have also been provided for printing.
 
 
+
+
+
 Copyright (c) 2022 Ke'Koa C. Wells
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
