@@ -136,7 +136,7 @@ namespace BioCloneBot
             this.toolStrip1.Location = new System.Drawing.Point(0, 0);
             this.toolStrip1.Name = "toolStrip1";
             this.toolStrip1.Padding = new System.Windows.Forms.Padding(0, 0, 2, 0);
-            this.toolStrip1.Size = new System.Drawing.Size(1347, 25);
+            this.toolStrip1.Size = new System.Drawing.Size(1962, 25);
             this.toolStrip1.TabIndex = 8;
             this.toolStrip1.Text = "toolStrip1";
             // 
@@ -207,11 +207,11 @@ namespace BioCloneBot
             this.home.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(18)))), ((int)(((byte)(18)))), ((int)(((byte)(20)))));
             this.home.Font = new System.Drawing.Font("Microsoft Sans Serif", 14F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point);
             this.home.ForeColor = System.Drawing.Color.White;
-            this.home.Location = new System.Drawing.Point(4, 488);
+            this.home.Location = new System.Drawing.Point(4, 670);
             this.home.Margin = new System.Windows.Forms.Padding(4);
             this.home.MinimumSize = new System.Drawing.Size(166, 90);
             this.home.Name = "home";
-            this.home.Size = new System.Drawing.Size(166, 90);
+            this.home.Size = new System.Drawing.Size(191, 90);
             this.home.TabIndex = 15;
             this.home.Text = "Home Device";
             this.home.UseVisualStyleBackColor = false;
@@ -226,11 +226,11 @@ namespace BioCloneBot
             this.closeSerialPort.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(18)))), ((int)(((byte)(18)))), ((int)(((byte)(20)))));
             this.closeSerialPort.Font = new System.Drawing.Font("Microsoft Sans Serif", 14F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point);
             this.closeSerialPort.ForeColor = System.Drawing.Color.White;
-            this.closeSerialPort.Location = new System.Drawing.Point(140, 488);
+            this.closeSerialPort.Location = new System.Drawing.Point(203, 670);
             this.closeSerialPort.Margin = new System.Windows.Forms.Padding(4);
             this.closeSerialPort.MinimumSize = new System.Drawing.Size(166, 90);
             this.closeSerialPort.Name = "closeSerialPort";
-            this.closeSerialPort.Size = new System.Drawing.Size(166, 90);
+            this.closeSerialPort.Size = new System.Drawing.Size(192, 90);
             this.closeSerialPort.TabIndex = 16;
             this.closeSerialPort.Text = "Reconnect Arduino";
             this.closeSerialPort.UseVisualStyleBackColor = false;
@@ -253,8 +253,8 @@ namespace BioCloneBot
             // splitContainer1.Panel2
             // 
             this.splitContainer1.Panel2.Controls.Add(this.splitContainer2);
-            this.splitContainer1.Size = new System.Drawing.Size(1347, 612);
-            this.splitContainer1.SplitterDistance = 277;
+            this.splitContainer1.Size = new System.Drawing.Size(1962, 838);
+            this.splitContainer1.SplitterDistance = 403;
             this.splitContainer1.SplitterWidth = 2;
             this.splitContainer1.TabIndex = 18;
             // 
@@ -284,7 +284,7 @@ namespace BioCloneBot
             this.tableLayoutPanel4.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 10F));
             this.tableLayoutPanel4.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 10F));
             this.tableLayoutPanel4.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 10F));
-            this.tableLayoutPanel4.Size = new System.Drawing.Size(273, 608);
+            this.tableLayoutPanel4.Size = new System.Drawing.Size(399, 834);
             this.tableLayoutPanel4.TabIndex = 21;
             // 
             // protocolLabel
@@ -298,7 +298,7 @@ namespace BioCloneBot
             this.protocolLabel.Location = new System.Drawing.Point(4, 0);
             this.protocolLabel.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
             this.protocolLabel.Name = "protocolLabel";
-            this.protocolLabel.Size = new System.Drawing.Size(265, 60);
+            this.protocolLabel.Size = new System.Drawing.Size(391, 83);
             this.protocolLabel.TabIndex = 21;
             this.protocolLabel.Text = "Protocol Queue";
             this.protocolLabel.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
@@ -310,13 +310,13 @@ namespace BioCloneBot
             this.commandListTextBox.Cursor = System.Windows.Forms.Cursors.IBeam;
             this.commandListTextBox.Dock = System.Windows.Forms.DockStyle.Fill;
             this.commandListTextBox.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
-            this.commandListTextBox.Location = new System.Drawing.Point(4, 64);
+            this.commandListTextBox.Location = new System.Drawing.Point(4, 87);
             this.commandListTextBox.Margin = new System.Windows.Forms.Padding(4);
             this.commandListTextBox.Multiline = true;
             this.commandListTextBox.Name = "commandListTextBox";
             this.commandListTextBox.ReadOnly = true;
             this.commandListTextBox.ScrollBars = System.Windows.Forms.ScrollBars.Vertical;
-            this.commandListTextBox.Size = new System.Drawing.Size(265, 296);
+            this.commandListTextBox.Size = new System.Drawing.Size(391, 409);
             this.commandListTextBox.TabIndex = 18;
             // 
             // startExperiment
@@ -328,11 +328,11 @@ namespace BioCloneBot
             this.startExperiment.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(18)))), ((int)(((byte)(18)))), ((int)(((byte)(20)))));
             this.startExperiment.Font = new System.Drawing.Font("Microsoft Sans Serif", 14F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point);
             this.startExperiment.ForeColor = System.Drawing.Color.White;
-            this.startExperiment.Location = new System.Drawing.Point(4, 368);
+            this.startExperiment.Location = new System.Drawing.Point(4, 504);
             this.startExperiment.Margin = new System.Windows.Forms.Padding(4);
             this.startExperiment.MinimumSize = new System.Drawing.Size(166, 90);
             this.startExperiment.Name = "startExperiment";
-            this.startExperiment.Size = new System.Drawing.Size(166, 90);
+            this.startExperiment.Size = new System.Drawing.Size(191, 90);
             this.startExperiment.TabIndex = 19;
             this.startExperiment.Text = "Start Experiment";
             this.startExperiment.UseVisualStyleBackColor = false;
@@ -347,11 +347,11 @@ namespace BioCloneBot
             this.saveProtocolButton.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(18)))), ((int)(((byte)(18)))), ((int)(((byte)(20)))));
             this.saveProtocolButton.Font = new System.Drawing.Font("Microsoft Sans Serif", 14.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point);
             this.saveProtocolButton.ForeColor = System.Drawing.Color.White;
-            this.saveProtocolButton.Location = new System.Drawing.Point(4, 548);
+            this.saveProtocolButton.Location = new System.Drawing.Point(4, 753);
             this.saveProtocolButton.Margin = new System.Windows.Forms.Padding(4);
             this.saveProtocolButton.MinimumSize = new System.Drawing.Size(166, 90);
             this.saveProtocolButton.Name = "saveProtocolButton";
-            this.saveProtocolButton.Size = new System.Drawing.Size(166, 90);
+            this.saveProtocolButton.Size = new System.Drawing.Size(191, 90);
             this.saveProtocolButton.TabIndex = 22;
             this.saveProtocolButton.Text = "Save Protocol";
             this.saveProtocolButton.UseVisualStyleBackColor = false;
@@ -366,11 +366,11 @@ namespace BioCloneBot
             this.loadSample.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(18)))), ((int)(((byte)(18)))), ((int)(((byte)(20)))));
             this.loadSample.Font = new System.Drawing.Font("Microsoft Sans Serif", 14.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point);
             this.loadSample.ForeColor = System.Drawing.Color.White;
-            this.loadSample.Location = new System.Drawing.Point(4, 428);
+            this.loadSample.Location = new System.Drawing.Point(4, 587);
             this.loadSample.Margin = new System.Windows.Forms.Padding(4);
             this.loadSample.MinimumSize = new System.Drawing.Size(166, 90);
             this.loadSample.Name = "loadSample";
-            this.loadSample.Size = new System.Drawing.Size(166, 90);
+            this.loadSample.Size = new System.Drawing.Size(191, 90);
             this.loadSample.TabIndex = 20;
             this.loadSample.Text = "Load Sample Experiment";
             this.loadSample.UseVisualStyleBackColor = false;
@@ -383,10 +383,10 @@ namespace BioCloneBot
             | System.Windows.Forms.AnchorStyles.Right)));
             this.loadProtocolButton.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(18)))), ((int)(((byte)(18)))), ((int)(((byte)(20)))));
             this.loadProtocolButton.ForeColor = System.Drawing.Color.White;
-            this.loadProtocolButton.Location = new System.Drawing.Point(140, 548);
+            this.loadProtocolButton.Location = new System.Drawing.Point(203, 753);
             this.loadProtocolButton.Margin = new System.Windows.Forms.Padding(4);
             this.loadProtocolButton.Name = "loadProtocolButton";
-            this.loadProtocolButton.Size = new System.Drawing.Size(129, 56);
+            this.loadProtocolButton.Size = new System.Drawing.Size(192, 77);
             this.loadProtocolButton.TabIndex = 23;
             this.loadProtocolButton.Text = "Load Protocol";
             this.loadProtocolButton.UseVisualStyleBackColor = false;
@@ -399,10 +399,10 @@ namespace BioCloneBot
             | System.Windows.Forms.AnchorStyles.Right)));
             this.clearProtocolButton.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(18)))), ((int)(((byte)(18)))), ((int)(((byte)(20)))));
             this.clearProtocolButton.ForeColor = System.Drawing.Color.White;
-            this.clearProtocolButton.Location = new System.Drawing.Point(140, 368);
+            this.clearProtocolButton.Location = new System.Drawing.Point(203, 504);
             this.clearProtocolButton.Margin = new System.Windows.Forms.Padding(4);
             this.clearProtocolButton.Name = "clearProtocolButton";
-            this.clearProtocolButton.Size = new System.Drawing.Size(129, 52);
+            this.clearProtocolButton.Size = new System.Drawing.Size(192, 75);
             this.clearProtocolButton.TabIndex = 24;
             this.clearProtocolButton.Text = "Clear Protocol";
             this.clearProtocolButton.UseVisualStyleBackColor = false;
@@ -425,7 +425,7 @@ namespace BioCloneBot
             // splitContainer2.Panel2
             // 
             this.splitContainer2.Panel2.Controls.Add(this.splitContainer3);
-            this.splitContainer2.Size = new System.Drawing.Size(1068, 612);
+            this.splitContainer2.Size = new System.Drawing.Size(1557, 838);
             this.splitContainer2.SplitterDistance = 223;
             this.splitContainer2.SplitterWidth = 2;
             this.splitContainer2.TabIndex = 0;
@@ -465,7 +465,7 @@ namespace BioCloneBot
             this.tableLayoutPanel5.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 7.5F));
             this.tableLayoutPanel5.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 7.5F));
             this.tableLayoutPanel5.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 7.5F));
-            this.tableLayoutPanel5.Size = new System.Drawing.Size(219, 608);
+            this.tableLayoutPanel5.Size = new System.Drawing.Size(219, 834);
             this.tableLayoutPanel5.TabIndex = 0;
             // 
             // operationsLabel
@@ -477,7 +477,7 @@ namespace BioCloneBot
             this.operationsLabel.Location = new System.Drawing.Point(2, 0);
             this.operationsLabel.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
             this.operationsLabel.Name = "operationsLabel";
-            this.operationsLabel.Size = new System.Drawing.Size(215, 60);
+            this.operationsLabel.Size = new System.Drawing.Size(215, 83);
             this.operationsLabel.TabIndex = 20;
             this.operationsLabel.Text = "Operations";
             this.operationsLabel.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
@@ -490,10 +490,10 @@ namespace BioCloneBot
             this.homeDeviceOperationButton.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(194)))), ((int)(((byte)(148)))), ((int)(((byte)(255)))));
             this.homeDeviceOperationButton.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point);
             this.homeDeviceOperationButton.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(18)))), ((int)(((byte)(18)))), ((int)(((byte)(20)))));
-            this.homeDeviceOperationButton.Location = new System.Drawing.Point(2, 62);
+            this.homeDeviceOperationButton.Location = new System.Drawing.Point(2, 85);
             this.homeDeviceOperationButton.Margin = new System.Windows.Forms.Padding(2);
             this.homeDeviceOperationButton.Name = "homeDeviceOperationButton";
-            this.homeDeviceOperationButton.Size = new System.Drawing.Size(215, 41);
+            this.homeDeviceOperationButton.Size = new System.Drawing.Size(215, 58);
             this.homeDeviceOperationButton.TabIndex = 7;
             this.homeDeviceOperationButton.Text = "Home Device";
             this.homeDeviceOperationButton.UseVisualStyleBackColor = false;
@@ -507,10 +507,10 @@ namespace BioCloneBot
             this.getTipOperationButton.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(194)))), ((int)(((byte)(148)))), ((int)(((byte)(255)))));
             this.getTipOperationButton.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point);
             this.getTipOperationButton.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(18)))), ((int)(((byte)(18)))), ((int)(((byte)(20)))));
-            this.getTipOperationButton.Location = new System.Drawing.Point(2, 107);
+            this.getTipOperationButton.Location = new System.Drawing.Point(2, 147);
             this.getTipOperationButton.Margin = new System.Windows.Forms.Padding(2);
             this.getTipOperationButton.Name = "getTipOperationButton";
-            this.getTipOperationButton.Size = new System.Drawing.Size(215, 41);
+            this.getTipOperationButton.Size = new System.Drawing.Size(215, 58);
             this.getTipOperationButton.TabIndex = 9;
             this.getTipOperationButton.Text = "Get Tip";
             this.getTipOperationButton.UseVisualStyleBackColor = false;
@@ -524,10 +524,10 @@ namespace BioCloneBot
             this.removeTipOperationButton.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(194)))), ((int)(((byte)(148)))), ((int)(((byte)(255)))));
             this.removeTipOperationButton.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point);
             this.removeTipOperationButton.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(18)))), ((int)(((byte)(18)))), ((int)(((byte)(20)))));
-            this.removeTipOperationButton.Location = new System.Drawing.Point(2, 152);
+            this.removeTipOperationButton.Location = new System.Drawing.Point(2, 209);
             this.removeTipOperationButton.Margin = new System.Windows.Forms.Padding(2);
             this.removeTipOperationButton.Name = "removeTipOperationButton";
-            this.removeTipOperationButton.Size = new System.Drawing.Size(215, 41);
+            this.removeTipOperationButton.Size = new System.Drawing.Size(215, 58);
             this.removeTipOperationButton.TabIndex = 10;
             this.removeTipOperationButton.Text = "Remove Tip";
             this.removeTipOperationButton.UseVisualStyleBackColor = false;
@@ -541,10 +541,10 @@ namespace BioCloneBot
             this.aspirateOperationButton.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(194)))), ((int)(((byte)(148)))), ((int)(((byte)(255)))));
             this.aspirateOperationButton.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point);
             this.aspirateOperationButton.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(18)))), ((int)(((byte)(18)))), ((int)(((byte)(20)))));
-            this.aspirateOperationButton.Location = new System.Drawing.Point(2, 197);
+            this.aspirateOperationButton.Location = new System.Drawing.Point(2, 271);
             this.aspirateOperationButton.Margin = new System.Windows.Forms.Padding(2);
             this.aspirateOperationButton.Name = "aspirateOperationButton";
-            this.aspirateOperationButton.Size = new System.Drawing.Size(215, 41);
+            this.aspirateOperationButton.Size = new System.Drawing.Size(215, 58);
             this.aspirateOperationButton.TabIndex = 11;
             this.aspirateOperationButton.Text = "Aspirate";
             this.aspirateOperationButton.UseVisualStyleBackColor = false;
@@ -558,10 +558,10 @@ namespace BioCloneBot
             this.dispenseOperationButton.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(194)))), ((int)(((byte)(148)))), ((int)(((byte)(255)))));
             this.dispenseOperationButton.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point);
             this.dispenseOperationButton.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(18)))), ((int)(((byte)(18)))), ((int)(((byte)(20)))));
-            this.dispenseOperationButton.Location = new System.Drawing.Point(2, 242);
+            this.dispenseOperationButton.Location = new System.Drawing.Point(2, 333);
             this.dispenseOperationButton.Margin = new System.Windows.Forms.Padding(2);
             this.dispenseOperationButton.Name = "dispenseOperationButton";
-            this.dispenseOperationButton.Size = new System.Drawing.Size(215, 41);
+            this.dispenseOperationButton.Size = new System.Drawing.Size(215, 58);
             this.dispenseOperationButton.TabIndex = 12;
             this.dispenseOperationButton.Text = "Dispense";
             this.dispenseOperationButton.UseVisualStyleBackColor = false;
@@ -575,10 +575,10 @@ namespace BioCloneBot
             this.mixOperationButton.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(194)))), ((int)(((byte)(148)))), ((int)(((byte)(255)))));
             this.mixOperationButton.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point);
             this.mixOperationButton.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(18)))), ((int)(((byte)(18)))), ((int)(((byte)(20)))));
-            this.mixOperationButton.Location = new System.Drawing.Point(2, 287);
+            this.mixOperationButton.Location = new System.Drawing.Point(2, 395);
             this.mixOperationButton.Margin = new System.Windows.Forms.Padding(2);
             this.mixOperationButton.Name = "mixOperationButton";
-            this.mixOperationButton.Size = new System.Drawing.Size(215, 41);
+            this.mixOperationButton.Size = new System.Drawing.Size(215, 58);
             this.mixOperationButton.TabIndex = 13;
             this.mixOperationButton.Text = "Mix";
             this.mixOperationButton.UseVisualStyleBackColor = false;
@@ -592,10 +592,10 @@ namespace BioCloneBot
             this.operationsTBD2Button.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(33)))), ((int)(((byte)(33)))), ((int)(((byte)(33)))));
             this.operationsTBD2Button.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point);
             this.operationsTBD2Button.ForeColor = System.Drawing.Color.White;
-            this.operationsTBD2Button.Location = new System.Drawing.Point(2, 332);
+            this.operationsTBD2Button.Location = new System.Drawing.Point(2, 457);
             this.operationsTBD2Button.Margin = new System.Windows.Forms.Padding(2);
             this.operationsTBD2Button.Name = "operationsTBD2Button";
-            this.operationsTBD2Button.Size = new System.Drawing.Size(215, 41);
+            this.operationsTBD2Button.Size = new System.Drawing.Size(215, 58);
             this.operationsTBD2Button.TabIndex = 14;
             this.operationsTBD2Button.Text = "TBD";
             this.operationsTBD2Button.UseVisualStyleBackColor = false;
@@ -608,10 +608,10 @@ namespace BioCloneBot
             this.operationsTBD3Button.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(33)))), ((int)(((byte)(33)))), ((int)(((byte)(33)))));
             this.operationsTBD3Button.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point);
             this.operationsTBD3Button.ForeColor = System.Drawing.Color.White;
-            this.operationsTBD3Button.Location = new System.Drawing.Point(2, 377);
+            this.operationsTBD3Button.Location = new System.Drawing.Point(2, 519);
             this.operationsTBD3Button.Margin = new System.Windows.Forms.Padding(2);
             this.operationsTBD3Button.Name = "operationsTBD3Button";
-            this.operationsTBD3Button.Size = new System.Drawing.Size(215, 41);
+            this.operationsTBD3Button.Size = new System.Drawing.Size(215, 58);
             this.operationsTBD3Button.TabIndex = 15;
             this.operationsTBD3Button.Text = "TBD";
             this.operationsTBD3Button.UseVisualStyleBackColor = false;
@@ -624,10 +624,10 @@ namespace BioCloneBot
             this.operationsTBD4Button.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(33)))), ((int)(((byte)(33)))), ((int)(((byte)(33)))));
             this.operationsTBD4Button.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point);
             this.operationsTBD4Button.ForeColor = System.Drawing.Color.White;
-            this.operationsTBD4Button.Location = new System.Drawing.Point(2, 422);
+            this.operationsTBD4Button.Location = new System.Drawing.Point(2, 581);
             this.operationsTBD4Button.Margin = new System.Windows.Forms.Padding(2);
             this.operationsTBD4Button.Name = "operationsTBD4Button";
-            this.operationsTBD4Button.Size = new System.Drawing.Size(215, 41);
+            this.operationsTBD4Button.Size = new System.Drawing.Size(215, 58);
             this.operationsTBD4Button.TabIndex = 16;
             this.operationsTBD4Button.Text = "TBD";
             this.operationsTBD4Button.UseVisualStyleBackColor = false;
@@ -640,10 +640,10 @@ namespace BioCloneBot
             this.operationsTBD5Button.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(33)))), ((int)(((byte)(33)))), ((int)(((byte)(33)))));
             this.operationsTBD5Button.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point);
             this.operationsTBD5Button.ForeColor = System.Drawing.Color.White;
-            this.operationsTBD5Button.Location = new System.Drawing.Point(2, 467);
+            this.operationsTBD5Button.Location = new System.Drawing.Point(2, 643);
             this.operationsTBD5Button.Margin = new System.Windows.Forms.Padding(2);
             this.operationsTBD5Button.Name = "operationsTBD5Button";
-            this.operationsTBD5Button.Size = new System.Drawing.Size(215, 41);
+            this.operationsTBD5Button.Size = new System.Drawing.Size(215, 58);
             this.operationsTBD5Button.TabIndex = 17;
             this.operationsTBD5Button.Text = "TBD";
             this.operationsTBD5Button.UseVisualStyleBackColor = false;
@@ -656,10 +656,10 @@ namespace BioCloneBot
             this.operationsTBD6Button.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(33)))), ((int)(((byte)(33)))), ((int)(((byte)(33)))));
             this.operationsTBD6Button.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point);
             this.operationsTBD6Button.ForeColor = System.Drawing.Color.White;
-            this.operationsTBD6Button.Location = new System.Drawing.Point(2, 512);
+            this.operationsTBD6Button.Location = new System.Drawing.Point(2, 705);
             this.operationsTBD6Button.Margin = new System.Windows.Forms.Padding(2);
             this.operationsTBD6Button.Name = "operationsTBD6Button";
-            this.operationsTBD6Button.Size = new System.Drawing.Size(215, 41);
+            this.operationsTBD6Button.Size = new System.Drawing.Size(215, 58);
             this.operationsTBD6Button.TabIndex = 18;
             this.operationsTBD6Button.Text = "TBD";
             this.operationsTBD6Button.UseVisualStyleBackColor = false;
@@ -672,10 +672,10 @@ namespace BioCloneBot
             this.operationsTBD7Button.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(33)))), ((int)(((byte)(33)))), ((int)(((byte)(33)))));
             this.operationsTBD7Button.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point);
             this.operationsTBD7Button.ForeColor = System.Drawing.Color.White;
-            this.operationsTBD7Button.Location = new System.Drawing.Point(2, 557);
+            this.operationsTBD7Button.Location = new System.Drawing.Point(2, 767);
             this.operationsTBD7Button.Margin = new System.Windows.Forms.Padding(2);
             this.operationsTBD7Button.Name = "operationsTBD7Button";
-            this.operationsTBD7Button.Size = new System.Drawing.Size(215, 49);
+            this.operationsTBD7Button.Size = new System.Drawing.Size(215, 65);
             this.operationsTBD7Button.TabIndex = 19;
             this.operationsTBD7Button.Text = "TBD";
             this.operationsTBD7Button.UseVisualStyleBackColor = false;
@@ -697,7 +697,7 @@ namespace BioCloneBot
             // splitContainer3.Panel2
             // 
             this.splitContainer3.Panel2.Controls.Add(this.tableLayoutPanel1);
-            this.splitContainer3.Size = new System.Drawing.Size(843, 612);
+            this.splitContainer3.Size = new System.Drawing.Size(1332, 838);
             this.splitContainer3.SplitterDistance = 223;
             this.splitContainer3.SplitterWidth = 2;
             this.splitContainer3.TabIndex = 0;
@@ -741,7 +741,7 @@ namespace BioCloneBot
             this.tableLayoutPanel2.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 23F));
             this.tableLayoutPanel2.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 23F));
             this.tableLayoutPanel2.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 23F));
-            this.tableLayoutPanel2.Size = new System.Drawing.Size(219, 608);
+            this.tableLayoutPanel2.Size = new System.Drawing.Size(219, 834);
             this.tableLayoutPanel2.TabIndex = 0;
             // 
             // labwareLabel
@@ -750,7 +750,7 @@ namespace BioCloneBot
             this.labwareLabel.AutoSize = true;
             this.labwareLabel.Font = new System.Drawing.Font("Microsoft Sans Serif", 16F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point);
             this.labwareLabel.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(194)))), ((int)(((byte)(148)))), ((int)(((byte)(255)))));
-            this.labwareLabel.Location = new System.Drawing.Point(6, 17);
+            this.labwareLabel.Location = new System.Drawing.Point(6, 28);
             this.labwareLabel.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
             this.labwareLabel.Name = "labwareLabel";
             this.labwareLabel.Size = new System.Drawing.Size(207, 26);
@@ -763,10 +763,10 @@ namespace BioCloneBot
             this.wellplateButton.Dock = System.Windows.Forms.DockStyle.Fill;
             this.wellplateButton.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point);
             this.wellplateButton.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(18)))), ((int)(((byte)(18)))), ((int)(((byte)(20)))));
-            this.wellplateButton.Location = new System.Drawing.Point(4, 64);
+            this.wellplateButton.Location = new System.Drawing.Point(4, 87);
             this.wellplateButton.Margin = new System.Windows.Forms.Padding(4);
             this.wellplateButton.Name = "wellplateButton";
-            this.wellplateButton.Size = new System.Drawing.Size(211, 37);
+            this.wellplateButton.Size = new System.Drawing.Size(211, 54);
             this.wellplateButton.TabIndex = 0;
             this.wellplateButton.Text = "96 Wellplate";
             this.wellplateButton.UseVisualStyleBackColor = false;
@@ -778,10 +778,10 @@ namespace BioCloneBot
             this.tubeStandButton.Dock = System.Windows.Forms.DockStyle.Fill;
             this.tubeStandButton.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point);
             this.tubeStandButton.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(18)))), ((int)(((byte)(18)))), ((int)(((byte)(20)))));
-            this.tubeStandButton.Location = new System.Drawing.Point(4, 109);
+            this.tubeStandButton.Location = new System.Drawing.Point(4, 149);
             this.tubeStandButton.Margin = new System.Windows.Forms.Padding(4);
             this.tubeStandButton.Name = "tubeStandButton";
-            this.tubeStandButton.Size = new System.Drawing.Size(211, 37);
+            this.tubeStandButton.Size = new System.Drawing.Size(211, 54);
             this.tubeStandButton.TabIndex = 1;
             this.tubeStandButton.Text = "5mL Eppendorf Tubes";
             this.tubeStandButton.UseVisualStyleBackColor = false;
@@ -793,10 +793,10 @@ namespace BioCloneBot
             this.tipBoxButton.Dock = System.Windows.Forms.DockStyle.Fill;
             this.tipBoxButton.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point);
             this.tipBoxButton.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(18)))), ((int)(((byte)(18)))), ((int)(((byte)(20)))));
-            this.tipBoxButton.Location = new System.Drawing.Point(4, 154);
+            this.tipBoxButton.Location = new System.Drawing.Point(4, 211);
             this.tipBoxButton.Margin = new System.Windows.Forms.Padding(4);
             this.tipBoxButton.Name = "tipBoxButton";
-            this.tipBoxButton.Size = new System.Drawing.Size(211, 37);
+            this.tipBoxButton.Size = new System.Drawing.Size(211, 54);
             this.tipBoxButton.TabIndex = 2;
             this.tipBoxButton.Text = "200 uL Tip Box";
             this.tipBoxButton.UseVisualStyleBackColor = false;
@@ -808,10 +808,10 @@ namespace BioCloneBot
             this.labwareTBD1Button.Dock = System.Windows.Forms.DockStyle.Fill;
             this.labwareTBD1Button.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point);
             this.labwareTBD1Button.ForeColor = System.Drawing.Color.White;
-            this.labwareTBD1Button.Location = new System.Drawing.Point(4, 199);
+            this.labwareTBD1Button.Location = new System.Drawing.Point(4, 273);
             this.labwareTBD1Button.Margin = new System.Windows.Forms.Padding(4);
             this.labwareTBD1Button.Name = "labwareTBD1Button";
-            this.labwareTBD1Button.Size = new System.Drawing.Size(211, 37);
+            this.labwareTBD1Button.Size = new System.Drawing.Size(211, 54);
             this.labwareTBD1Button.TabIndex = 3;
             this.labwareTBD1Button.Text = "TBD";
             this.labwareTBD1Button.UseVisualStyleBackColor = false;
@@ -822,10 +822,10 @@ namespace BioCloneBot
             this.labwareTBD2Button.Dock = System.Windows.Forms.DockStyle.Fill;
             this.labwareTBD2Button.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point);
             this.labwareTBD2Button.ForeColor = System.Drawing.Color.White;
-            this.labwareTBD2Button.Location = new System.Drawing.Point(4, 244);
+            this.labwareTBD2Button.Location = new System.Drawing.Point(4, 335);
             this.labwareTBD2Button.Margin = new System.Windows.Forms.Padding(4);
             this.labwareTBD2Button.Name = "labwareTBD2Button";
-            this.labwareTBD2Button.Size = new System.Drawing.Size(211, 37);
+            this.labwareTBD2Button.Size = new System.Drawing.Size(211, 54);
             this.labwareTBD2Button.TabIndex = 4;
             this.labwareTBD2Button.Text = "TBD";
             this.labwareTBD2Button.UseVisualStyleBackColor = false;
@@ -836,10 +836,10 @@ namespace BioCloneBot
             this.labwareTBD3Button.Dock = System.Windows.Forms.DockStyle.Fill;
             this.labwareTBD3Button.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point);
             this.labwareTBD3Button.ForeColor = System.Drawing.Color.White;
-            this.labwareTBD3Button.Location = new System.Drawing.Point(4, 289);
+            this.labwareTBD3Button.Location = new System.Drawing.Point(4, 397);
             this.labwareTBD3Button.Margin = new System.Windows.Forms.Padding(4);
             this.labwareTBD3Button.Name = "labwareTBD3Button";
-            this.labwareTBD3Button.Size = new System.Drawing.Size(211, 37);
+            this.labwareTBD3Button.Size = new System.Drawing.Size(211, 54);
             this.labwareTBD3Button.TabIndex = 5;
             this.labwareTBD3Button.Text = "TBD";
             this.labwareTBD3Button.UseVisualStyleBackColor = false;
@@ -850,10 +850,10 @@ namespace BioCloneBot
             this.labwareTBD4Button.Dock = System.Windows.Forms.DockStyle.Fill;
             this.labwareTBD4Button.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point);
             this.labwareTBD4Button.ForeColor = System.Drawing.Color.White;
-            this.labwareTBD4Button.Location = new System.Drawing.Point(4, 334);
+            this.labwareTBD4Button.Location = new System.Drawing.Point(4, 459);
             this.labwareTBD4Button.Margin = new System.Windows.Forms.Padding(4);
             this.labwareTBD4Button.Name = "labwareTBD4Button";
-            this.labwareTBD4Button.Size = new System.Drawing.Size(211, 37);
+            this.labwareTBD4Button.Size = new System.Drawing.Size(211, 54);
             this.labwareTBD4Button.TabIndex = 6;
             this.labwareTBD4Button.Text = "TBD";
             this.labwareTBD4Button.UseVisualStyleBackColor = false;
@@ -864,10 +864,10 @@ namespace BioCloneBot
             this.labwareTBD5Button.Dock = System.Windows.Forms.DockStyle.Fill;
             this.labwareTBD5Button.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point);
             this.labwareTBD5Button.ForeColor = System.Drawing.Color.White;
-            this.labwareTBD5Button.Location = new System.Drawing.Point(4, 379);
+            this.labwareTBD5Button.Location = new System.Drawing.Point(4, 521);
             this.labwareTBD5Button.Margin = new System.Windows.Forms.Padding(4);
             this.labwareTBD5Button.Name = "labwareTBD5Button";
-            this.labwareTBD5Button.Size = new System.Drawing.Size(211, 37);
+            this.labwareTBD5Button.Size = new System.Drawing.Size(211, 54);
             this.labwareTBD5Button.TabIndex = 7;
             this.labwareTBD5Button.Text = "TBD";
             this.labwareTBD5Button.UseVisualStyleBackColor = false;
@@ -878,10 +878,10 @@ namespace BioCloneBot
             this.labwareTBD6Button.Dock = System.Windows.Forms.DockStyle.Fill;
             this.labwareTBD6Button.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point);
             this.labwareTBD6Button.ForeColor = System.Drawing.Color.White;
-            this.labwareTBD6Button.Location = new System.Drawing.Point(4, 424);
+            this.labwareTBD6Button.Location = new System.Drawing.Point(4, 583);
             this.labwareTBD6Button.Margin = new System.Windows.Forms.Padding(4);
             this.labwareTBD6Button.Name = "labwareTBD6Button";
-            this.labwareTBD6Button.Size = new System.Drawing.Size(211, 37);
+            this.labwareTBD6Button.Size = new System.Drawing.Size(211, 54);
             this.labwareTBD6Button.TabIndex = 8;
             this.labwareTBD6Button.Text = "TBD";
             this.labwareTBD6Button.UseVisualStyleBackColor = false;
@@ -892,10 +892,10 @@ namespace BioCloneBot
             this.labwareTBD7Button.Dock = System.Windows.Forms.DockStyle.Fill;
             this.labwareTBD7Button.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point);
             this.labwareTBD7Button.ForeColor = System.Drawing.Color.White;
-            this.labwareTBD7Button.Location = new System.Drawing.Point(4, 469);
+            this.labwareTBD7Button.Location = new System.Drawing.Point(4, 645);
             this.labwareTBD7Button.Margin = new System.Windows.Forms.Padding(4);
             this.labwareTBD7Button.Name = "labwareTBD7Button";
-            this.labwareTBD7Button.Size = new System.Drawing.Size(211, 37);
+            this.labwareTBD7Button.Size = new System.Drawing.Size(211, 54);
             this.labwareTBD7Button.TabIndex = 9;
             this.labwareTBD7Button.Text = "TBD";
             this.labwareTBD7Button.UseVisualStyleBackColor = false;
@@ -906,10 +906,10 @@ namespace BioCloneBot
             this.labwareTBD8Button.Dock = System.Windows.Forms.DockStyle.Fill;
             this.labwareTBD8Button.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point);
             this.labwareTBD8Button.ForeColor = System.Drawing.Color.White;
-            this.labwareTBD8Button.Location = new System.Drawing.Point(4, 514);
+            this.labwareTBD8Button.Location = new System.Drawing.Point(4, 707);
             this.labwareTBD8Button.Margin = new System.Windows.Forms.Padding(4);
             this.labwareTBD8Button.Name = "labwareTBD8Button";
-            this.labwareTBD8Button.Size = new System.Drawing.Size(211, 37);
+            this.labwareTBD8Button.Size = new System.Drawing.Size(211, 54);
             this.labwareTBD8Button.TabIndex = 10;
             this.labwareTBD8Button.Text = "TBD";
             this.labwareTBD8Button.UseVisualStyleBackColor = false;
@@ -920,10 +920,10 @@ namespace BioCloneBot
             this.labwareTBD9Button.Dock = System.Windows.Forms.DockStyle.Fill;
             this.labwareTBD9Button.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point);
             this.labwareTBD9Button.ForeColor = System.Drawing.Color.White;
-            this.labwareTBD9Button.Location = new System.Drawing.Point(4, 559);
+            this.labwareTBD9Button.Location = new System.Drawing.Point(4, 769);
             this.labwareTBD9Button.Margin = new System.Windows.Forms.Padding(4);
             this.labwareTBD9Button.Name = "labwareTBD9Button";
-            this.labwareTBD9Button.Size = new System.Drawing.Size(211, 45);
+            this.labwareTBD9Button.Size = new System.Drawing.Size(211, 61);
             this.labwareTBD9Button.TabIndex = 11;
             this.labwareTBD9Button.Text = "TBD";
             this.labwareTBD9Button.UseVisualStyleBackColor = false;
@@ -960,7 +960,7 @@ namespace BioCloneBot
             this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 7.5F));
             this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 7.5F));
             this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 23F));
-            this.tableLayoutPanel1.Size = new System.Drawing.Size(614, 608);
+            this.tableLayoutPanel1.Size = new System.Drawing.Size(1103, 834);
             this.tableLayoutPanel1.TabIndex = 0;
             // 
             // platformLabel
@@ -973,7 +973,7 @@ namespace BioCloneBot
             this.platformLabel.Location = new System.Drawing.Point(4, 0);
             this.platformLabel.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
             this.platformLabel.Name = "platformLabel";
-            this.platformLabel.Size = new System.Drawing.Size(606, 60);
+            this.platformLabel.Size = new System.Drawing.Size(1095, 83);
             this.platformLabel.TabIndex = 6;
             this.platformLabel.Text = "BioCloneBot Platform";
             this.platformLabel.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
@@ -985,7 +985,7 @@ namespace BioCloneBot
             this.thermocyclerButton.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
             this.thermocyclerButton.Font = new System.Drawing.Font("Microsoft Sans Serif", 20F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point);
             this.thermocyclerButton.ForeColor = System.Drawing.Color.White;
-            this.thermocyclerButton.Location = new System.Drawing.Point(4, 64);
+            this.thermocyclerButton.Location = new System.Drawing.Point(88, 95);
             this.thermocyclerButton.Margin = new System.Windows.Forms.Padding(4, 4, 70, 4);
             this.thermocyclerButton.MaximumSize = new System.Drawing.Size(506, 224);
             this.thermocyclerButton.MinimumSize = new System.Drawing.Size(393, 224);
@@ -1002,7 +1002,7 @@ namespace BioCloneBot
             this.trashButton.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(33)))), ((int)(((byte)(33)))), ((int)(((byte)(33)))));
             this.trashButton.Font = new System.Drawing.Font("Microsoft Sans Serif", 20F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point);
             this.trashButton.ForeColor = System.Drawing.Color.White;
-            this.trashButton.Location = new System.Drawing.Point(377, 64);
+            this.trashButton.Location = new System.Drawing.Point(621, 95);
             this.trashButton.Margin = new System.Windows.Forms.Padding(70, 4, 4, 4);
             this.trashButton.MaximumSize = new System.Drawing.Size(506, 224);
             this.trashButton.MinimumSize = new System.Drawing.Size(393, 224);
@@ -1020,7 +1020,7 @@ namespace BioCloneBot
             this.labwareButton1.ContextMenuStrip = this.labwareMenuStrip;
             this.labwareButton1.Font = new System.Drawing.Font("Microsoft Sans Serif", 20F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point);
             this.labwareButton1.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(194)))), ((int)(((byte)(148)))), ((int)(((byte)(255)))));
-            this.labwareButton1.Location = new System.Drawing.Point(4, 244);
+            this.labwareButton1.Location = new System.Drawing.Point(88, 343);
             this.labwareButton1.Margin = new System.Windows.Forms.Padding(4, 4, 70, 4);
             this.labwareButton1.MaximumSize = new System.Drawing.Size(506, 224);
             this.labwareButton1.MinimumSize = new System.Drawing.Size(393, 224);
@@ -1063,7 +1063,7 @@ namespace BioCloneBot
             this.labwareButton2.ContextMenuStrip = this.labware2MenuStrip;
             this.labwareButton2.Font = new System.Drawing.Font("Microsoft Sans Serif", 20F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point);
             this.labwareButton2.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(194)))), ((int)(((byte)(148)))), ((int)(((byte)(255)))));
-            this.labwareButton2.Location = new System.Drawing.Point(377, 244);
+            this.labwareButton2.Location = new System.Drawing.Point(621, 343);
             this.labwareButton2.Margin = new System.Windows.Forms.Padding(70, 4, 4, 4);
             this.labwareButton2.MaximumSize = new System.Drawing.Size(506, 224);
             this.labwareButton2.MinimumSize = new System.Drawing.Size(393, 224);
@@ -1106,7 +1106,7 @@ namespace BioCloneBot
             this.labwareButton3.ContextMenuStrip = this.labware3MenuStrip;
             this.labwareButton3.Font = new System.Drawing.Font("Microsoft Sans Serif", 20F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point);
             this.labwareButton3.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(194)))), ((int)(((byte)(148)))), ((int)(((byte)(255)))));
-            this.labwareButton3.Location = new System.Drawing.Point(4, 424);
+            this.labwareButton3.Location = new System.Drawing.Point(88, 594);
             this.labwareButton3.Margin = new System.Windows.Forms.Padding(4, 4, 70, 4);
             this.labwareButton3.MaximumSize = new System.Drawing.Size(506, 224);
             this.labwareButton3.MinimumSize = new System.Drawing.Size(393, 224);
@@ -1149,7 +1149,7 @@ namespace BioCloneBot
             this.labwareButton4.ContextMenuStrip = this.labware4MenuStrip;
             this.labwareButton4.Font = new System.Drawing.Font("Microsoft Sans Serif", 20F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point);
             this.labwareButton4.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(194)))), ((int)(((byte)(148)))), ((int)(((byte)(255)))));
-            this.labwareButton4.Location = new System.Drawing.Point(377, 424);
+            this.labwareButton4.Location = new System.Drawing.Point(621, 594);
             this.labwareButton4.Margin = new System.Windows.Forms.Padding(70, 4, 4, 4);
             this.labwareButton4.MaximumSize = new System.Drawing.Size(506, 224);
             this.labwareButton4.MinimumSize = new System.Drawing.Size(393, 224);
@@ -1189,7 +1189,7 @@ namespace BioCloneBot
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 15F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(1347, 637);
+            this.ClientSize = new System.Drawing.Size(1962, 863);
             this.Controls.Add(this.splitContainer1);
             this.Controls.Add(this.toolStrip1);
             this.Margin = new System.Windows.Forms.Padding(4);
