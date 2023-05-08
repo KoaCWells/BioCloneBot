@@ -1,10 +1,13 @@
-﻿################################################################################
+################################################################################
 # This .gitignore file was automatically created by Microsoft(R) Visual Studio.
 ################################################################################
 
-Software/BioCloneBot/bin
-Software/BioCloneBot/obj
-Software/Firmware/DeviceControllerV4/.vscode
 Software/volume_test.json
 Software/.vs
-Software/Firmware/DeviceControllerV5/.vscode
+Software/obj
+Software/BioCloneBot/bin
+Software/BioCloneBot/obj
+Software/Firmware/DeviceControllerV*/.vscode
+Software/Firmware/sketch_feb15a/%temp%
+Software/Firmware/sketch_feb15a/.vscode
+Software/Firmware/sketch_feb15a/build
