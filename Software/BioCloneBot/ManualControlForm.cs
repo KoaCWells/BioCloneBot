@@ -141,7 +141,7 @@ namespace BioCloneBot
 
                 if (button.Text == "x+")
                 {
-                    direction = "100";
+                    direction = "000";
                     distance = convertToTwoDecimalDouble(input) + "000.00" + "000.00" + "%";
                     xLocation += input;
                     xLocationTextBox.Text = "x: " + convertToTwoDecimalDouble(xLocation);
@@ -149,35 +149,35 @@ namespace BioCloneBot
 
                 else if (button.Text == "y+")
                 {
-                    direction = "010";
+                    direction = "000";
                     distance = "000.00" + convertToTwoDecimalDouble(input) + "000.00" + "%";
                     yLocation += input;
                     yLocationTextBox.Text = "y: " + convertToTwoDecimalDouble(yLocation);
                 }
                 else if (button.Text == "z+")
                 {
-                    direction = "001";
+                    direction = "000";
                     distance = "000.00" + "000.00" + convertToTwoDecimalDouble(input) + "%";
                     zLocation += input;
                     zLocationTextBox.Text = "z: " + convertToTwoDecimalDouble(zLocation);
                 }
                 else if (button.Text == "x-")
                 {
-                    direction = "000";
+                    direction = "100";
                     distance = convertToTwoDecimalDouble(input) + "000.00" + "000.00" + "%";
                     xLocation -= input;
                     xLocationTextBox.Text = "x: " + convertToTwoDecimalDouble(xLocation);
                 }
                 else if (button.Text == "y-")
                 {
-                    direction = "000";
+                    direction = "010";
                     distance = "000.00" + convertToTwoDecimalDouble(input) + "000.00" + "%";
                     yLocation -= input;
                     yLocationTextBox.Text = "y: " + convertToTwoDecimalDouble(yLocation);
                 }
                 else if (button.Text == "z-")
                 {
-                    direction = "000";
+                    direction = "001";
                     distance = "000.00" + "000.00" + convertToTwoDecimalDouble(input) + "%";
                     zLocation -= input;
                     zLocationTextBox.Text = "z: " + convertToTwoDecimalDouble(zLocation);

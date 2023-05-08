@@ -73,8 +73,7 @@ int pump_rev_steps;
 int homing;
 int message_character;
 
-double x_step_dist;
-double y_step_dist;
+double xy_step_dist;
 double z_step_dist;
 double p_step_dist;
 double volume;
@@ -97,22 +96,204 @@ String curr_command;
 String prev_command;
 bool message_complete;
 
+//x delay values
+int xTiny[] = {
+  300, 300, 300, 300, 300, 300, 300, 300, 300, 300,
+  300, 300, 300, 300, 300, 300, 300, 300, 300, 300,
+  300, 300, 300, 300, 300, 300, 300, 300, 300, 300,
+  300, 300, 300, 300, 300, 300, 300, 300, 300, 300,
+  300, 300, 300, 300, 300, 300, 300, 300, 300, 300,
+  300, 300, 300, 300, 300, 300, 300, 300, 300, 300,
+  300, 300, 300, 300, 300, 300, 300, 300, 300, 300,
+  300, 300, 300, 300, 300, 300, 300, 300, 300, 300,
+  300, 300, 300, 300, 300, 300, 300, 300, 300, 300,
+  300, 300, 300, 300, 300, 300, 300, 300, 300, 300,
+  300, 300, 300, 300, 300, 300, 300, 300, 300, 300,
+  300, 300, 300, 300, 300, 300, 300, 300, 300, 300
+};
+int xShort[] = {
+  200, 190, 180, 170, 160, 150, 140, 130, 120, 110,
+  100, 100, 100, 100, 100, 100, 100, 100, 100, 100,
+  100, 100, 100, 100, 100, 100, 100, 100, 100, 100,
+  100, 100, 100, 100, 100, 100, 100, 100, 100, 100,
+  100, 100, 100, 100, 100, 100, 100, 100, 100, 100,
+  100, 100, 100, 100, 100, 100, 100, 100, 100, 100,
+  100, 100, 100, 100, 100, 100, 100, 100, 100, 100,
+  100, 100, 100, 100, 100, 100, 100, 100, 100, 100,
+  100, 100, 100, 100, 100, 100, 100, 100, 100, 100,
+  100, 100, 100, 100, 100, 100, 100, 100, 100, 100,
+  100, 100, 100, 100, 100, 100, 100, 100, 100, 100,
+  110, 120, 130, 140, 150, 160, 170, 180, 190, 200
+};
+  
+int xMedium[] = {
+  120, 115, 110, 105, 100, 95, 90, 85, 80, 75,
+  70, 65, 60, 55, 50, 45, 44, 43, 42, 41, 
+  40, 39, 38, 37, 36, 35, 34, 33, 32, 31, 
+  30, 30, 30, 30, 30, 30, 30, 30, 30, 30,
+  30, 30, 30, 30, 30, 30, 30, 30, 30, 30,
+  30, 30, 30, 30, 30, 30, 30, 30, 30, 30,
+  30, 30, 30, 30, 30, 30, 30, 30, 30, 30,
+  30, 30, 30, 30, 30, 30, 30, 30, 30, 30,
+  30, 30, 30, 30, 30, 30, 30, 30, 30, 30,
+  31, 32, 33, 34, 35, 36, 37, 38, 39, 40,
+  41, 42, 43, 44, 45, 50, 55, 60, 65, 70, 
+  75, 80, 85, 90, 95, 100, 105, 110, 115, 120
+  };
+
+int xLong[] = {
+  120, 115, 110, 105, 100, 95, 90, 85, 80, 75, 
+  70, 65, 60, 55, 50, 45, 40, 35, 30, 25, 
+  22, 20, 19, 18, 17, 16, 15, 15, 15, 15, 
+  15, 15, 15, 15, 15, 15, 15, 15, 15, 15, 
+  15, 15, 15, 15, 15, 15, 15, 15, 15, 15, 
+  15, 15, 15, 15, 15, 15, 15, 15, 15, 15, 
+  15, 15, 15, 15, 15, 15, 15, 15, 15, 15, 
+  15, 15, 15, 15, 15, 15, 15, 15, 15, 15, 
+  15, 15, 15, 15, 15, 15, 15, 15, 15, 15, 
+  15, 15 ,15, 15, 16, 17, 18, 19, 20, 22, 
+  25, 30, 35, 40, 45, 50, 55, 60, 65, 70, 
+  75, 80, 85, 90, 95, 100, 105, 110, 115, 120
+  };
+
+//y delay values
+int yTiny[] = {
+  300, 300, 300, 300, 300, 300, 300, 300, 300, 300,
+  300, 300, 300, 300, 300, 300, 300, 300, 300, 300,
+  300, 300, 300, 300, 300, 300, 300, 300, 300, 300,
+  300, 300, 300, 300, 300, 300, 300, 300, 300, 300,
+  300, 300, 300, 300, 300, 300, 300, 300, 300, 300,
+  300, 300, 300, 300, 300, 300, 300, 300, 300, 300,
+  300, 300, 300, 300, 300, 300, 300, 300, 300, 300,
+  300, 300, 300, 300, 300, 300, 300, 300, 300, 300,
+  300, 300, 300, 300, 300, 300, 300, 300, 300, 300,
+  300, 300, 300, 300, 300, 300, 300, 300, 300, 300,
+  300, 300, 300, 300, 300, 300, 300, 300, 300, 300,
+  300, 300, 300, 300, 300, 300, 300, 300, 300, 300
+};
+
+int yShort[] = {
+  200, 190, 180, 170, 160, 150, 140, 130, 120, 110,
+  100, 100, 100, 100, 100, 100, 100, 100, 100, 100,
+  100, 100, 100, 100, 100, 100, 100, 100, 100, 100,
+  100, 100, 100, 100, 100, 100, 100, 100, 100, 100,
+  100, 100, 100, 100, 100, 100, 100, 100, 100, 100,
+  100, 100, 100, 100, 100, 100, 100, 100, 100, 100,
+  100, 100, 100, 100, 100, 100, 100, 100, 100, 100,
+  100, 100, 100, 100, 100, 100, 100, 100, 100, 100,
+  100, 100, 100, 100, 100, 100, 100, 100, 100, 100,
+  100, 100, 100, 100, 100, 100, 100, 100, 100, 100,
+  100, 100, 100, 100, 100, 100, 100, 100, 100, 100,
+  110, 120, 130, 140, 150, 160, 170, 180, 190, 200
+};
+  
+int yMedium[] = {
+  120, 115, 110, 105, 100, 95, 90, 85, 80, 75,
+  70, 65, 60, 55, 50, 45, 44, 43, 42, 41, 
+  40, 39, 38, 37, 36, 35, 34, 33, 32, 31, 
+  30, 30, 30, 30, 30, 30, 30, 30, 30, 30,
+  30, 30, 30, 30, 30, 30, 30, 30, 30, 30,
+  30, 30, 30, 30, 30, 30, 30, 30, 30, 30,
+  30, 30, 30, 30, 30, 30, 30, 30, 30, 30,
+  30, 30, 30, 30, 30, 30, 30, 30, 30, 30,
+  30, 30, 30, 30, 30, 30, 30, 30, 30, 30,
+  31, 32, 33, 34, 35, 36, 37, 38, 39, 40,
+  41, 42, 43, 44, 45, 50, 55, 60, 65, 70, 
+  75, 80, 85, 90, 95, 100, 105, 110, 115, 120
+  };
+
+int yLong[] = {
+  400, 350, 300, 250, 200, 150, 100, 95, 90, 85, 
+  80, 75, 72, 70, 68, 66, 64, 62, 60, 58, 
+  56, 54, 52, 50, 48, 46, 44, 42, 40, 38, 
+  36, 34, 32, 30, 30, 30, 30, 30, 30, 30, 
+  30, 30, 30, 30, 30, 30, 30, 30, 30, 30,
+  30, 30, 30, 30, 30, 30, 30, 30, 30, 30,
+  30, 30, 30, 30, 30, 30, 30, 30, 30, 30,
+  30, 30, 30, 30, 30, 30, 30, 30, 30, 30,
+  30, 30, 30, 30, 30, 30, 30, 32, 34, 36,
+  38, 40, 42, 44, 46, 48, 50, 52, 54, 56, 
+  58, 60, 62, 64, 66, 68, 70, 72, 75, 80, 
+  85, 90, 95, 100, 150, 200, 250, 300, 350, 400
+  };
+
+// int yLong[] = {
+//   400, 350, 300, 250, 200, 195, 190, 185, 180, 175, 
+//   170, 165, 160, 155, 150, 145, 140, 135, 130, 125, 
+//   120, 115, 110, 105, 100, 95, 90, 85, 80, 75, 
+//   70, 65, 60, 55, 50, 45, 40, 40, 40, 40, 
+//   40, 40, 40, 40, 40, 40, 40, 40, 40, 40,
+//   40, 40, 40, 40, 40, 40, 40, 40, 40, 40,
+//   40, 40, 40, 40, 40, 40, 40, 40, 40, 40,
+//   40, 40, 40, 40, 40, 40, 40, 40, 40, 40,
+//   40, 40, 40, 40, 45, 50, 55, 50, 65, 70,
+//   75, 80, 85, 90, 95, 100, 105, 110, 115, 120,
+//   125, 130, 135, 140, 145, 150, 155, 160, 165, 170,
+//   175, 180, 185, 190, 195, 200, 250, 300, 350, 400
+//   };
+
+
+  //z delay values
+  int zShort[] = {
+  200, 190, 180, 170, 160, 150, 140, 130, 120, 110,
+  100, 100, 100, 100, 100, 100, 100, 100, 100, 100,
+  100, 100, 100, 100, 100, 100, 100, 100, 100, 100,
+  100, 100, 100, 100, 100, 100, 100, 100, 100, 100,
+  100, 100, 100, 100, 100, 100, 100, 100, 100, 100,
+  100, 100, 100, 100, 100, 100, 100, 100, 100, 100,
+  100, 100, 100, 100, 100, 100, 100, 100, 100, 100,
+  100, 100, 100, 100, 100, 100, 100, 100, 100, 100,
+  100, 100, 100, 100, 100, 100, 100, 100, 100, 100,
+  100, 100, 100, 100, 100, 100, 100, 100, 100, 100,
+  100, 100, 100, 100, 100, 100, 100, 100, 100, 100,
+  110, 120, 130, 140, 150, 160, 170, 180, 190, 200
+};
+  
+int zMedium[] = {
+  120, 115, 110, 105, 100, 95, 90, 85, 80, 75,
+  70, 65, 60, 55, 50, 45, 44, 43, 42, 41, 
+  40, 39, 38, 37, 36, 35, 34, 33, 32, 31, 
+  30, 30, 30, 30, 30, 30, 30, 30, 30, 30,
+  30, 30, 30, 30, 30, 30, 30, 30, 30, 30,
+  30, 30, 30, 30, 30, 30, 30, 30, 30, 30,
+  30, 30, 30, 30, 30, 30, 30, 30, 30, 30,
+  30, 30, 30, 30, 30, 30, 30, 30, 30, 30,
+  30, 30, 30, 30, 30, 30, 30, 30, 30, 30,
+  31, 32, 33, 34, 35, 36, 37, 38, 39, 40,
+  41, 42, 43, 44, 45, 50, 55, 60, 65, 70, 
+  75, 80, 85, 90, 95, 100, 105, 110, 115, 120
+  };
+
+int zLong[] = {
+  120, 115, 110, 105, 100, 95, 90, 85, 80, 75, 
+  70, 65, 60, 55, 50, 45, 40, 39, 38, 37, 
+  36, 35, 34, 33, 32, 31, 30, 30, 30, 30, 
+  30, 30, 30, 30, 30, 30, 30, 30, 30, 30, 
+  30, 30, 30, 30, 30, 30, 30, 30, 30, 30, 
+  30, 30, 30, 30, 30, 30, 30, 30, 30, 30, 
+  30, 30, 30, 30, 30, 30, 30, 30, 30, 30, 
+  30, 30, 30, 30, 30, 30, 30, 30, 30, 30, 
+  30, 30, 30, 30, 30, 30, 30, 30, 30, 30, 
+  30, 30, 30, 30, 30, 30, 30, 30, 30, 30, 
+  30, 30, 35, 40, 45, 50, 55, 60, 65, 70, 
+  75, 80, 85, 90, 95, 100, 105, 110, 115, 120
+  };
+
 void setup() {
   Serial.begin(9600);
 
   //controls speed of each axis during constant velocity movements
-  int axis_step_delay = 60;
-  int pump_step_delay = 60;
+  axis_step_delay = 150;
+  pump_step_delay = 100;
 
   //steps per revolution
   axis_rev_steps = 12800;
   pump_rev_steps = 400; 
 
   //mm per step
-  x_step_dist = 32E-7;
-  y_step_dist = 32E-7;
-  z_step_dist = 63E-5;
-  p_step_dist = 78E-6; 
+  xy_step_dist = 0.025;
+  z_step_dist = 0.005;
+  p_step_dist = 0.000625;
   //0.041667 for 500 uL syringe
   //0.020774 for 250 uL syringe
   //0.004166 for 50 uL gastight syringe
@@ -139,10 +320,10 @@ void setup() {
   pinMode(P_LIMIT, INPUT_PULLUP);
 
   //enables stepper motors
-  digitalWrite(X_ENABLE, LOW);
-  digitalWrite(Y_ENABLE, LOW);
-  digitalWrite(Z_ENABLE, LOW);
-  digitalWrite(P_ENABLE, LOW);
+  digitalWrite(X_ENABLE, HIGH);
+  digitalWrite(Y_ENABLE, HIGH);
+  digitalWrite(Z_ENABLE, HIGH);
+  digitalWrite(P_ENABLE, HIGH);
 
   //sets default direction of stepper motors to point towards the limit switches
   digitalWrite(X_DIR, HIGH);
@@ -218,7 +399,8 @@ void loop() {
       }
       z_dist = strtod(operation_dist, &ptr_end);
 
-      movePumpWithAcceleration(x_dir,y_dir,z_dir,x_dist,y_dist,z_dist);
+      //movePumpWithAcceleration(x_dir,y_dir,z_dir,x_dist,y_dist,z_dist);
+      movePump(x_dir,y_dir,z_dir,x_dist,y_dist,z_dist);
       sendCompletionMessage();
     }
     else if(curr_command == "0010"){ //remove tip
@@ -401,7 +583,7 @@ void homeCarriage(){
   }
 
   digitalWrite(P_DIR, LOW);
-  movePump('0', '0', '0', 012.00, 033.00, 0.0);
+  movePump('0', '0', '0', 14.00, 29.00, 0.0);
   //sets homing to 0 re-enabling the normal functionality of the limit switches as emergency stops
   //and sets carriage location to (0.0, 0.0, 0.0) and syringe volume to 0
   homing = 0;
@@ -415,7 +597,7 @@ void movePump(char x_dir, char y_dir, char z_dir, double x_dist, double y_dist, 
     digitalWrite(X_DIR, HIGH);
   }
 
-  for(double i = 0; i < (x_dist/.00625); i++){
+  for(double i = 0; i < (x_dist/xy_step_dist); i++){
     digitalWrite(X_STEP, HIGH);
     delayMicroseconds(axis_step_delay);
     digitalWrite(X_STEP, LOW);
@@ -429,7 +611,7 @@ void movePump(char x_dir, char y_dir, char z_dir, double x_dist, double y_dist, 
     digitalWrite(Y_DIR, HIGH);
   }
 
-  for(double i = 0; i < (y_dist/.00625); i++){
+  for(double i = 0; i < (y_dist/xy_step_dist); i++){
     digitalWrite(Y_STEP, HIGH);
     delayMicroseconds(axis_step_delay);
     digitalWrite(Y_STEP, LOW);
@@ -445,7 +627,7 @@ void movePump(char x_dir, char y_dir, char z_dir, double x_dist, double y_dist, 
   
   digitalWrite(Z_DIR, z_dir - '0');
 
-  for(double i = 0; i < (z_dist/.00125); i++){
+  for(double i = 0; i < (z_dist/z_step_dist); i++){
     digitalWrite(Z_STEP, HIGH);
     delayMicroseconds(axis_step_delay);
     digitalWrite(Z_STEP, LOW);
@@ -454,27 +636,110 @@ void movePump(char x_dir, char y_dir, char z_dir, double x_dist, double y_dist, 
 }
 
 void movePumpWithAcceleration(char x_dir, char y_dir, char z_dir, double x_dist, double y_dist, double z_dist){
-
-
+  int loopDelay = 0;
+  int loop = 0;
+  int currentDelayArray[120];
+  
+  //set x direction
   if(x_dir == '0'){
-      digitalWrite(X_DIR, LOW);
+    digitalWrite(X_DIR, LOW);
   }
   else if(x_dir == '1'){
     digitalWrite(X_DIR, HIGH);
   }
-
-  for(double i = 0; i < (x_dist/.00625); i++){
-    digitalWrite(X_STEP, HIGH);
-    delayMicroseconds(axis_step_delay);
-    digitalWrite(X_STEP, LOW);
-    delayMicroseconds(axis_step_delay);
+  
+  //set x acceleration (use which delay array)
+  if(300.0 <= x_dist && x_dist <= 400.0){
+    memcpy(currentDelayArray, xLong, sizeof(xLong));
+  }
+  else if(50.0 <= x_dist && x_dist < 300.0){
+    memcpy(currentDelayArray, xMedium, sizeof(xMedium));
+  }
+  else if(10.0 <= x_dist && x_dist < 50.0){
+    memcpy(currentDelayArray, xShort, sizeof(xShort));
+  }
+  else{
+    memcpy(currentDelayArray, xTiny, sizeof(xTiny));
   }
 
+  int num_of_steps_x = floor(x_dist/xy_step_dist);
+  loop = num_of_steps_x/(sizeof(currentDelayArray)/sizeof(currentDelayArray[0]));
+
+  for(unsigned int i=0; i<sizeof(currentDelayArray)/sizeof(currentDelayArray[0]); i++){
+    int delay = currentDelayArray[i];
+    for(int j = 0; j < loop; j++){
+      digitalWrite(X_STEP, HIGH);
+      delayMicroseconds(delay);
+      digitalWrite(X_STEP, LOW);
+      delayMicroseconds(delay);
+    }
+  }
+
+  //set y direction
   if(y_dir == '0'){
       digitalWrite(Y_DIR, LOW);
   }
   else if(y_dir == '1'){
     digitalWrite(Y_DIR, HIGH);
+  }
+
+  //set y acceleration (use which delay array)
+  if(300.0 <= y_dist && y_dist <= 400.0){
+    memcpy(currentDelayArray, yLong, sizeof(yLong));
+  }
+  else if(50.0 <= y_dist && y_dist < 300.0){
+    memcpy(currentDelayArray, yMedium, sizeof(yMedium));
+  }
+  else if(10.0 <= y_dist && y_dist < 50.0){
+    memcpy(currentDelayArray, yShort, sizeof(yShort));
+  }
+  else{
+    memcpy(currentDelayArray, yTiny, sizeof(yTiny));
+  }
+
+  int num_of_steps_y = floor(y_dist/(xy_step_dist));
+  loop = num_of_steps_y/(sizeof(currentDelayArray)/(sizeof(currentDelayArray[0])));
+
+  for(unsigned int i=0; i<sizeof(currentDelayArray)/sizeof(currentDelayArray[0]); i++){
+    int delay = currentDelayArray[i];
+    for(int j = 0; j < loop; j++){
+      digitalWrite(Y_STEP, HIGH);
+      delayMicroseconds(delay);
+      digitalWrite(Y_STEP, LOW);
+      delayMicroseconds(delay);
+    }
+  }
+
+  //set z direction
+  if(z_dir == '0'){
+    digitalWrite(Z_DIR, LOW);
+  }
+  else if(z_dir == '1'){
+    digitalWrite(Z_DIR, HIGH);
+  }
+
+  //set z acceleration (use which delay array)
+  if(325 <= z_dist && z_dist <= 400){
+    memcpy(currentDelayArray, zLong, sizeof(zLong));
+  }
+  else if(250 <= z_dist && z_dist < 325){
+    memcpy(currentDelayArray, zMedium, sizeof(zMedium));
+  }
+  else{
+    memcpy(currentDelayArray, zShort, sizeof(zShort));
+  }
+
+  int num_of_steps_z = floor(z_dist/z_step_dist);
+  loop = num_of_steps_z/(sizeof(currentDelayArray)/sizeof(currentDelayArray[0]));
+
+  for(unsigned int i=0; i<sizeof(currentDelayArray)/sizeof(currentDelayArray[0]); i++){
+    int delay = currentDelayArray[i];
+    for(int j = 0; j < loop; j++){
+      digitalWrite(Z_STEP, HIGH);
+      delayMicroseconds(delay);
+      digitalWrite(Z_STEP, LOW);
+      delayMicroseconds(delay);
+    }
   }
 }
 
@@ -511,11 +776,28 @@ void removeTip(){
 void aspirate(double volume){
   homing = 1;
   digitalWrite(P_DIR, LOW);
-  for(int i = 0; i < volume/vol_per_step; i++){
-    digitalWrite(P_STEP, HIGH);
-    delayMicroseconds(pump_step_delay);
-    digitalWrite(P_STEP, LOW);
-    delayMicroseconds(pump_step_delay);
+  
+  double num_of_steps = floor(volume/vol_per_step);
+  int num_of_loops = ceil(num_of_steps/65535);
+  double final_loop_dist = num_of_steps - (num_of_loops - 1)*65535;
+
+  for(int i = 0; i < num_of_loops; i++){
+    if(i < num_of_loops - 1){
+      for(int j = 0; j < 65536; j++){
+        digitalWrite(P_STEP, HIGH);
+        delayMicroseconds(pump_step_delay);
+        digitalWrite(P_STEP, LOW);
+        delayMicroseconds(pump_step_delay);
+      }
+    }
+    else{
+        for(int j = 0; j < final_loop_dist; j++){
+          digitalWrite(P_STEP, HIGH);
+          delayMicroseconds(pump_step_delay);
+          digitalWrite(P_STEP, LOW);
+          delayMicroseconds(pump_step_delay);
+      }
+    }
   }
   homing = 0;
 }
@@ -523,31 +805,76 @@ void aspirate(double volume){
 void dispense(double volume){
   homing = 1;
   digitalWrite(P_DIR, HIGH);
-  for(int i = 0; i < volume/vol_per_step; i++){
-    digitalWrite(P_STEP, HIGH);
-    delayMicroseconds(pump_step_delay);
-    digitalWrite(P_STEP, LOW);
-    delayMicroseconds(pump_step_delay);
+
+  double num_of_steps = floor(volume/vol_per_step);
+  int num_of_loops = ceil(num_of_steps/65535);
+  double final_loop_dist = num_of_steps - (num_of_loops - 1)*65535;
+
+  for(int i = 0; i < num_of_loops; i++){
+    if(i < num_of_loops - 1){
+      for(int j = 0; j < 65536; j++){
+        digitalWrite(P_STEP, HIGH);
+        delayMicroseconds(pump_step_delay);
+        digitalWrite(P_STEP, LOW);
+        delayMicroseconds(pump_step_delay);
+      }
+    }
+    else{
+        for(int j = 0; j < final_loop_dist; j++){
+          digitalWrite(P_STEP, HIGH);
+          delayMicroseconds(pump_step_delay);
+          digitalWrite(P_STEP, LOW);
+          delayMicroseconds(pump_step_delay);
+      }
+    }
   }
   homing = 0;
 }
 
 void mix(double mix_count, double volume)
 {
-  for(int i = 0; i < mix_count; i++){
+  double num_of_steps = floor(volume/vol_per_step);
+  int num_of_loops = ceil(num_of_steps/65535);
+  double final_loop_dist = num_of_steps - (num_of_loops - 1)*65535;
+
+  for(int num_of_mixes = 0; num_of_mixes < mix_count; num_of_mixes++){
     digitalWrite(P_DIR, LOW);
-    for(int j = 0; j < volume/vol_per_step; j++){
-      digitalWrite(P_STEP, HIGH);
-      delayMicroseconds(pump_step_delay);
-      digitalWrite(P_STEP, LOW);
-      delayMicroseconds(pump_step_delay);
+    for(int i = 0; i < num_of_loops; i++){
+      if(i < num_of_loops - 1){
+        for(int j = 0; j < 65536; j++){
+          digitalWrite(P_STEP, HIGH);
+          delayMicroseconds(pump_step_delay);
+          digitalWrite(P_STEP, LOW);
+          delayMicroseconds(pump_step_delay);
+        }
+      }
+      else{
+        for(int j = 0; j < final_loop_dist; j++){
+          digitalWrite(P_STEP, HIGH);
+          delayMicroseconds(pump_step_delay);
+          digitalWrite(P_STEP, LOW);
+          delayMicroseconds(pump_step_delay);
+        }
+      }
     }
     digitalWrite(P_DIR, HIGH);
-    for(int j = 0; j < volume/vol_per_step; j++){
-      digitalWrite(P_STEP, HIGH);
-      delayMicroseconds(pump_step_delay);
-      digitalWrite(P_STEP, LOW);
-      delayMicroseconds(pump_step_delay);
+    for(int i = 0; i < num_of_loops; i++){
+      if(i < num_of_loops - 1){
+        for(int j = 0; j < 65536; j++){
+          digitalWrite(P_STEP, HIGH);
+          delayMicroseconds(pump_step_delay);
+          digitalWrite(P_STEP, LOW);
+          delayMicroseconds(pump_step_delay);
+        }
+      }
+      else{
+        for(int j = 0; j < final_loop_dist; j++){
+          digitalWrite(P_STEP, HIGH);
+          delayMicroseconds(pump_step_delay);
+          digitalWrite(P_STEP, LOW);
+          delayMicroseconds(pump_step_delay);
+        }
+      }
     }
   }
 }
@@ -634,6 +961,7 @@ String receiveHostMessage(){
   }
   return host_message;
 }
+
 void xLimitPressed(){
   if(homing == 0){
     //digitalWrite(X_ENABLE, LOW);

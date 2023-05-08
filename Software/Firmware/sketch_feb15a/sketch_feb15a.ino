@@ -210,11 +210,41 @@ void setup() {
 }
 
 void loop() {
-  moveWithAcceleration('1', '0', '0', 0.0, 380.0, 0.0);
-  delay(1000);
-  moveWithAcceleration('0', '1', '0', 0.0, 380.0, 0.0);
-  digitalWrite(X_ENABLE, HIGH);
-  digitalWrite(Y_ENABLE, HIGH);
+  digitalWrite(P_DIR, HIGH);
+  while(digitalRead(P_LIMIT)){
+    digitalWrite(P_STEP, HIGH);
+    delayMicroseconds(100);
+    digitalWrite(P_STEP,LOW);
+    delayMicroseconds(100);
+  }
+  delay(50);
+  digitalWrite(P_DIR, LOW);
+  while(!digitalRead(P_LIMIT)){
+    digitalWrite(P_STEP, HIGH);
+    delayMicroseconds(100);
+    digitalWrite(P_STEP, LOW);
+    delayMicroseconds(100);
+  }
+  //back off until pump ejector is flush with base
+  for(int i = 0; i < 800; i++){
+    digitalWrite(P_STEP, HIGH);
+    delayMicroseconds(100);
+    digitalWrite(P_STEP, LOW);
+    delayMicroseconds(100);
+  }
+  digitalWrite(P_ENABLE, HIGH);
+  // digitalWrite(P_DIR, HIGH);
+  // for(int i = 0; i < 2000; i ++){
+  //   digitalWrite(P_STEP, HIGH);
+  //   delayMicroseconds(100);
+  //   digitalWrite(P_STEP, LOW);
+  //   delayMicroseconds(100);
+  // }
+  // moveWithAcceleration('1', '0', '0', 0.0, 380.0, 0.0);
+  // delay(1000);
+  // moveWithAcceleration('0', '1', '0', 0.0, 380.0, 0.0);
+  // digitalWrite(X_ENABLE, HIGH);
+  // digitalWrite(Y_ENABLE, HIGH);
 }
 
 void moveWithAcceleration(char x_dir, char y_dir, char z_dir, double x_dist, double y_dist, double z_dist){

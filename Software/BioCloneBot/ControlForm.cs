@@ -25,7 +25,7 @@ namespace BioCloneBot
         private Platform platform;
         private Button[] labwareButtons;
         private SerialPort serialPort;
-        private Color formBackgroundColor = Color.FromArgb(33,33,33);
+        private Color formBackgroundColor = Color.FromArgb(33, 33, 33);
         private Color buttonSelectedColor = Color.FromArgb(24, 225, 204);
         private Color buttonBackgroundColor1 = Color.FromArgb(194, 148, 255);
         private Color buttonBackgroundColor2 = Color.FromArgb(18, 18, 20);
@@ -93,7 +93,7 @@ namespace BioCloneBot
                     }
                 }
 
-                if(ports.Length > 0)
+                if (ports.Length > 0)
                 {
                     serialPort.PortName = ports[i];
 
@@ -174,16 +174,16 @@ namespace BioCloneBot
         }
         private void updateCommand_List()
         {
-            if(platform.ProtocolList.Count > 0)
+            if (platform.ProtocolList.Count > 0)
             {
                 commandListTextBox.Clear();
-                for(int i = 0; i < platform.ProtocolList.Count(); i++)
+                for (int i = 0; i < platform.ProtocolList.Count(); i++)
                 {
-                    commandListTextBox.Text += (i+1) + ". " + platform.ProtocolList[i] + ".\r\n";
+                    commandListTextBox.Text += (i + 1) + ". " + platform.ProtocolList[i] + ".\r\n";
                 }
             }
         }
-        
+
         private double[] calculateTravelDistance(int position, int[] wellLocation)
         {
             double[] destination = new double[3];
@@ -200,7 +200,7 @@ namespace BioCloneBot
         private void getTip(int labwarePosition)
         {
             double[] destination = calculateTravelDistance(labwarePosition, platform.SelectedPosition);
-            platform.Operations.Add(new Operation("gettip", platform.XLocation, platform.YLocation, platform.ZLocation, destination[0], destination[1], destination[2], 
+            platform.Operations.Add(new Operation("gettip", platform.XLocation, platform.YLocation, platform.ZLocation, destination[0], destination[1], destination[2],
                 labwarePosition, platform.SelectedPosition, platform.Labwares[labwarePosition]));
 
             platform.NumberOfOperations++;
@@ -277,7 +277,7 @@ namespace BioCloneBot
 
             DialogResult msg = MessageBox.Show("Click OK to confirm and start the experiment", "Starting Experiment", MessageBoxButtons.OKCancel, MessageBoxIcon.Information);
 
-            if(msg == DialogResult.OK)
+            if (msg == DialogResult.OK)
             {
                 for (int i = 0; i < platform.Operations.Count; i++)
                 {
@@ -598,27 +598,27 @@ namespace BioCloneBot
         private void loadSample_Click(object sender, EventArgs e)
         {
             double[][] wellplateVolume1 = new double[8][];
-            for(int i = 0; i < 8; i++)
+            for (int i = 0; i < 8; i++)
             {
                 wellplateVolume1[i] = new double[12];
             }
 
             double[][] wellplateVolume2 = new double[8][];
-            for(int i = 0; i < 8; i++)
+            for (int i = 0; i < 8; i++)
             {
                 wellplateVolume2[i] = new double[12];
-            }    
+            }
 
             double[][] tubestandVolume = new double[4][];
-            for(int i = 0; i < 4; i++)
+            for (int i = 0; i < 4; i++)
             {
                 tubestandVolume[i] = new double[6];
             }
 
             double[][] tipboxTips = new double[8][];
-            for(int i = 0; i < 8; i++)
+            for (int i = 0; i < 8; i++)
             {
-                tipboxTips[i] = new double[12]; 
+                tipboxTips[i] = new double[12];
             }
 
             for (int i = 0; i < 8; i++)
@@ -673,7 +673,7 @@ namespace BioCloneBot
         }
         private void reconnect_Arduino_Click(object sender, EventArgs e)
         {
-            if(serialPort.IsOpen)
+            if (serialPort.IsOpen)
             {
                 serialPort.Close();
             }
@@ -703,7 +703,7 @@ namespace BioCloneBot
                     platform.LabwareOccupied[i] = false;
                     labwareButtons[i].BackColor = buttonBackgroundColor2;
                     labwareButtons[i].ForeColor = buttonTextColor2;
-                    labwareButtons[i].Text = "Labware " + (i+1);
+                    labwareButtons[i].Text = "Labware " + (i + 1);
                 }
             }
         }
@@ -932,7 +932,7 @@ namespace BioCloneBot
             Button button = sender as Button;
             int labwarePosition = -1;
 
-            for(int i = 0; i < labwareCount; i++)
+            for (int i = 0; i < labwareCount; i++)
             {
                 if (button.Name == "labwareButton1")
                 {
@@ -1096,7 +1096,7 @@ namespace BioCloneBot
                 {
                     platform.Labwares[0].Volumes = labwarePropertiesForm.Volumes;
                 }
-            }    
+            }
         }
         private void removeLabware1ToolStripMenuItem_Click(object sender, EventArgs e)
         {
