@@ -35,12 +35,8 @@ namespace BioCloneBot
             this.components = new System.ComponentModel.Container();
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(ControlForm));
             this.toolStrip1 = new System.Windows.Forms.ToolStrip();
-            this.toolStripButton1 = new System.Windows.Forms.ToolStripDropDownButton();
-            this.openToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.saveExperimentToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.toolStripDropDownButton1 = new System.Windows.Forms.ToolStripDropDownButton();
             this.manuallyMovePumpToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.toolStripButton3 = new System.Windows.Forms.ToolStripDropDownButton();
             this.home = new System.Windows.Forms.Button();
             this.closeSerialPort = new System.Windows.Forms.Button();
             this.splitContainer1 = new System.Windows.Forms.SplitContainer();
@@ -130,44 +126,13 @@ namespace BioCloneBot
             this.toolStrip1.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(33)))), ((int)(((byte)(33)))), ((int)(((byte)(33)))));
             this.toolStrip1.ImageScalingSize = new System.Drawing.Size(24, 24);
             this.toolStrip1.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.toolStripButton1,
-            this.toolStripDropDownButton1,
-            this.toolStripButton3});
+            this.toolStripDropDownButton1});
             this.toolStrip1.Location = new System.Drawing.Point(0, 0);
             this.toolStrip1.Name = "toolStrip1";
             this.toolStrip1.Padding = new System.Windows.Forms.Padding(0, 0, 2, 0);
             this.toolStrip1.Size = new System.Drawing.Size(1582, 25);
             this.toolStrip1.TabIndex = 8;
             this.toolStrip1.Text = "toolStrip1";
-            // 
-            // toolStripButton1
-            // 
-            this.toolStripButton1.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Text;
-            this.toolStripButton1.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.openToolStripMenuItem,
-            this.saveExperimentToolStripMenuItem});
-            this.toolStripButton1.ForeColor = System.Drawing.Color.White;
-            this.toolStripButton1.Image = ((System.Drawing.Image)(resources.GetObject("toolStripButton1.Image")));
-            this.toolStripButton1.ImageTransparentColor = System.Drawing.Color.Magenta;
-            this.toolStripButton1.Name = "toolStripButton1";
-            this.toolStripButton1.Size = new System.Drawing.Size(38, 22);
-            this.toolStripButton1.Text = "File";
-            // 
-            // openToolStripMenuItem
-            // 
-            this.openToolStripMenuItem.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(33)))), ((int)(((byte)(33)))), ((int)(((byte)(33)))));
-            this.openToolStripMenuItem.ForeColor = System.Drawing.Color.White;
-            this.openToolStripMenuItem.Name = "openToolStripMenuItem";
-            this.openToolStripMenuItem.Size = new System.Drawing.Size(166, 22);
-            this.openToolStripMenuItem.Text = "Open Experiment";
-            // 
-            // saveExperimentToolStripMenuItem
-            // 
-            this.saveExperimentToolStripMenuItem.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(33)))), ((int)(((byte)(33)))), ((int)(((byte)(33)))));
-            this.saveExperimentToolStripMenuItem.ForeColor = System.Drawing.Color.White;
-            this.saveExperimentToolStripMenuItem.Name = "saveExperimentToolStripMenuItem";
-            this.saveExperimentToolStripMenuItem.Size = new System.Drawing.Size(166, 22);
-            this.saveExperimentToolStripMenuItem.Text = "Save Experiment";
             // 
             // toolStripDropDownButton1
             // 
@@ -178,25 +143,15 @@ namespace BioCloneBot
             this.toolStripDropDownButton1.Image = ((System.Drawing.Image)(resources.GetObject("toolStripDropDownButton1.Image")));
             this.toolStripDropDownButton1.ImageTransparentColor = System.Drawing.Color.Magenta;
             this.toolStripDropDownButton1.Name = "toolStripDropDownButton1";
-            this.toolStripDropDownButton1.Size = new System.Drawing.Size(62, 22);
-            this.toolStripDropDownButton1.Text = "Settings";
+            this.toolStripDropDownButton1.Size = new System.Drawing.Size(67, 22);
+            this.toolStripDropDownButton1.Text = "Calibrate";
             // 
             // manuallyMovePumpToolStripMenuItem
             // 
             this.manuallyMovePumpToolStripMenuItem.Name = "manuallyMovePumpToolStripMenuItem";
-            this.manuallyMovePumpToolStripMenuItem.Size = new System.Drawing.Size(191, 22);
-            this.manuallyMovePumpToolStripMenuItem.Text = "Manually move pump";
+            this.manuallyMovePumpToolStripMenuItem.Size = new System.Drawing.Size(157, 22);
+            this.manuallyMovePumpToolStripMenuItem.Text = "Manual Control";
             this.manuallyMovePumpToolStripMenuItem.Click += new System.EventHandler(this.manuallyMovePumpToolStripMenuItem_Click);
-            // 
-            // toolStripButton3
-            // 
-            this.toolStripButton3.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Text;
-            this.toolStripButton3.ForeColor = System.Drawing.Color.White;
-            this.toolStripButton3.Image = ((System.Drawing.Image)(resources.GetObject("toolStripButton3.Image")));
-            this.toolStripButton3.ImageTransparentColor = System.Drawing.Color.Magenta;
-            this.toolStripButton3.Name = "toolStripButton3";
-            this.toolStripButton3.Size = new System.Drawing.Size(45, 22);
-            this.toolStripButton3.Text = "Help";
             // 
             // home
             // 
@@ -232,6 +187,7 @@ namespace BioCloneBot
             this.closeSerialPort.TabIndex = 16;
             this.closeSerialPort.Text = "Reconnect Arduino";
             this.closeSerialPort.UseVisualStyleBackColor = false;
+            this.closeSerialPort.Click += new System.EventHandler(this.reconnect_Arduino_Click);
             // 
             // splitContainer1
             // 
@@ -332,6 +288,7 @@ namespace BioCloneBot
             this.startExperiment.TabIndex = 19;
             this.startExperiment.Text = "Start Experiment";
             this.startExperiment.UseVisualStyleBackColor = false;
+            this.startExperiment.Click += new System.EventHandler(this.startExperimentButton_Click);
             // 
             // saveProtocolButton
             // 
@@ -349,6 +306,7 @@ namespace BioCloneBot
             this.saveProtocolButton.TabIndex = 22;
             this.saveProtocolButton.Text = "Save Protocol";
             this.saveProtocolButton.UseVisualStyleBackColor = false;
+            this.saveProtocolButton.Click += new System.EventHandler(this.saveProtocolButton_Click);
             // 
             // loadProtocolButton
             // 
@@ -364,6 +322,7 @@ namespace BioCloneBot
             this.loadProtocolButton.TabIndex = 23;
             this.loadProtocolButton.Text = "Load Protocol";
             this.loadProtocolButton.UseVisualStyleBackColor = false;
+            this.loadProtocolButton.Click += new System.EventHandler(this.loadProtocolButton_Click);
             // 
             // clearProtocolButton
             // 
@@ -379,6 +338,7 @@ namespace BioCloneBot
             this.clearProtocolButton.TabIndex = 24;
             this.clearProtocolButton.Text = "Clear Protocol";
             this.clearProtocolButton.UseVisualStyleBackColor = false;
+            this.clearProtocolButton.Click += new System.EventHandler(this.clearProtocolButton_Click);
             // 
             // loadSample
             // 
@@ -396,6 +356,7 @@ namespace BioCloneBot
             this.loadSample.TabIndex = 20;
             this.loadSample.Text = "Load Sample Experiment";
             this.loadSample.UseVisualStyleBackColor = false;
+            this.loadSample.Click += new System.EventHandler(this.loadSample_Click);
             // 
             // splitContainer2
             // 
@@ -486,6 +447,7 @@ namespace BioCloneBot
             this.homeDeviceOperationButton.TabIndex = 7;
             this.homeDeviceOperationButton.Text = "Home Device";
             this.homeDeviceOperationButton.UseVisualStyleBackColor = false;
+            this.homeDeviceOperationButton.Click += new System.EventHandler(this.homeDeviceOperationButton_Click);
             // 
             // getTipOperationButton
             // 
@@ -502,6 +464,7 @@ namespace BioCloneBot
             this.getTipOperationButton.TabIndex = 9;
             this.getTipOperationButton.Text = "Get Tip";
             this.getTipOperationButton.UseVisualStyleBackColor = false;
+            this.getTipOperationButton.Click += new System.EventHandler(this.getTipOperationButton_Click);
             // 
             // removeTipOperationButton
             // 
@@ -518,6 +481,7 @@ namespace BioCloneBot
             this.removeTipOperationButton.TabIndex = 10;
             this.removeTipOperationButton.Text = "Remove Tip";
             this.removeTipOperationButton.UseVisualStyleBackColor = false;
+            this.removeTipOperationButton.Click += new System.EventHandler(this.removeTipOperationButton_Click);
             // 
             // aspirateOperationButton
             // 
@@ -534,6 +498,7 @@ namespace BioCloneBot
             this.aspirateOperationButton.TabIndex = 11;
             this.aspirateOperationButton.Text = "Aspirate";
             this.aspirateOperationButton.UseVisualStyleBackColor = false;
+            this.aspirateOperationButton.Click += new System.EventHandler(this.aspirateOperationButton_Click);
             // 
             // dispenseOperationButton
             // 
@@ -550,6 +515,7 @@ namespace BioCloneBot
             this.dispenseOperationButton.TabIndex = 12;
             this.dispenseOperationButton.Text = "Dispense";
             this.dispenseOperationButton.UseVisualStyleBackColor = false;
+            this.dispenseOperationButton.Click += new System.EventHandler(this.dispenseOperationButton_Click);
             // 
             // mixOperationButton
             // 
@@ -566,6 +532,7 @@ namespace BioCloneBot
             this.mixOperationButton.TabIndex = 13;
             this.mixOperationButton.Text = "Mix";
             this.mixOperationButton.UseVisualStyleBackColor = false;
+            this.mixOperationButton.Click += new System.EventHandler(this.mixOperationButton_Click);
             // 
             // operationsTBD2Button
             // 
@@ -753,6 +720,7 @@ namespace BioCloneBot
             this.wellplateButton.TabIndex = 0;
             this.wellplateButton.Text = "96 Wellplate";
             this.wellplateButton.UseVisualStyleBackColor = false;
+            this.wellplateButton.Click += new System.EventHandler(this.wellplate_Click);
             // 
             // tubeStandButton
             // 
@@ -767,6 +735,7 @@ namespace BioCloneBot
             this.tubeStandButton.TabIndex = 1;
             this.tubeStandButton.Text = "5mL Eppendorf Tubes";
             this.tubeStandButton.UseVisualStyleBackColor = false;
+            this.tubeStandButton.Click += new System.EventHandler(this.tubeStand_Click);
             // 
             // tipBoxButton
             // 
@@ -781,6 +750,7 @@ namespace BioCloneBot
             this.tipBoxButton.TabIndex = 2;
             this.tipBoxButton.Text = "200 uL Tip Box";
             this.tipBoxButton.UseVisualStyleBackColor = false;
+            this.tipBoxButton.Click += new System.EventHandler(this.tipBox_Click);
             // 
             // labwareTBD1Button
             // 
@@ -968,10 +938,9 @@ namespace BioCloneBot
             this.thermocyclerButton.Location = new System.Drawing.Point(4, 73);
             this.thermocyclerButton.Margin = new System.Windows.Forms.Padding(4, 4, 70, 4);
             this.thermocyclerButton.MaximumSize = new System.Drawing.Size(506, 224);
-            this.thermocyclerButton.MinimumSize = new System.Drawing.Size(393, 224);
             this.thermocyclerButton.Name = "thermocyclerButton";
             this.tableLayoutPanel1.SetRowSpan(this.thermocyclerButton, 4);
-            this.thermocyclerButton.Size = new System.Drawing.Size(393, 224);
+            this.thermocyclerButton.Size = new System.Drawing.Size(327, 196);
             this.thermocyclerButton.TabIndex = 0;
             this.thermocyclerButton.Text = "Thermocycler";
             this.thermocyclerButton.UseVisualStyleBackColor = false;
@@ -985,10 +954,9 @@ namespace BioCloneBot
             this.trashButton.Location = new System.Drawing.Point(471, 73);
             this.trashButton.Margin = new System.Windows.Forms.Padding(70, 4, 4, 4);
             this.trashButton.MaximumSize = new System.Drawing.Size(506, 224);
-            this.trashButton.MinimumSize = new System.Drawing.Size(393, 224);
             this.trashButton.Name = "trashButton";
             this.tableLayoutPanel1.SetRowSpan(this.trashButton, 4);
-            this.trashButton.Size = new System.Drawing.Size(393, 224);
+            this.trashButton.Size = new System.Drawing.Size(328, 196);
             this.trashButton.TabIndex = 1;
             this.trashButton.Text = "Trash";
             this.trashButton.UseVisualStyleBackColor = false;
@@ -1003,13 +971,13 @@ namespace BioCloneBot
             this.labwareButton1.Location = new System.Drawing.Point(4, 277);
             this.labwareButton1.Margin = new System.Windows.Forms.Padding(4, 4, 70, 4);
             this.labwareButton1.MaximumSize = new System.Drawing.Size(506, 224);
-            this.labwareButton1.MinimumSize = new System.Drawing.Size(393, 224);
             this.labwareButton1.Name = "labwareButton1";
             this.tableLayoutPanel1.SetRowSpan(this.labwareButton1, 4);
-            this.labwareButton1.Size = new System.Drawing.Size(393, 224);
+            this.labwareButton1.Size = new System.Drawing.Size(327, 196);
             this.labwareButton1.TabIndex = 2;
             this.labwareButton1.Text = "Labware 1";
             this.labwareButton1.UseVisualStyleBackColor = false;
+            this.labwareButton1.MouseDown += new System.Windows.Forms.MouseEventHandler(this.labware_MouseDown);
             // 
             // labwareMenuStrip
             // 
@@ -1018,19 +986,22 @@ namespace BioCloneBot
             this.labware1PropertiesToolStripMenuItem,
             this.removeLabware1ToolStripMenuItem});
             this.labwareMenuStrip.Name = "rightClickMenuStrip";
-            this.labwareMenuStrip.Size = new System.Drawing.Size(184, 48);
+            this.labwareMenuStrip.Size = new System.Drawing.Size(184, 70);
+            this.labwareMenuStrip.Opening += new System.ComponentModel.CancelEventHandler(this.labware1MenuStrip_Opening);
             // 
             // labware1PropertiesToolStripMenuItem
             // 
             this.labware1PropertiesToolStripMenuItem.Name = "labware1PropertiesToolStripMenuItem";
             this.labware1PropertiesToolStripMenuItem.Size = new System.Drawing.Size(183, 22);
             this.labware1PropertiesToolStripMenuItem.Text = "Labware 1 Properties";
+            this.labware1PropertiesToolStripMenuItem.Click += new System.EventHandler(this.labware1PropertiesToolStripMenuItem_Click);
             // 
             // removeLabware1ToolStripMenuItem
             // 
             this.removeLabware1ToolStripMenuItem.Name = "removeLabware1ToolStripMenuItem";
             this.removeLabware1ToolStripMenuItem.Size = new System.Drawing.Size(183, 22);
             this.removeLabware1ToolStripMenuItem.Text = "Remove Labware 1";
+            this.removeLabware1ToolStripMenuItem.Click += new System.EventHandler(this.removeLabware1ToolStripMenuItem_Click);
             // 
             // labwareButton2
             // 
@@ -1042,13 +1013,13 @@ namespace BioCloneBot
             this.labwareButton2.Location = new System.Drawing.Point(471, 277);
             this.labwareButton2.Margin = new System.Windows.Forms.Padding(70, 4, 4, 4);
             this.labwareButton2.MaximumSize = new System.Drawing.Size(506, 224);
-            this.labwareButton2.MinimumSize = new System.Drawing.Size(393, 224);
             this.labwareButton2.Name = "labwareButton2";
             this.tableLayoutPanel1.SetRowSpan(this.labwareButton2, 4);
-            this.labwareButton2.Size = new System.Drawing.Size(393, 224);
+            this.labwareButton2.Size = new System.Drawing.Size(328, 196);
             this.labwareButton2.TabIndex = 3;
             this.labwareButton2.Text = "Labware 2";
             this.labwareButton2.UseVisualStyleBackColor = false;
+            this.labwareButton2.MouseDown += new System.Windows.Forms.MouseEventHandler(this.labware_MouseDown);
             // 
             // labware2MenuStrip
             // 
@@ -1058,18 +1029,21 @@ namespace BioCloneBot
             this.removeLabware2ToolStripMenuItem});
             this.labware2MenuStrip.Name = "labware2MenuStrip";
             this.labware2MenuStrip.Size = new System.Drawing.Size(184, 48);
+            this.labware2MenuStrip.Opening += new System.ComponentModel.CancelEventHandler(this.labware2MenuStrip_Opening);
             // 
             // labware2PropertiesToolStripMenuItem
             // 
             this.labware2PropertiesToolStripMenuItem.Name = "labware2PropertiesToolStripMenuItem";
             this.labware2PropertiesToolStripMenuItem.Size = new System.Drawing.Size(183, 22);
             this.labware2PropertiesToolStripMenuItem.Text = "Labware 2 Properties";
+            this.labware2PropertiesToolStripMenuItem.Click += new System.EventHandler(this.labware2PropertiesToolStripMenuItem_Click);
             // 
             // removeLabware2ToolStripMenuItem
             // 
             this.removeLabware2ToolStripMenuItem.Name = "removeLabware2ToolStripMenuItem";
             this.removeLabware2ToolStripMenuItem.Size = new System.Drawing.Size(183, 22);
             this.removeLabware2ToolStripMenuItem.Text = "Remove Labware 2";
+            this.removeLabware2ToolStripMenuItem.Click += new System.EventHandler(this.removeLabware2ToolStripMenuItem_Click);
             // 
             // labwareButton3
             // 
@@ -1081,13 +1055,13 @@ namespace BioCloneBot
             this.labwareButton3.Location = new System.Drawing.Point(4, 481);
             this.labwareButton3.Margin = new System.Windows.Forms.Padding(4, 4, 70, 4);
             this.labwareButton3.MaximumSize = new System.Drawing.Size(506, 224);
-            this.labwareButton3.MinimumSize = new System.Drawing.Size(393, 224);
             this.labwareButton3.Name = "labwareButton3";
             this.tableLayoutPanel1.SetRowSpan(this.labwareButton3, 4);
-            this.labwareButton3.Size = new System.Drawing.Size(393, 224);
+            this.labwareButton3.Size = new System.Drawing.Size(327, 205);
             this.labwareButton3.TabIndex = 4;
             this.labwareButton3.Text = "Labware 3";
             this.labwareButton3.UseVisualStyleBackColor = false;
+            this.labwareButton3.MouseDown += new System.Windows.Forms.MouseEventHandler(this.labware_MouseDown);
             // 
             // labware3MenuStrip
             // 
@@ -1097,18 +1071,21 @@ namespace BioCloneBot
             this.removeLabware3ToolStripMenuItem});
             this.labware3MenuStrip.Name = "contextMenuStrip2";
             this.labware3MenuStrip.Size = new System.Drawing.Size(184, 48);
+            this.labware3MenuStrip.Opening += new System.ComponentModel.CancelEventHandler(this.labware3MenuStrip_Opening);
             // 
             // labware3PropertiesToolStripMenuItem
             // 
             this.labware3PropertiesToolStripMenuItem.Name = "labware3PropertiesToolStripMenuItem";
             this.labware3PropertiesToolStripMenuItem.Size = new System.Drawing.Size(183, 22);
             this.labware3PropertiesToolStripMenuItem.Text = "Labware 3 Properties";
+            this.labware3PropertiesToolStripMenuItem.Click += new System.EventHandler(this.labware3ProperiesToolStripMenuItem_Click);
             // 
             // removeLabware3ToolStripMenuItem
             // 
             this.removeLabware3ToolStripMenuItem.Name = "removeLabware3ToolStripMenuItem";
             this.removeLabware3ToolStripMenuItem.Size = new System.Drawing.Size(183, 22);
             this.removeLabware3ToolStripMenuItem.Text = "Remove Labware 3";
+            this.removeLabware3ToolStripMenuItem.Click += new System.EventHandler(this.removeLabware3ToolStripMenuItem_Click);
             // 
             // labwareButton4
             // 
@@ -1120,13 +1097,13 @@ namespace BioCloneBot
             this.labwareButton4.Location = new System.Drawing.Point(471, 481);
             this.labwareButton4.Margin = new System.Windows.Forms.Padding(70, 4, 4, 4);
             this.labwareButton4.MaximumSize = new System.Drawing.Size(506, 224);
-            this.labwareButton4.MinimumSize = new System.Drawing.Size(393, 224);
             this.labwareButton4.Name = "labwareButton4";
             this.tableLayoutPanel1.SetRowSpan(this.labwareButton4, 4);
-            this.labwareButton4.Size = new System.Drawing.Size(393, 224);
+            this.labwareButton4.Size = new System.Drawing.Size(328, 205);
             this.labwareButton4.TabIndex = 5;
             this.labwareButton4.Text = "Labware 4";
             this.labwareButton4.UseVisualStyleBackColor = false;
+            this.labwareButton4.MouseDown += new System.Windows.Forms.MouseEventHandler(this.labware_MouseDown);
             // 
             // labware4MenuStrip
             // 
@@ -1136,18 +1113,21 @@ namespace BioCloneBot
             this.removeLabware4ToolStripMenuItem});
             this.labware4MenuStrip.Name = "contextMenuStrip2";
             this.labware4MenuStrip.Size = new System.Drawing.Size(184, 48);
+            this.labware4MenuStrip.Opening += new System.ComponentModel.CancelEventHandler(this.labware4MenuStrip_Opening);
             // 
             // labware4PropertiesToolStripMenuItem
             // 
             this.labware4PropertiesToolStripMenuItem.Name = "labware4PropertiesToolStripMenuItem";
             this.labware4PropertiesToolStripMenuItem.Size = new System.Drawing.Size(183, 22);
             this.labware4PropertiesToolStripMenuItem.Text = "Labware 4 Properties";
+            this.labware4PropertiesToolStripMenuItem.Click += new System.EventHandler(this.labware4PropertiesToolStripMenuItem_Click);
             // 
             // removeLabware4ToolStripMenuItem
             // 
             this.removeLabware4ToolStripMenuItem.Name = "removeLabware4ToolStripMenuItem";
             this.removeLabware4ToolStripMenuItem.Size = new System.Drawing.Size(183, 22);
             this.removeLabware4ToolStripMenuItem.Text = "Remove Labware 4";
+            this.removeLabware4ToolStripMenuItem.Click += new System.EventHandler(this.removeLabware4ToolStripMenuItem_Click);
             // 
             // ControlForm
             // 
@@ -1193,11 +1173,7 @@ namespace BioCloneBot
 
         #endregion
         private System.Windows.Forms.ToolStrip toolStrip1;
-        private System.Windows.Forms.ToolStripDropDownButton toolStripButton1;
         private System.Windows.Forms.ToolStripDropDownButton toolStripDropDownButton1;
-        private System.Windows.Forms.ToolStripDropDownButton toolStripButton3;
-        private System.Windows.Forms.ToolStripMenuItem openToolStripMenuItem;
-        private System.Windows.Forms.ToolStripMenuItem saveExperimentToolStripMenuItem;
         private System.Windows.Forms.Button home;
         private System.Windows.Forms.Button closeSerialPort;
 

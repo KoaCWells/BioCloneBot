@@ -17,8 +17,6 @@ namespace BioCloneBot
         public Tipbox()
         {
             //length, width, and height of labware
-            //dimensions of orange tip box
-            //dimensions = new double[3] { 127.76, 80.48, 35.50 };
             dimensions = new double[3] { 127.76, 80.48, 46.00 };
             topLeftCorner = new double[2];
             //x and y distance from the top left corner of labware position to center of reservoir
