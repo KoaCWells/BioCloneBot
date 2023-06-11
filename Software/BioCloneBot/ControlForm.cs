@@ -411,8 +411,8 @@ namespace BioCloneBot
 
                     //load platform values
                     platform.NumberOfOperations = (int)platformNode!["NumberOfOperations"]!;
-                    platform.VolumeInTip = (int)platformNode!["VolumeInTip"]!;
-                    platform.TipCapacity = (int)platformNode!["TipCapacity"]!;
+                    platform.VolumeInTip = (double)platformNode!["VolumeInTip"]!;
+                    platform.TipCapacity = (double)platformNode!["TipCapacity"]!;
                     platform.XLocation = (double)platformNode!["XLocation"]!;
                     platform.YLocation = (double)platformNode!["YLocation"]!;
                     platform.ZLocation = (double)platformNode!["ZLocation"]!;

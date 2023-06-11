@@ -149,7 +149,7 @@ namespace BioCloneBot
             // manuallyMovePumpToolStripMenuItem
             // 
             this.manuallyMovePumpToolStripMenuItem.Name = "manuallyMovePumpToolStripMenuItem";
-            this.manuallyMovePumpToolStripMenuItem.Size = new System.Drawing.Size(157, 22);
+            this.manuallyMovePumpToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
             this.manuallyMovePumpToolStripMenuItem.Text = "Manual Control";
             this.manuallyMovePumpToolStripMenuItem.Click += new System.EventHandler(this.manuallyMovePumpToolStripMenuItem_Click);
             // 
@@ -986,7 +986,7 @@ namespace BioCloneBot
             this.labware1PropertiesToolStripMenuItem,
             this.removeLabware1ToolStripMenuItem});
             this.labwareMenuStrip.Name = "rightClickMenuStrip";
-            this.labwareMenuStrip.Size = new System.Drawing.Size(184, 70);
+            this.labwareMenuStrip.Size = new System.Drawing.Size(184, 48);
             this.labwareMenuStrip.Opening += new System.ComponentModel.CancelEventHandler(this.labware1MenuStrip_Opening);
             // 
             // labware1PropertiesToolStripMenuItem

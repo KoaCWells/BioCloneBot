@@ -15,11 +15,11 @@ namespace BioCloneBot
         public Wellplate()
         {
             //length, width, height of labware
-            dimensions = new double[3] { 127.76, 86.48, 47.5 };
+            dimensions = new double[3] { 127.76, 86.48, 43.0 };
             //x and y location for the top left corner of the labware slot
             topLeftCorner = new double[2];
             //x and y distance from the top left corner of labware position to center of reservoir
-            startLocation = new double[2] { 15.38, 15.0 }; //x and y distance from the top left corner of the plate
+            startLocation = new double[2] { 14.48, 11.00 }; //x and y distance from the top left corner of the plate
             row = 8;
             col = 12;
             maxVolume = 200.00; //200.00 uL

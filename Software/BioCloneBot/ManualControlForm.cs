@@ -184,6 +184,7 @@ namespace BioCloneBot
                 }
 
                 command += direction + distance;
+                commandTextBox.Text = command;
 
                 try
                 {
@@ -223,6 +224,7 @@ namespace BioCloneBot
             }
 
             command += convertToTwoDecimalDouble(input) + "%";
+            commandTextBox.Text = command;
 
             try
             {
@@ -257,6 +259,7 @@ namespace BioCloneBot
             }
 
             command += convertToTwoDecimalDouble(input) + "%";
+            commandTextBox.Text = command;
 
             try
             {
@@ -278,6 +281,7 @@ namespace BioCloneBot
         {
             string command = "#0010%";
             byte[] messageCharacter = new byte[1];
+            commandTextBox.Text = command;
 
             try
             {
@@ -303,6 +307,7 @@ namespace BioCloneBot
             xLocation = 0.0;
             yLocation = 0.0;
             zLocation = 0.0;
+            commandTextBox.Text = command;
 
             try
             {
@@ -342,6 +347,7 @@ namespace BioCloneBot
                 mixCount = Convert.ToInt32(mixCountTextBox.Text);
 
                 command = command + convertToThreeDigitInt(mixCount) + convertToTwoDecimalDouble(mixVolume) + "%";
+                commandTextBox.Text = command;
             }
 
             try

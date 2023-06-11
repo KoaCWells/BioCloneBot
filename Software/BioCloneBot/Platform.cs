@@ -157,15 +157,15 @@ namespace BioCloneBot
             //labware position 1
             if (position == 0)
             {
-                topLeftCorner[0] = 51.50;
-                topLeftCorner[1] = 246.00;
+                topLeftCorner[0] = 52.10;
+                topLeftCorner[1] = 245.00;
                 labwares[position].TopLeftCorner = topLeftCorner;
             }
             //labware position 2
             else if (position == 1)
             {
-                topLeftCorner[0] = 227.50;
-                topLeftCorner[1] = 246.00;
+                topLeftCorner[0] = 228.00;
+                topLeftCorner[1] = 243.80;
                 labwares[position].TopLeftCorner = topLeftCorner;
             }
             //labware position 3
@@ -179,7 +179,7 @@ namespace BioCloneBot
             else if (position == 3)
             {
                 topLeftCorner[0] = 227.50;
-                topLeftCorner[1] = 121.25;
+                topLeftCorner[1] = 119.75;
                 labwares[position].TopLeftCorner = topLeftCorner;
             }
         }

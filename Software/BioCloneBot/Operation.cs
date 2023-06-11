@@ -109,9 +109,9 @@ namespace BioCloneBot
                 yStart = yLocation;
                 zStart = zLocation;
                 //5.0 for 50uL syringe
-                //backlashAdjustment = 5.0;
+                backlashAdjustment = 5.0;
                 //10.o for 250uL syringe
-                backlashAdjustment = 25.0;
+                //backlashAdjustment = 25.0;
                 movePump(xDest, yDest, zLocation);
                 xLocation = xDest;
                 yLocation = yDest;
@@ -182,9 +182,9 @@ namespace BioCloneBot
                 zStart = zLocation;
 
                 //5.0 for 50uL syringe
-                //backlashAdjustment = 5.0;
+                backlashAdjustment = 5.0;
                 //10.o for 250uL syringe
-                backlashAdjustment = 25.0;
+                //backlashAdjustment = 25.0;
 
                 movePump(xDest, yDest, zLocation);
                 xLocation = xDest;
@@ -229,9 +229,9 @@ namespace BioCloneBot
                 yStart = yLocation;
                 zStart = zLocation;
                 //5.0 for 50uL syringe
-                //backlashAdjustment = 5.0;
+                backlashAdjustment = 5.0;
                 //10.o for 250uL syringe
-                backlashAdjustment = 25.0;
+                //backlashAdjustment = 25.0;
 
                 //for 250 uL syringe
                 //aspirateVolume(25.0);
@@ -269,13 +269,13 @@ namespace BioCloneBot
 
             if (xDest > xLocation)
             {
-                xDir = 1;
+                xDir = 0;
                 xTravel = xDest - xLocation;
                 x = convertToTwoDecimalDouble(xTravel);
             }
             else if (xDest < xLocation)
             {
-                xDir = 0;
+                xDir = 1;
                 xTravel = xLocation - xDest;
                 x = convertToTwoDecimalDouble(xTravel);
             }
@@ -287,13 +287,13 @@ namespace BioCloneBot
             }
             if (yDest > yLocation)
             {
-                yDir = 1;
+                yDir = 0;
                 yTravel = yDest - yLocation;
                 y = convertToTwoDecimalDouble(yTravel);
             }
             else if (yDest < yLocation)
             {
-                yDir = 0;
+                yDir = 1;
                 yTravel = yLocation - yDest;
                 y = convertToTwoDecimalDouble(yTravel);
             }
@@ -306,13 +306,13 @@ namespace BioCloneBot
 
             if (zDest > zLocation)
             {
-                zDir = 1;
+                zDir = 0;
                 zTravel = zDest - zLocation;
                 z = convertToTwoDecimalDouble(zTravel);
             }
             else if (zDest < zLocation)
             {
-                zDir = 0;
+                zDir = 1;
                 zTravel = zLocation - zDest;
                 z = convertToTwoDecimalDouble(zTravel);
             }

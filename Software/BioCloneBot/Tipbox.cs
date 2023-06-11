@@ -17,10 +17,10 @@ namespace BioCloneBot
         public Tipbox()
         {
             //length, width, and height of labware
-            dimensions = new double[3] { 127.76, 80.48, 46.00 };
+            dimensions = new double[3] { 127.76, 80.48, 50.00 };
             topLeftCorner = new double[2];
             //x and y distance from the top left corner of labware position to center of reservoir
-            startLocation = new double[2] { 15.80, 14.50 };
+            startLocation = new double[2] { 13.80, 12.80 };
             row = 8;
             col = 12;
             maxVolume = 200.00;
